@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></script>
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:700,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <title>E-commerce</title>
+</head>
+
+<body>
+  
+  <header class="header-bar">
+    <nav class="main-menu">
+      <ul>
+        <li><i class="fas fa-stroopwafel"></i><span class="nav-text">Home</span></li>
+        <li><i class="fa fax-dress"></i><span class="nav-text">Women's Wears</span></li>
+        <li><i class="fa fax-necktie"></i><span class="nav-text">Men's Wears</span></li>
+        <li><i class="fa fax-t-shirt"></i><span class="nav-text">Shirts</span></li>
+        <li><i class="fa fax-jeans"></i><span class="nav-text">Pants</span></li>
+        <li><i class="fa fax-high-heeled-shoe"></i><span class="nav-text">Women's Shoes</span></li>
+        <li><i class="fa fax-mans-shoe"></i><span class="nav-text">Men's Shoes</span></li>
+        <li><i class="fa fa-cart-plus"></i><span class="nav-text">Transactions</span></li>
+      </ul>
+
+      <ul class="logout">
+        <li><i class="fas fa-user-plus"></i><span class="nav-text">Register</span></li>
+        <li><i class="fas fa-sign-in-alt"></i><span class="nav-text">Login</span></li>  
+      </ul>    
+    </nav>
+  </header>
+
+  <div class="container grid" id="app-list" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 100 }'>
+    <div class="col-4 grid-item">
+      <article class="list--item">
+        <figure>
+          <img src="//placehold.it/250x350" alt="">
+          <header>
+            <div class="floater">
+              <i class="fa fa-cart-plus"></i>
+            </div>
+            <h2>Title</h2>
+          </header>
+          <figcaption>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            <p> Rp 300000</p>
+          </figcaption>
+        </figure>
+      </article>
+    </div>
+    <div class="col-4 grid-item">
+        <article class="list--item">
+          <figure>
+            <img src="//placehold.it/250x300" alt="">
+            <header>
+              <div class="floater">
+                <i class="fa fa-cart-plus"></i>
+              </div>
+              <h2>Title</h2>
+            </header>
+            <figcaption>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              <p> Rp 300000</p>
+            </figcaption>
+          </figure>
+        </article>
+      </div>
+    <div class="col-4 grid-item">
+      <article class="list--item">
+        <figure>
+          <img src="//placehold.it/250x200" alt="">
+          <header>
+            <div class="floater">
+              <i class="fa fa-cart-plus"></i>
+            </div>
+            <h2>Title</h2>
+          </header>
+          <figcaption>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            <p> Rp 300000</p>
+          </figcaption>
+        </figure>
+      </article>
+    </div>
+    <div class="col-4 grid-item">
+      <article class="list--item">
+        <figure>
+          <img src="//placehold.it/250x250" alt="">
+          <header>
+            <div class="floater">
+              <i class="fa fa-cart-plus"></i>
+            </div>
+            <h2>Title</h2>
+          </header>
+          <figcaption>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            <p> Rp 300000</p>
+          </figcaption>
+        </figure>
+      </article>
+    </div>
+    <div class="col-4 grid-item">
+      <article class="list--item">
+        <figure>
+          <img src="//placehold.it/250x250" alt="">
+          <header>
+            <div class="floater">
+              <i class="fa fa-cart-plus"></i>
+            </div>
+            <h2>Title</h2>
+          </header>
+          <figcaption>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            <p> Rp 300000</p>
+          </figcaption>
+        </figure>
+      </article>
+    </div>
+    <div class="col-4 grid-item">
+        <article class="list--item">
+          <figure>
+            <img src="//placehold.it/250x350" alt="">
+            <header>
+              <div class="floater">
+                <i class="fa fa-cart-plus"></i>
+              </div>
+              <h2>Title</h2>
+            </header>
+            <figcaption>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              <p> Rp 300000</p>
+            </figcaption>
+          </figure>
+        </article>
+      </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+    crossorigin="anonymous"></script>
+    <script>
+      $('.grid').masonry({
+        // options...
+        itemSelector: '.grid-item',
+        columnWidth: 100
+      });
+
+      var $grid = $('.grid').masonry({
+        // options...
+      });
+      // layout Masonry after each image loads
+      $grid.imagesLoaded().progress( function() {
+        $grid.masonry('layout');
+      });
+    </script>
+</body>
+
+</html>
