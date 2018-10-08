@@ -13,6 +13,10 @@ const UserSchema = new Schema({
     password: {
         type: String
     },
+    role: {
+        type: String,
+        default: 'user'
+    },
     thirdpartylogin: {
         type: String
     }
