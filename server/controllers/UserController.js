@@ -7,7 +7,6 @@ const isEmail = require('../helpers/isEmail')
 
 
 class UserController{
-
     // register user
     static registerUser(req,res){
 
@@ -24,7 +23,8 @@ class UserController{
             jwt.sign({
                 userid: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                role: user.role
             },process.env.SECRETTOKEN,(err,token)=>{
                     if(!err){
                         res.status(200).json({
@@ -64,7 +64,8 @@ class UserController{
                 jwt.sign({
                     userid: user._id,
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    role: user.role
                 },process.env.SECRETTOKEN, (err,token)=>{
                     if(!err){
                        res.status(200).json({
@@ -115,7 +116,7 @@ class UserController{
        if(isEmail(req.body.email)){
           
           // check setuppassword
-          if(req.body.secretcode === process.env.SETADMIN){
+          if(req.headers.secretcode === process.env.SETADMIN){
             let hash = hashPassword(req.body.password)
             User.create({
                 name: req.body.name,
