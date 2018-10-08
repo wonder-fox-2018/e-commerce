@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./assets/css/custom.css">
+    <link href="https://fonts.googleapis.com/css?family=K2D" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amiri|Arvo" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <title>E-Cosmetics</title>
+</head>
+<body>
+    <!-- Navbar section-->
+    <nav class="navbar navbar-expand-sm bg-light navBarCustom">
+        <!-- Links -->
+        <div class="container">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link navBarItem" href="JavaScript:Void(0)">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link navBarItem" href="JavaScript:Void(0)">Flash Deal</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link navBarItem" href="JavaScript:Void(0)">Event</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link navBarItem" href="JavaScript:Void(0)">Your style</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="fontIconMargin">
+            <div class="row">
+                <div class="col-md-3 offset-md-3">
+                    <a href="#">
+                        <i class="fas fa-shopping-cart" data-toggle="modal" data-target="#cartModal">Your Cart</i>
+                    </a>
+                </div>
+                <hr>
+                <div class="col-md-3 offset-md-3">
+                    <button type="button" data-toggle="modal" data-target="#loginUser">Login</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid border">
+        <div class="row">
+            <div class = "col-md-3 border">
+                <div class="navBarFixedLeft">
+                    <h3 class="my-4">Categories</h3>
+                    <div class="list-group">
+                        <button class="list-group-item sideBarCustom">All Items</button>
+                        <button class="list-group-item sideBarCustom">Lipstick</button>
+                        <button class="list-group-item sideBarCustom">Powder</button>
+                        <button class="list-group-item sideBarCustom">Shampoo</button>
+                        <button class="list-group-item sideBarCustom">Eye lashes</button>
+                    </div>
+                </div>
+            </div>
+            <div class= "col-md-9 border">
+                <div class="marginTop">
+                    <div class="row">
+                        <div class="container">
+                            <div id="carouselExampleControls" class="carousel slide carouselMarginCustom" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active carouselCustom">
+                                        <img class="d-block w-100" src="./assets/image/cosmetics1.jpg" alt="First slide">
+                                    </div>
+                                    <div class="carousel-item carouselCustom">
+                                        <img class="d-block w-100 " src="./assets/image/cosmetics4.jpg" alt="Second slide">
+                                    </div>
+                                    <div class="carousel-item carouselCustom">
+                                        <img class="d-block w-100 " src="./assets/image/cosmetics5.jpg" alt="Second slide">
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>            
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">   
+                        </div>
+                    </div>
+                    <div class="marginBottom"></div>
+                    <div>
+                        <div>
+                            <div class="row">
+                                <div class ="col-md-3">
+                                    <div class="itemBox">
+                                        <div class="card" style="width: 18rem;">
+                                            <img class="card-img-top img-fluid imgCustom" src="https://cdn.shopify.com/s/files/1/1338/0845/collections/lippie-pencil_grande.jpg?v=1512588769" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Lipstick</h5>
+                                                <p class="card-text">Rp. 400000</p>
+                                            </div>
+                                            <a data-toggle="modal" data-target="#loginMessage" class="btn btn-primary"><font color="white">Order Now</font></a>
+                                        </div>
+                                    </div>
+                                </div>    
+                                <div class="col-md-1">
+                                </div>
+                                <div class ="col-md-3">
+                                    <div class="itemBox">
+                                        <div class="card" style="width: 18rem;">
+                                            <img class="card-img-top img-fluid imgCustom" src="https://cdn.shopify.com/s/files/1/1338/0845/products/brain-freeze_a_800x1200.jpg?v=1502255076" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Lipstick</h5>
+                                                <p class="card-text">Rp. 400000</p>
+                                            </div>
+                                            <a data-toggle="modal" data-target="#loginMessage" class="btn btn-primary"><font color="white">Order Now</font></a>
+                                        </div>
+                                    </div>
+                                </div>    
+                                <div class="col-md-1">
+                                </div>
+                                <div class ="col-md-3">
+                                    <div class="itemBox">
+                                        <div class="card" style="width: 18rem;">
+                                            <img class="card-img-top img-fluid imgCustom" src="https://cdn.shopify.com/s/files/1/1016/3243/products/LIPBALM_LID_grande.jpg?v=1496848378" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Lipstick</h5>
+                                                <p class="card-text">Rp. 400000</p>
+                                            </div>
+                                            <a data-toggle="modal" data-target="#loginMessage" class="btn btn-primary"><font color="white">Order Now</font></a>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <div class="col-md-12">
+                                        <img height="40px" width="100%" src="./assets/image/whiteBox.jpg">
+                                    </div>
+                                </div>
+                            </div>        
+                        </div>  
+                    </div>   
+                    <div class="row">
+                        <div>
+                            <div class="col-md-12">
+                                <img height="30px" width="100%" src="./assets/image/whiteBox.jpg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <div id="footerContent">
+            <p>Copyright: &copy; E-Cosmetics 2018</p>
+        </div>
+    </div>
+
+    <!-- Modal Part -->
+    <!-- Need to Login Message Modal-->
+    <div class="modal fade" id="loginMessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label>You have to login/register first to buy</label>
+                    </div>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <!--
+                    <button type="button" v-on:click="loginToSite()" class="btn btn-primary">Login</button>
+                    -->    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login User Modal -->
+    <div class="modal fade" id="loginUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        </div>
+                    </form>
+                    <br/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <!-- Shopping Cart Modal-->
+    <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Your cart</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Hi Cantik berikut rincian belanjaan kamu: </h5>
+                    <div v-for="buyitem in detailTempTransaction" >
+                        <div>
+                            Lipstick : Price 1.000.000 IDR
+                        </div>
+                        <div>
+                            Eye-lashes : Price 400.000 IDR
+                        </div>
+                    </div>
+                    <hr/>
+                    <h5>Total: 1.400.000 IDR</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"><font color="white">Buy Now</font></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
