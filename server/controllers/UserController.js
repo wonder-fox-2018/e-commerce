@@ -89,6 +89,24 @@ class UserController{
           }) 
        }
     }
+
+    // get user detail
+    static getUserDetail(req,res){
+        User.findOne({
+          _id: req.decoded.userid
+        })
+          .then(user =>{
+             res.status(200).json({
+                 msg: `Detail of User ${user.name}`,
+                 data: user
+             })
+          })
+          .catch(error =>{
+              res.status(500).json({
+                  msg: 'ERROR User Detail: ',error
+              })
+          })
+    }
 }
 
 module.exports = UserController
