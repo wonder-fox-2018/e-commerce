@@ -6,8 +6,14 @@ const Schema = mongoose.Schema
 const ItemSchema = new Schema({
     itemname: String,
     itembrand: String,
-    itemdescription: String,
-    itemcategory: String,
+    itemdescription: {
+        type: String,
+        default: 'No description available'
+    },
+    itemcategory: {
+        type: String,
+        default: 'miscellaneous'
+    },
     itemurlimage: String,
     itemwebsitelink: String,
     itemstock: {

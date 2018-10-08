@@ -41,6 +41,68 @@ class ItemController{
              })
          })
     }
+
+    // get details
+    static getDetail(req,res){
+        Item.findOne({
+            _id: req.params.id
+        })
+          .then(item=>{
+            res.status(200).json({
+                msg: `Detail of item ${item.itemname}`,
+                data: item
+            })
+          })
+          .catch(error =>{
+            res.status(500).json({
+              msg: 'ERROR Detail Items ',error
+            })
+          })
+    }
+
+    // edit item
+    static editItem(req,res){
+        Item.findOneAndUpdate({
+            _id: req.params.id
+        },{
+            itemname: req.body.itemname,
+            itembrand: req.body.itembrand,
+            itemdescription: req.body.itemdescription,
+            itemcategory: req.body.itemcategory,
+            itemurlimage: req.body.itemurlimage,
+            itemwebsitelink: req.body.itemwebsitelink,
+            itemstock: Number(req.body.itemstock)
+        })
+          .then(item => {
+            res.status(200).json({
+              msg: `Item has been updated`,
+              data: item
+            })
+          })
+          .catch(error => {
+            res.status(500).json({
+              msg: 'ERROR Edit Items ',error
+            })
+          })
+    }
+
+    // delete item
+    static deleteItem(req,res){
+        Item.findOneAndRemove({
+           _id: req.params.id
+        })
+         .then(item => {
+            res.status(200).json({
+              msg: `Item has been deleted`,
+              data: item
+            })
+         })
+         .catch(error => {
+            res.status(500).json({
+               msg: 'ERROR Delete Items ',error
+            }) 
+         })
+    }
 }
 
 module.exports = ItemController
