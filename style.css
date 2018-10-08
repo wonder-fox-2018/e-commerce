@@ -1,0 +1,28 @@
+#top-nav {
+    background-color: #11a29a !important; 
+    /* #aa423b */
+    /* #f43c2c */
+}
+
+#main-nav {
+    font-family: Lato;
+    font-size: 15px;
+}
+
+#home-nav {
+    font-family: Oswald;
+    font-size: 35px;
+}
+
+#cart-all-products {
+    height: 50px;
+}
+
+#div-cart-btn {
+    width: 50px;
+}
+
+#category-path-link button {
+    color: #0099cc;
+    font-family: Oswald;
+}
