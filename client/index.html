@@ -19,9 +19,20 @@
 
 <body>
   <header class="ui">
-    <nav class="navbar navbar-light" style="background-color: rgb(47, 49, 49); color: whitesmoke">
+    <nav class="navbar navbar-light" style="background-color: rgb(69, 73, 73); color: whitesmoke">
       <!-- <img src="./img/tokolapak.png" alt="#" class="logo"> -->
       <h1><span style="color:rgb(20, 160, 20)">Toko</span><i class="fab fa-opencart"></i><span style="color:rgb(194, 27, 27)">Lapak</span></h1>
+      <div class="ui buttons">
+          <button class="ui teal button">Register</button>
+          <div class="or"></div>
+          <button class="ui blue button">Sign In</button>
+        </div>
+      <div class="ui vertical animated button" tabindex="0">
+          <div class="hidden content">Cart</div>
+          <div class="visible content">
+            <i class="shop icon"></i>
+          </div>
+        </div>
       <form class="form-inline mt-2 mt-md-0">
         <h3><a class="nav-link" onclick="logout()" style="color: white">logout</a></h3>
       </form>
@@ -30,11 +41,8 @@
   <main>
   <div class="ui" style="padding-top:50px;">
       <div class="ui grid">
-        <h2 class="ui center aligned icon header">
-          <i class="circular users icon"></i>
-          Friends
-        </h2>
-        <div class="ui large vertical menu">
+        <div class="offset-sm-0.5"></div>
+        <div class="ui vertical menu">
           <a class="active item">
             <div class="ui small teal label">666</div>
             Buku
@@ -54,7 +62,7 @@
             </div>
           </div>
         </div>
-        
+        <div class="ui one wide column"></div>
         <!-- cards -->
       <div class="ui eleven wide column">
         <div class="ui link cards">

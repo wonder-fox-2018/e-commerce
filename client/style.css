@@ -8,10 +8,18 @@ body .ui {
   max-width: 100px ;
 }
 
+.special .cards {
+  margin: 0;
+}
+
 .container-footer {
   background-color:rgb(53, 49, 49);
   color: whitesmoke;
   display: flex;
   min-width: 1358px;
   justify-content: center;
+}
+
+footer {
+  padding-top: 12px;
 }
