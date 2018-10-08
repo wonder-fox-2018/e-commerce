@@ -16,9 +16,10 @@ const ItemSchema = new Schema({
     },
     itemurlimage: String,
     itemwebsitelink: String,
-    itemstock: {
+    itemprice: {
         type:Number,
-        default: 0
+        default: 0,
+        min: [0, 'Price can not have negative value']
     }
 },{
     timestamps: true

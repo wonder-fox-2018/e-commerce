@@ -95,7 +95,7 @@ class UserController{
     static getUserDetail(req,res){
         User.findOne({
           _id: req.decoded.userid
-        })
+        }).populate('transactionslist')
           .then(user =>{
              res.status(200).json({
                  msg: `Detail of User ${user.name}`,

@@ -11,7 +11,8 @@ class ItemController{
             itemdescription: req.body.itemdescription,
             itemcategory: req.body.itemcategory,
             itemurlimage: req.body.itemurlimage,
-            itemwebsitelink: req.body.itemwebsitelink
+            itemwebsitelink: req.body.itemwebsitelink,
+            itemprice: Number(req.body.itemprice)
         })
           .then(item => {
               res.status(200).json({
@@ -71,7 +72,7 @@ class ItemController{
             itemcategory: req.body.itemcategory,
             itemurlimage: req.body.itemurlimage,
             itemwebsitelink: req.body.itemwebsitelink,
-            itemstock: Number(req.body.itemstock)
+            itemprice: Number(req.body.itemprice)
         })
           .then(item => {
             res.status(200).json({
