@@ -33,7 +33,7 @@ class UserController{
                         })
                     }else{
                         res.status(500).json({
-                            msg: 'ERROR TOKEN ',err
+                            msg: 'ERROR Register TOKEN ',err
                         })
                     }
             })
@@ -48,6 +48,46 @@ class UserController{
             msg: 'Please Check Your Email'
         })
       }
+    }
+
+    // user login
+    static loginUser(req,res){
+       // let's validate email
+       if(isEmail(req.body.email)){
+          let hash = hashPassword(req.body.password)
+          User.findOne({
+             email: req.body.email,
+             password: hash 
+          })
+            .then(user => {
+                // get the jwt token 
+                jwt.sign({
+                    userid: user._id,
+                    name: user.name,
+                    email: user.email
+                },process.env.SECRETTOKEN, (err,token)=>{
+                    if(!err){
+                       res.status(200).json({
+                          msg: 'Login successful',
+                          token: token 
+                       }) 
+                    }else{
+                        res.status(500).json({
+                           msg: 'ERROR Login Token ',err  
+                        })
+                    }
+                })
+            })
+            .catch(error => {
+                res.status(500).json({
+                   msg: 'ERROR Login ',error 
+                })
+            })   
+       }else{
+          res.status(500).json({
+              msg: 'Please Check Your Email'
+          }) 
+       }
     }
 }
 
