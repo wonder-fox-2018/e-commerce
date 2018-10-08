@@ -1,0 +1,17 @@
+body .ui {
+  background-color: rgb(44, 40, 40);
+}
+
+
+.logo {
+  max-height: 60px ;
+  max-width: 100px ;
+}
+
+.container-footer {
+  background-color:rgb(53, 49, 49);
+  color: whitesmoke;
+  display: flex;
+  min-width: 1358px;
+  justify-content: center;
+}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css" integrity="sha256-ncjDAd2/rm/vaNTqp7Kk96MfSeHACtbiDU9NWKqNuCI="
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+    crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+  <title>TokoLapak</title>
+</head>
+
+<body>
+  <header class="ui">
+    <nav class="navbar navbar-light" style="background-color: rgb(47, 49, 49); color: whitesmoke">
+      <!-- <img src="./img/tokolapak.png" alt="#" class="logo"> -->
+      <h1><span style="color:rgb(20, 160, 20)">Toko</span><i class="fab fa-opencart"></i><span style="color:rgb(194, 27, 27)">Lapak</span></h1>
+      <form class="form-inline mt-2 mt-md-0">
+        <h3><a class="nav-link" onclick="logout()" style="color: white">logout</a></h3>
+      </form>
+    </nav>
+  </header>
+  <main>
+  <div class="ui" style="padding-top:50px;">
+      <div class="ui grid">
+        <h2 class="ui center aligned icon header">
+          <i class="circular users icon"></i>
+          Friends
+        </h2>
+        <div class="ui large vertical menu">
+          <a class="active item">
+            <div class="ui small teal label">666</div>
+            Buku
+          </a>
+          <a class="item">
+            <div class="ui small label">7</div>
+            Kamera
+          </a>
+          <a class="item">
+            <div class="ui small label">77</div>
+            Sepatu
+          </a>
+          <div class="item">
+            <div class="ui icon input">
+              <input type="text" placeholder="Search by category...">
+              <i class="search icon"></i>
+            </div>
+          </div>
+        </div>
+        
+        <!-- cards -->
+      <div class="ui eleven wide column">
+        <div class="ui link cards">
+          <div class="ui special cards" id="cards-template">
+            <div class="search" style="padding-top:50px;"></div>
+            <div class="ui special cards">
+              <div class="card">
+                <div class="blurring dimmable image">
+                  <div class="ui dimmer">
+                    <div class="content">
+                      <div class="center">
+                        <div class="ui inverted button">Add to cart</div>
+                      </div>
+                    </div>
+                  </div>
+                  <img src="./img/1.jpg">
+                </div>
+                <div class="content">
+                  <a class="header">Team Fu</a>
+                  <div class="meta">
+                    <span class="date">Created in Sep 2014</span>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <a>
+                    <i class="users icon"></i>
+                    2 Members
+                  </a>
+                </div>
+              </div>
+              <div class="card">
+                <div class="blurring dimmable image">
+                  <div class="ui dimmer">
+                    <div class="content">
+                      <div class="center">
+                        <div class="ui inverted button">Add to cart</div>
+                      </div>
+                    </div>
+                  </div>
+                  <img src="./img/2.jpg">
+                </div>
+                <div class="content">
+                  <a class="header">Team Fu</a>
+                  <div class="meta">
+                    <span class="date">Created in Sep 2014</span>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <a>
+                    <i class="users icon"></i>
+                    2 Members
+                  </a>
+                </div>
+              </div>
+              <div class="card">
+                  <div class="blurring dimmable image">
+                    <div class="ui dimmer">
+                      <div class="content">
+                        <div class="center">
+                          <div class="ui inverted button">Add to cart</div>
+                        </div>
+                      </div>
+                    </div>
+                    <img src="./img/3.jpg">
+                  </div>
+                  <div class="content">
+                    <a class="header">Team Fu</a>
+                    <div class="meta">
+                      <span class="date">Created in Sep 2014</span>
+                    </div>
+                  </div>
+                  <div class="extra content">
+                    <a>
+                      <i class="users icon"></i>
+                      2 Members
+                    </a>
+                  </div>
+                </div>
+                <div class="card">
+                    <div class="blurring dimmable image">
+                      <div class="ui dimmer">
+                        <div class="content">
+                          <div class="center">
+                            <div class="ui inverted button">Add to cart</div>
+                          </div>
+                        </div>
+                      </div>
+                      <img src="./img/3.jpg">
+                    </div>
+                    <div class="content">
+                      <a class="header">Team Fu</a>
+                      <div class="meta">
+                        <span class="date">Created in Sep 2014</span>
+                      </div>
+                    </div>
+                    <div class="extra content">
+                      <a>
+                        <i class="users icon"></i>
+                        2 Members
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card">
+                      <div class="blurring dimmable image">
+                        <div class="ui dimmer">
+                          <div class="content">
+                            <div class="center">
+                              <div class="ui inverted button">Add to cart</div>
+                            </div>
+                          </div>
+                        </div>
+                        <img src="./img/3.jpg">
+                      </div>
+                      <div class="content">
+                        <a class="header">Team Fu</a>
+                        <div class="meta">
+                          <span class="date">Created in Sep 2014</span>
+                        </div>
+                      </div>
+                      <div class="extra content">
+                        <a>
+                          <i class="users icon"></i>
+                          2 Members
+                        </a>
+                      </div>
+                    </div>
+                    <div class="card">
+                        <div class="blurring dimmable image">
+                          <div class="ui dimmer">
+                            <div class="content">
+                              <div class="center">
+                                <div class="ui inverted button">Add to cart</div>
+                              </div>
+                            </div>
+                          </div>
+                          <img src="./img/3.jpg">
+                        </div>
+                        <div class="content">
+                          <a class="header">Team Fu</a>
+                          <div class="meta">
+                            <span class="date">Created in Sep 2014</span>
+                          </div>
+                        </div>
+                        <div class="extra content">
+                          <a>
+                            <i class="users icon"></i>
+                            2 Members
+                          </a>
+                        </div>
+                      </div>
+              <div class="card">
+                <div class="blurring dimmable image">
+                  <div class="ui dimmer">
+                    <div class="content">
+                      <div class="center">
+                        <div class="ui inverted button">Add to cart</div>
+                      </div>
+                    </div>
+                  </div>
+                  <img src="./img/3.jpg">
+                </div>
+                <div class="content">
+                  <a class="header">Team Fu</a>
+                  <div class="meta">
+                    <span class="date">Created in Sep 2014</span>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <a>
+                    <i class="users icon"></i>
+                    2 Members
+                  </a>
+                </div>
+              </div>
+              <div class="card">
+                <div class="blurring dimmable image">
+                  <div class="ui dimmer">
+                    <div class="content">
+                      <div class="center">
+                        <div class="ui inverted button">Add to cart</div>
+                      </div>
+                    </div>
+                  </div>
+                  <img src="./img/4.jpg">
+                </div>
+                <div class="content">
+                  <a class="header">Team Fu</a>
+                  <div class="meta">
+                    <span class="date">Created in Sep 2014</span>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <a>
+                    <i class="users icon"></i>
+                    2 Members
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- footer -->
+  <footer>
+    <div class="container-footer text-center static-bottom" style="">
+      <div class="row">
+        <div class="col-sm-12">
+          <p>&copy; copyrigth 2018 | built by <a href="https://github.com/agungatd" target="blank">Agung Tri Atidhira</a></p>
+        </div>
+        <div class="col-sm-12">
+          <a href="https://github.com/agungatd"><i class="fab fa-github"></i></a>&nbsp;
+          <a href="https://facebook.com/agung.triatidhira"><i class="fab fa-facebook"></i></a>&nbsp;
+          <a href="https://www.instagram.com/agung_atidhira/?hl=en"><i class="fab fa-instagram"></i></a>&nbsp;
+          <a href="https://twitter.com/agungatidhira"><i class="fab fa-twitter"></i></a>&nbsp;
+        </div>
+      </div>
+    </div>
+  </main>
+  </footer>
+  <!-- akhir footer -->
+  <!-- scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js" integrity="sha256-0gIvTkdsp0OOeV8tx3UTdi3ehppGwZbzQMvZJYhbzsE="
+    crossorigin="anonymous"></script>
+  <script>
+    $('.special.cards .image').dimmer({
+      on: 'hover'
+    });
+  </script>
+</body>
+
+</html>
