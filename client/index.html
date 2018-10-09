@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.js"></script>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta name="google-signin-client_id" content="944393342423-g098v0uhgc4u9q49gpcdkjndkbhgnf45.apps.googleusercontent.com">
+</head>
+<body>
+
+    <div id="app">            
+      <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+              <img src="/img/bukapedia.png" width="130" height="85" class="d-inline-block align-top" alt="">
+            </a>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <div class="ui buttons">
+                    <button class="ui button" data-toggle="modal" data-target="#myModal">Signin</button>
+                    <div class="or"></div>
+                    <button class="ui positive button">Register</button>
+            </div>
+            <div id=cart>
+                <a class="ui yellow circular label">{{checkout}}</a>
+                <i class="fa fa-shopping-cart" style="font-size:48px;color:green"></i>
+            </div>
+            <div class="ui loading search">
+                    <div class="ui icon input">
+                      <input class="prompt" type="text" placeholder="Search...">
+                      <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
+                  </div>
+          </nav>
+          <br><br>
+
+          
+        <div class="ui four column doubling stackable grid container">
+    
+            <div class="column">
+                    <h3 class="ui center aligned icon header">
+                            <i class="circular users icon"></i>
+                            Mr AGUS 
+                            (20000 TOKOPOINT)
+                          </h3>
+                <div class="ui red segment">Olahraga</div>
+                <div class="ui orange segment">Baju Anak</div>
+                <div class="ui yellow segment">Baju Kokoh</div>
+                <div class="ui olive segment">Makanan</div>
+                <div class="ui green segment">Makanan Olahan</div>
+                <div class="ui teal segment">Elektronik</div>
+                <div class="ui blue segment">Hp/Gadget</div>
+                <div class="ui violet segment">Entertainment</div>
+            </div>
+
+            <div class="grid">
+                    <div class="column" >
+                            <div class="ui special cards">
+                                <div class="card">
+                                  <div class="blurring dimmable image">
+                                    <div class="ui dimmer">
+                                      <div class="content">
+                                        <div class="center">
+                                          <div class="ui inverted button">add to cart</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <img src="http://bajujersey.info/wp-content/uploads/2018/05/3-Moment-Terbaik-Menggunakan-Baju-Koko.jpg">
+                                  </div>
+                                  <div class="content">
+                                    <a class="header">Team Fu</a>
+                                    <div class="meta">
+                                      <span class="date">Created in Sep 2014</span>
+                                    </div>
+                                  </div>
+                                  <div class="extra content">
+                                      <button v-on:click="checkout += 1" class="ui toggle button active">Voted</button>
+                                  </div>
+                            </div>
+                    </div>     
+             
+          </div>
+    
+            <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Modal Header</h4>
+                        </div>
+                        <div class="modal-body">
+                          <p>This is a large modal.</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+
+    </div>
+    </div>
+
+        <script>
+           
+           $('.special.cards .image').dimmer({
+                on: 'hover'
+            });   
+
+            var app = new Vue({
+                el: '#app', 
+                data: {
+                    message: 'Hello Vue!',
+                    data_barang:[],
+                    checkout:0
+                }
+                ,
+                created() {    
+                    this.showItem()
+                }
+                ,methods:{
+                  showItem(){
+                    axios({
+                      url:'http://localhost:3000/product'
+                    })
+                    .then(function (response) {
+                        app.data_barang=response.data
+                    }).catch(function(err){
+                        console.log(err)
+                    })
+                  }
+                }
+            })
+
+        </script>
+        
+</body>
+</html>
