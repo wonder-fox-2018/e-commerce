@@ -4,11 +4,12 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-const CronJob = require('cron').CronJob
+// const CronJob = require('cron').CronJob
 const IndexRoutes = require('./routes/IndexRoutes')
 const UserRoutes = require('./routes/UserRoutes')
 const ItemRoutes = require('./routes/ItemRoutes')
 const TransactionRoutes = require('./routes/TransactionRoutes')
+const CategoryRoutes = require('./routes/CategoryRoutes')
 const app = express()
 
 mongoose.connect('mongodb://localhost:27017/ecosmeticsdb', {useNewUrlParser: true});
@@ -21,6 +22,7 @@ app.use('/user', IndexRoutes)
 app.use('/users', UserRoutes)
 app.use('/items', ItemRoutes)
 app.use('/transactions', TransactionRoutes)
+app.use('/categories', CategoryRoutes)
 
 
 // console.log('Before job instantiation');
