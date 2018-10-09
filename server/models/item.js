@@ -19,6 +19,9 @@ var ItemSchema = new Schema({
   price: {
     type: Number,
     required: true
+  },
+  image_url: {
+    type: String
   }
 }, {
   timestamps: true
