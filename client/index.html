@@ -47,7 +47,7 @@
           </li>
           <li>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">>
-              Notifications <span class="badge badge-light">{{ user.cart.length }}</span>
+              Notifications <span class="badge badge-light">{{ user.count }}</span>
             </button>
           </li>
         </ul>
@@ -83,17 +83,17 @@
     </div>
  <!-- Modal -->
  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalCenterTitle">Cart</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <table>
-            <thead>
+            <thead style="text-align:center">
               <th>Nama</th>
               <th>Jumlah</th>
               <th>Harga</th>
@@ -101,10 +101,10 @@
             </thead>
             <tbody v-for="value in user.cart">
               <tr>
-                <td>{{ value.title }}</td>
-                <td style="text-align:center">{{ value.total }}</td>
-                <td>{{ value.price }}</td>
-                <td>{{ value.total * value.price}}</td>
+                <td><input class="form-control" type="text" v-bind:value="value.title" readonly></td>
+                <td><input class="form-control" type="text" v-bind:value="value.total" readonly style="text-align:center"></td>
+                <td><input class="form-control" type="text" v-bind:value="value.price" readonly style="text-align:right"></td>
+                <td><input class="form-control" type="text" v-bind:value="value.total * value.price" readonly style="text-align:right"></td>
               </tr>
             </tbody>
           </table>

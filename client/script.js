@@ -48,19 +48,25 @@ let app = new Vue({
     },
     methods :{
         cart : function(buy){
-            let product = this.user.cart
-            if(product.length > 0){
-                for(let i = 0; i < product.length;i++){
-                    if(product[i].id !== buy.id){
-                        product.push(buy)
+            this.user.count=this.user.count+1
+            let status=0
+            if(this.user.cart.length > 0){
+                for(let i = 0; i < this.user.cart.length;i++){
+                    if(this.user.cart[i].id === buy.id){
+                        this.user.cart[i].total=this.user.cart[i].total+1
+                        status=1
+                        break
                     }
                 }
             }
             else{
                 this.user.cart.push(buy)
+                status = 1
             }
 
-            this.user.cart = product
+            if(status==0){
+                this.user.cart.push(buy)
+            }
         }
     }
 })
