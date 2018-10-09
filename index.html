@@ -17,6 +17,7 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="js/modernizr.custom.js"></script>
     <script src="js/jBox.min.js"></script>
 
@@ -31,7 +32,7 @@
                 <div href="#">+ SHOP</div>
                 <div href="#">+ ABOUT</div>
                 <div href="#">+ HELP</div>
-                <div href="#">+ BLOG</div>
+                <div href="#">+ {{ welcome }}</div>
             </div>
 
             <div class="logoSect">H8 </div>
@@ -44,230 +45,53 @@
         </header>
 
         <section>
-            <img src="https://picsum.photos/1200/600/?random" alt="">
+            <img src="https://picsum.photos/1200/400/?random" alt="">
         </section>
 
+        <main>
+            <div v-for="item in categories.slice(0,6)" :key="item.id" class="grid cs-style-3">
+                <div class="mainCard">
+                    <figure>
+                        <div><img v-bind:src="'https://picsum.photos/500/30'+item.id+'/?random'" alt="img05"></div>
+                        <figcaption>
+                            <h3> {{ item.categoryName }} </h3>
+                            <span> {{ item.description }} </span>
+                            <a href="">Take a look</a>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </main>
 
         <nav>
-
+            <div class="categoriesContainer">
+                <ul>
+                    <li v-for="item in categories" :key="item.id" class="fa fa-star">
+                        {{ item.categoryName }}
+                    </li>
+                </ul>
+            </div>
         </nav>
 
 
-        <main>
-
-            <div class="grid cs-style-5">
-                <div class="mainCard">
-                    <figure>
-                        <div><img src="https://picsum.photos/500/300/?random" alt="img05"></div>
-                        <figcaption>
-                            <h3>Safari</h3>
-                            <span>Jacob Cummings</span>
-                            <a href="http://dribbble.com/shots/1116775-Safari">Take a look</a>
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
-            <div class="grid cs-style-2">
-                <div class="mainCard">
-                    <figure>
-                        <div><img src="https://picsum.photos/500/302/?random" alt="img05"></div>
-                        <figcaption>
-                            <h3>Safari</h3>
-                            <span>Jacob Cummings</span>
-                            <a href="http://dribbble.com/shots/1116775-Safari">Take a look</a>
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
-            <div class="grid cs-style-3">
-                <div class="mainCard">
-                    <figure>
-                        <div><img src="https://picsum.photos/500/303/?random" alt="img05"></div>
-                        <figcaption>
-                            <h3>Safari</h3>
-                            <span>Jacob Cummings</span>
-                            <a href="http://dribbble.com/shots/1116775-Safari">Take a look</a>
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
-            <div class="grid cs-style-4">
-                <div class="mainCard">
-                    <figure>
-                        <div><img src="https://picsum.photos/500/304/?random" alt="img05"></div>
-                        <figcaption>
-                            <h3>Safari</h3>
-                            <span>Jacob Cummings</span>
-                            <a href="http://dribbble.com/shots/1116775-Safari">Take a look</a>
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
-            <div class="grid cs-style-4">
-                <div class="mainCard">
-                    <figure>
-                        <div><img src="https://picsum.photos/500/305/?random" alt="img05"></div>
-                        <figcaption>
-                            <h3>Safari</h3>
-                            <span>Jacob Cummings</span>
-                            <a href="http://dribbble.com/shots/1116775-Safari">Take a look</a>
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
-            <div class="grid cs-style-4">
-                <div class="mainCard">
-                    <figure>
-                        <div><img src="https://picsum.photos/500/306/?random" alt="img05"></div>
-                        <figcaption>
-                            <h3>Safari</h3>
-                            <span>Jacob Cummings</span>
-                            <a href="http://dribbble.com/shots/1116775-Safari">Take a look</a>
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
-
-        </main>
-
-
-
         <article>
-            <div class="productCard">
+            <div v-for="(item, i) in products" :key="item.id" class="productCard">
                 <div class="box-wrapper">
-                    <img src="https://picsum.photos/401/201/?random" alt="rhcp" />
+                    <img v-bind:src="'https://picsum.photos/401/20'+item.rating+'/?random'" alt="rhcp" />
                     <div class="box-content">
                         <a class="buy" href="javascript:void(0)"><span><i class="fa fa-cart-plus"></i></span></a>
-                        <div class="title">Chili Papers</div>
-                        <div class="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt,
-                            necessitatibus!</div>
-                        <span class="price">5.67$</span>
+                        <div class="title"> {{item.productName}} </div>
+                        <div class="desc"> {{item.productDesc}} </div>
+                        <span class="price">Rp {{item.price}}</span>
                         <div class="footer">
                             <ul>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star-o"></li>
+                                <li v-for="n in item.rating" class="fa fa-star"></li>
                             </ul>
                         </div>
                     </div>
                     <div class="success"></div>
                 </div>
             </div>
-            <div class="productCard">
-                <div class="box-wrapper">
-                    <img src="https://picsum.photos/401/202/?random" alt="rhcp" />
-                    <div class="box-content">
-                        <a class="buy" href="javascript:void(0)"><span><i class="fa fa-cart-plus"></i></span></a>
-                        <div class="title">Chili Papers</div>
-                        <div class="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt,
-                            necessitatibus!</div>
-                        <span class="price">5.67$</span>
-                        <div class="footer">
-                            <ul>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star-o"></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="success"></div>
-                </div>
-            </div>
-            <div class="productCard">
-                <div class="box-wrapper">
-                    <img src="https://picsum.photos/401/203/?random" alt="rhcp" />
-                    <div class="box-content">
-                        <a class="buy" href="javascript:void(0)"><span><i class="fa fa-cart-plus"></i></span></a>
-                        <div class="title">Chili Papers</div>
-                        <div class="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt,
-                            necessitatibus!</div>
-                        <span class="price">5.67$</span>
-                        <div class="footer">
-                            <ul>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star-o"></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="success"></div>
-                </div>
-            </div>
-            <div class="productCard">
-                <div class="box-wrapper">
-                    <img src="https://picsum.photos/401/204/?random" alt="rhcp" />
-                    <div class="box-content">
-                        <a class="buy" href="javascript:void(0)"><span><i class="fa fa-cart-plus"></i></span></a>
-                        <div class="title">Chili Papers</div>
-                        <div class="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt,
-                            necessitatibus!</div>
-                        <span class="price">5.67$</span>
-                        <div class="footer">
-                            <ul>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star-o"></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="success"></div>
-                </div>
-            </div>
-            <div class="productCard">
-                <div class="box-wrapper">
-                    <img src="https://picsum.photos/401/205/?random" alt="rhcp" />
-                    <div class="box-content">
-                        <a class="buy" href="javascript:void(0)"><span><i class="fa fa-cart-plus"></i></span></a>
-                        <div class="title">Chili Papers</div>
-                        <div class="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt,
-                            necessitatibus!</div>
-                        <span class="price">5.67$</span>
-                        <div class="footer">
-                            <ul>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star-o"></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="success"></div>
-                </div>
-            </div>
-            <div class="productCard">
-                <div class="box-wrapper">
-                    <img src="https://picsum.photos/401/206/?random" alt="rhcp" />
-                    <div class="box-content">
-                        <a class="buy" href="javascript:void(0)"><span><i class="fa fa-cart-plus"></i></span></a>
-                        <div class="title">Chili Papers</div>
-                        <div class="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt,
-                            necessitatibus!</div>
-                        <span class="price">5.67$</span>
-                        <div class="footer">
-                            <ul>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star"></li>
-                                <li class="fa fa-star-o"></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="success"></div>
-                </div>
-            </div>
-
-
-
         </article>
 
         <aside>
@@ -297,11 +121,11 @@
         </aside>
 
         <footer>
-
+            
 
         </footer>
 
-    </div>
+    
 
     <div id="login-box" style="display:none;">
         <div class="left">
@@ -335,9 +159,7 @@
         </div>
     </div>
 
-
-
-    <div id="cartContainer" style="display:none;">
+    <div id="cartContainer" style="display:none;" >
         <div class="wrap cf">
 
             <div class="heading cf">
@@ -345,119 +167,41 @@
                 <a href="#" class="continue">Continue Shopping</a>
             </div>
             <div class="cart">
-                <!-- <ul class="tableHead">
-            <li class="prodHeader">Product</li>
-            <li>Quantity</li>
-            <li>Total</li>
-             <li>Remove</li>
-          </ul> -->
                 <ul class="cartWrap">
-                    <li class="items odd">
+                    <li v-for="(item, index) in cart.cartcontent" class="items even">
 
                         <div class="infoWrap">
                             <div class="cartSection">
                                 <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" class="itemImg" />
-                                <p class="itemNumber">#QUE-007544-002</p>
-                                <h3>Item Name 1</h3>
+                                <p class="itemNumber"> {{item.Product.id}} </p>
+                                <h3> {{ item.Product.productName}} </h3>
 
-                                <p> <input type="text" class="qty" placeholder="3" /> x $5.00</p>
+                                <p> <input type="text" class="qty" v-bind:placeholder="item.qty" /> x {{item.Product.price}}</p>
 
                                 <p class="stockStatus"> In Stock</p>
                             </div>
 
 
                             <div class="prodTotal cartSection">
-                                <p>$15.00</p>
+                                <p> {{ item.qty + item.Product.price }} </p>
                             </div>
                             <div class="cartSection removeWrap">
                                 <a href="#" class="remove">x</a>
                             </div>
                         </div>
                     </li>
-                    <li class="items even">
-
-                        <div class="infoWrap">
-                            <div class="cartSection">
-
-                                <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" class="itemImg" />
-                                <p class="itemNumber">#QUE-007544-002</p>
-                                <h3>Item Name 1</h3>
-
-                                <p> <input type="text" class="qty" placeholder="3" /> x $5.00</p>
-
-                                <p class="stockStatus"> In Stock</p>
-                            </div>
-
-
-                            <div class="prodTotal cartSection">
-                                <p>$15.00</p>
-                            </div>
-                            <div class="cartSection removeWrap">
-                                <a href="#" class="remove">x</a>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="items odd">
-                        <div class="infoWrap">
-                            <div class="cartSection">
-
-                                <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" class="itemImg" />
-                                <p class="itemNumber">#QUE-007544-002</p>
-                                <h3>Item Name 1</h3>
-
-                                <p> <input type="text" class="qty" placeholder="3" /> x $5.00</p>
-
-                                <p class="stockStatus out"> Out of Stock</p>
-                            </div>
-
-
-                            <div class="prodTotal cartSection">
-                                <p>$15.00</p>
-                            </div>
-                            <div class="cartSection removeWrap">
-                                <a href="#" class="remove">x</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="items even">
-                        <div class="infoWrap">
-                            <div class="cartSection info">
-
-                                <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" class="itemImg" />
-                                <p class="itemNumber">#QUE-007544-002</p>
-                                <h3>Item Name 1</h3>
-
-                                <p> <input type="text" class="qty" placeholder="3" /> x $5.00</p>
-
-                                <p class="stockStatus"> In Stock</p>
-
-                            </div>
-
-
-                            <div class="prodTotal cartSection">
-                                <p>$15.00</p>
-                            </div>
-
-                            <div class="cartSection removeWrap">
-                                <a href="#" class="remove">x</a>
-                            </div>
-                        </div>
-                    </li>
-
-                    <!--<li class="items even">Item 2</li>-->
-
+                    
                 </ul>
             </div>
 
             <div class="subtotal cf">
                 <ul>
-                    <li class="totalRow"><span class="label">Subtotal</span><span class="value">$35.00</span></li>
+                    <li class="totalRow"><span class="label">Subtotal</span><span class="value"> {{cart.subTotal}} </span></li>
 
-                    <li class="totalRow"><span class="label">Shipping</span><span class="value">$5.00</span></li>
+                    <li class="totalRow"><span class="label">Shipping</span><span class="value"> {{cart.shipping}} </span></li>
 
-                    <li class="totalRow"><span class="label">Tax</span><span class="value">$4.00</span></li>
-                    <li class="totalRow final"><span class="label">Total</span><span class="value">$44.00</span></li>
+                    <li class="totalRow"><span class="label">Tax</span><span class="value"> {{cart.tax}} </span></li>
+                    <li class="totalRow final"><span class="label">Total</span><span class="value"> {{cart.total}} </span></li>
                     <li class="totalRow"><a href="#" class="btn continue">Checkout</a></li>
                 </ul>
             </div>
@@ -465,6 +209,7 @@
         </div>
     </div>
 
+    </div>
 
     <script src="js/toucheffects.js"></script>
     <script src="js/scripts.js"></script>
