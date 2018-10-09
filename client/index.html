@@ -9,6 +9,8 @@
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css" integrity="sha256-ncjDAd2/rm/vaNTqp7Kk96MfSeHACtbiDU9NWKqNuCI="
     crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js" integrity="sha256-0gIvTkdsp0OOeV8tx3UTdi3ehppGwZbzQMvZJYhbzsE="
+  crossorigin="anonymous"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
     crossorigin="anonymous">
@@ -56,7 +58,9 @@
               </div>
             </div>
           </div>
-          <div class="ui one wide column"></div>
+          <div class="ui one wide column">
+
+          </div>
           <!-- cards -->
           <div class="ui eleven wide column">
             <div class="ui link cards">
@@ -79,7 +83,7 @@
                     <div class="content">
                       <a class="header">{{ item.name }}</a>
                       <div class="meta">
-                        <span class="date">{{ item.price }}</span>
+                        <span class="date">Rp {{ moneyFormat(item.price) }}</span>
                       </div>
                     </div>
                     <div class="extra content">
@@ -160,7 +164,7 @@
               <li class="text-dark" style="list-style-type: none;">
                   {{cart.name}} ({{cart.category}})
               </li>
-              <h6 class="text-dark">{{cart.price}}</h6>
+              <h6 class="text-dark">{{moneyFormat(cart.price)}}</h6>
             </div>
           </ul>
           <h5 class="text-dark">Payment Information</h5><br>
@@ -219,6 +223,7 @@
       },
       created() {
         this.showItems()
+        this.showCategories()
       },
       computed: {
         paymentDetail() {
@@ -288,6 +293,16 @@
             console.log(error);
           });
         },
+        showCategories(){
+          axios.get('http://localhost:3000/categories')
+          .then(function (response) {
+            console.log('cat:', response)
+            // app.categories = response.data.items
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        },
         findItem() {
           let self = this
           let arr = []
@@ -313,6 +328,7 @@
           this.totalItems++
         },
         checkout(carts, paymentDetail) {
+          this.carts = []
           let id = localStorage.getItem('id')
           let token = localStorage.getItem('token')
           let totalTransaction = paymentDetail
@@ -322,7 +338,6 @@
             id,
             totalTransaction
           }
-          this.carts = []
           axios.post('http://localhost:3000/carts', data, {
             headers: {
                 authorization: `Bearer ${token}`
@@ -334,12 +349,26 @@
           .catch(err => {
               console.log(err);
           })
+        },
+        moneyFormat(amount, decimalCount = 2, decimal = ",", thousands = ".") {
+          try {
+            decimalCount = Math.abs(decimalCount);
+            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+            const negativeSign = amount < 0 ? "-" : "";
+
+            let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+            let j = (i.length > 3) ? i.length % 3 : 0;
+
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+          } catch (e) {
+            console.log(e)
+          }
         }
       }
     })
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js" integrity="sha256-0gIvTkdsp0OOeV8tx3UTdi3ehppGwZbzQMvZJYhbzsE="
-    crossorigin="anonymous"></script>
+  
   <script>
     $('.special.cards .image').dimmer({
       on: 'hover'
