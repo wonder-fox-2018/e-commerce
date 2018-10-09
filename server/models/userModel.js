@@ -16,7 +16,7 @@ const userSchema = new Schema({
     },
     isAdmin: {
       type: Number,
-      default: 'user'
+      default: 0
     },
     cart: {
       type: Array

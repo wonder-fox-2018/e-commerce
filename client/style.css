@@ -4,6 +4,10 @@
     outline: none;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     max-width: 99%;
@@ -231,12 +235,12 @@ body {
     position: fixed;
     display: flex;
     width: 20vw;
-    height: 20vh;
+    height: 25vh;
     background: #fa782e;
     background: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
     background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
     background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
-    top: 30vh;
+    top: 25vh;
     left: 40vw;
     z-index: 11000;
     justify-content: center;

@@ -68,11 +68,12 @@ module.exports = {
 
     login: function (req, res) {
         if(!req.body.email || !req.body.password) {
-            res.status(500).json({message: 'You should input your email and password to log in'})
+            res.status(500).json({message: 'Please input your email and password'})
         } else {
             User.findOne({
                 email: req.body.email
-            }, function(err, user) {
+            })
+            .then(user => {
                 if(user) {
                     if (user.gSignIn === 0) {
                         let passwordValid = bcrypt.compareSync(req.body.password.toString(), user.password)
@@ -89,6 +90,9 @@ module.exports = {
                     res.status(500).json({message: 'The email is unregistered'})
                 }
             })
+            .catch(err => {
+                res.status(500).json({message: err})
+            })
         }
     },
 
@@ -97,36 +101,36 @@ module.exports = {
             res.status(500).json({message: 'Please input a valid email address'})
         } else {
             var hashedPassword = bcrypt.hashSync(req.body.password);
-            if (req.body.name && req.body.email && req.body.password) {
+            if (req.body.name && req.body.password) {
                 User.findOne({
-                        email: req.body.email
-                    })
-                    .then (data => {
-                        if (data) {
-                            res.status(500).json({message: 'Email has been registered before'})
+                    email: req.body.email
+                })
+                .then (data => {
+                    if (data) {
+                        res.status(500).json({message: 'Email has been registered before'})
+                    } else {
+                        if (req.body.password.length >= 6) {
+                            User.create({
+                                name: req.body.name,
+                                email: req.body.email,
+                                password: hashedPassword
+                            })
+                            .then(data => {
+                                res.status(201).json({message: 'Email registration successful. Please sign in to continue.'})
+                            })
+                            .catch(err => {
+                                res.status(500).json({message: 'An error occured during the registration process. Please try again later.'})
+                            })
                         } else {
-                            if (req.body.password.length >= 6) {
-                                User.create({
-                                    name: req.body.name,
-                                    email: req.body.email,
-                                    password: hashedPassword
-                                })
-                                .then(data => {
-                                    res.status(201).json({message: 'Email registration successful. Please sign in to continue.'})
-                                })
-                                .catch(err => {
-                                    res.status(500).json({message: 'An error occured during the registration process. Please try again later.'})
-                                })
-                            } else {
-                                res.status(500).json({message: 'Password should contain at least 6 characters'})
-                            }
+                            res.status(500).json({message: 'Password should contain at least 6 characters'})
                         }
-                    })
-                    .catch (err => {
-                        res.status(500).json({message: 'An error occured during the registration process. Please try again later.'})
-                    })
+                    }
+                })
+                .catch (err => {
+                    res.status(500).json({message: 'An error occured during the registration process. Please try again later.'})
+                })
             } else {
-                res.status(500).json({message: 'You should input your name, email, and a password to register'})
+                res.status(500).json({message: 'Please fill all the fields'})
             }
         }
     },

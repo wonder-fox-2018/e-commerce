@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 module.exports = {
 
     isLogin: function (req, res, next) {
-        jwt.verify(req.body.jwtToken, process.env.JWT_KEY, (err, decoded) => {
+        jwt.verify(req.headers.token, process.env.JWT_KEY, (err, decoded) => {
             if (err) {
                 next(err.message)
             } else {

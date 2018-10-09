@@ -10,7 +10,7 @@ router.get('/cart', isLogin, getCart)
 router.patch('/cart', isLogin, updateCart)
 router.post('/login', login)
 router.post('/register', register)
-router.post('/checklogin', isLogin, (req, res) => {res.status(200).json({isLogin: true})})
-router.post('/checkout', isLogin, checkout)
+router.get('/check', isLogin, (req, res) => {res.status(200).json({isLogin: true})})
+router.patch('/checkout', isLogin, checkout)
 
 module.exports = router;
