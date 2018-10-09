@@ -4,18 +4,16 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ItemSchema = new Schema({
-    itemname: String,
-    itembrand: String,
-    itemdescription: {
+    itemname: {
         type: String,
-        default: 'No description available'
+        required: [true, 'Name of item can not be empty']
     },
-    itemcategory: {
-        type: String,
-        default: 'miscellaneous'
+    itemcategoryid: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: [true, 'Name of category can not be empty']
     },
     itemurlimage: String,
-    itemwebsitelink: String,
     itemprice: {
         type:Number,
         default: 0,

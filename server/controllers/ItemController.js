@@ -1,24 +1,39 @@
 'use strict'
 
 const Item = require('../models/item')
+const Category = require('../models/category')
 
 class ItemController{
     //create item
     static createItem(req,res){
         Item.create({
             itemname: req.body.itemname,
-            itembrand: req.body.itembrand,
-            itemdescription: req.body.itemdescription,
-            itemcategory: req.body.itemcategory,
+            itemcategoryid: req.body.itemcategoryid,
             itemurlimage: req.body.itemurlimage,
-            itemwebsitelink: req.body.itemwebsitelink,
             itemprice: Number(req.body.itemprice)
         })
           .then(item => {
-              res.status(200).json({
-                  msg: 'Item has been created',
-                  data: item
+            let itemcreated = item
+            // update item to Category collection
+            Category.findOneAndUpdate({
+              _id: item.itemcategoryid  
+            },{
+                $push: {
+                    listitemcategory:itemcreated._id 
+                }
+            })
+              .then(category => {
+                res.status(200).json({
+                    msg: 'Item has been created',
+                    data: itemcreated
+                })
               })
+              .catch(error => {
+                res.status(500).json({
+                    msg: 'ERROR Update Item to Category ',error
+                })
+              })
+                 
           })
           .catch(error => {
               res.status(500).json({
@@ -63,22 +78,83 @@ class ItemController{
 
     // edit item
     static editItem(req,res){
-        Item.findOneAndUpdate({
+        Item.findOne({
             _id: req.params.id
-        },{
-            itemname: req.body.itemname,
-            itembrand: req.body.itembrand,
-            itemdescription: req.body.itemdescription,
-            itemcategory: req.body.itemcategory,
-            itemurlimage: req.body.itemurlimage,
-            itemwebsitelink: req.body.itemwebsitelink,
-            itemprice: Number(req.body.itemprice)
         })
           .then(item => {
-            res.status(200).json({
-              msg: `Item has been updated`,
-              data: item
-            })
+            // check if there's any change in category
+            if(item.itemcategoryid == req.body.itemcategoryid){
+                Item.findOneAndUpdate({
+                    _id: req.params.id
+                },{
+                    itemname: req.body.itemname,
+                    itemcategoryid: req.body.itemcategoryid,
+                    itemurlimage: req.body.itemurlimage,
+                    itemprice: req.body.itemprice
+                })
+                  .then(itemupdated =>{
+                    res.status(200).json({
+                        msg: `Item has been updated`,
+                        data: itemupdated
+                    })
+                  })
+                  .catch(error => {
+                     res.status(500).json({
+                        msg: 'ERROR Edit Items ',error
+                      })            
+                  })
+            }else if(item.itemcategoryid != req.body.itemcategoryid){
+                // remove from old category
+                Category.findOneAndUpdate({
+                    _id: item.itemcategoryid
+                },{
+                    $pull: {
+                        listitemcategory: req.params.id
+                    }
+                })
+                  .then(oldcategory=>{
+                    // updating new category
+                    Category.findOneAndUpdate({
+                        _id:req.body.itemcategoryid
+                    },{
+                        $push: {
+                            listitemcategory: req.params.id
+                        }
+                    })
+                      .then(newcategory =>{
+                          // update the item
+                          Item.findOneAndUpdate({
+                            _id: req.params.id
+                        },{
+                            itemname: req.body.itemname,
+                            itemcategoryid: req.body.itemcategoryid,
+                            itemurlimage: req.body.itemurlimage,
+                            itemprice: req.body.itemprice
+                        })
+                          .then(itemupdated =>{
+                            res.status(200).json({
+                                msg: `Item has been updated`,
+                                data: itemupdated
+                            })
+                          })
+                          .catch(error => {
+                             res.status(500).json({
+                                msg: 'ERROR Edit Items ',error
+                              })            
+                          })  
+                      })
+                      .catch(error =>{
+                        res.status(500).json({
+                          msg: 'ERROR Updating New Category ',error
+                        })  
+                      })
+                  })
+                  .catch(error =>{
+                      res.status(500).json({
+                        msg: 'ERROR Updating Old Category ',error
+                      })          
+                  })
+            }
           })
           .catch(error => {
             res.status(500).json({
@@ -89,14 +165,39 @@ class ItemController{
 
     // delete item
     static deleteItem(req,res){
-        Item.findOneAndRemove({
+        Item.findOne({
            _id: req.params.id
         })
          .then(item => {
-            res.status(200).json({
-              msg: `Item has been deleted`,
-              data: item
+            let deleteditem = item 
+            Category.findOne({
+                _id: item.itemcategoryid
+            },{
+                $pull: {
+                    listitemcategory: item._id
+                }
             })
+              .then(category => {
+                  Item.findOneAndRemove({
+                      _id: req.params.id
+                  })
+                    .then(category=>{
+                        res.status(200).json({
+                            msg: 'Item has been deleted',
+                            data: deleteditem
+                        })
+                    })
+                    .catch(error =>{
+                        res.status(500).json({
+                            msg: 'ERROR Delete Item from Category'
+                        })      
+                    })
+              })
+              .catch(error => {
+                  res.status(500).json({
+                      msg: 'ERROR Delete Item from Category'
+                  })
+              })
          })
          .catch(error => {
             res.status(500).json({

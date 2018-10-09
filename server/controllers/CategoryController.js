@@ -23,11 +23,12 @@ class CategoryController{
 
     // edit category ---> only updating name
     static editCategory(req,res){
-        Category.findOne({
+        Category.update({
             _id: req.params.id
+        },{
+            name: req.body.name
         })
           .then(category => {
-            category.name = req.body.name
             res.status(200).json({
                 msg: 'Category has been updated',
                 data: category
