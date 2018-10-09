@@ -1,0 +1,26 @@
+    .col-lg-3 {
+        color: green;
+        text-align: center;
+    }
+
+    .col-md-6 {
+        color: green;
+        text-align: center;
+        margin-bottom: 10px
+    }
+
+    .col-sm-6 {
+        color: green;
+        text-align: center;
+        margin-bottom: 10px
+    }
+
+    .col-12 {
+        color: green;
+        text-align: center;
+        margin-bottom: 10px
+    }
+
+    .row {
+        margin: 10px
+    }
