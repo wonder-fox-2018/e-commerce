@@ -10,657 +10,301 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="faextended.css" />
 </head>
 <body>
-    <div id="sidebar">
-        <ul class="mt-4">
-            <li><i class="fas fa-shoe-prints mx-4"></i><span class="menutext ml-2">Home</span></li>
-            <li><i class="fa fax-mans-shoe mx-4"></i><span class="menutext ml-2">Men's Shoes</span></li>
-            <li><i class="fa fax-high-heeled-shoe mx-4"></i><span class="menutext ml-2">Women's Shoes</span></li>
-            <li><i class="fa fax-athletic-shoe mx-4"></i><span class="menutext ml-2">Athletic Shoes</span></li>
-        </ul>
-        <ul class="mt-4" id='bottommenu'>
-            <li onclick="signin()"><i class="fas fa-sign-in-alt mx-4"></i><span class="menutext ml-2">Sign In</span></li>
-            <li><i class="fas fa-shopping-cart mx-4"></i><span class="menutext ml-2">My Cart</span></li>
-            <li id='cartitemcount'>.</li>
-        </ul>
-    </div>
-    <div class="row">
-        <div class="col-4"></div>
-        <div class="col-8 col-lg-7">
-            <div class="row" id='products'>
-                <!-- ITEM 1 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
+    <div id='app'>
+        <div id="sidebar" v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'>
+            <ul class="mt-4">
+                <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'><i class="fas fa-shoe-prints mx-4"></i><span class="menutext ml-2">Home</span></li>
+                <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-for='category in categories'><i v-bind:class="category.icon" class="mx-4"></i><span class="menutext ml-2">{{ category.name }}</span></li>
+            </ul>
+            <ul class="mt-4" id='bottommenu'>
+                <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signModal()"><i class="fas fa-sign-in-alt mx-4"></i><span class="menutext ml-2">Sign In / Register</span></li>
+                <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="cartModal()"><i class="fas fa-shopping-cart mx-4"></i><span class="menutext ml-2">My Cart ( {{ itemcount }} )</span></li>
+                <li class='itemcount' v-if='itemcount > 0 && menuhover === false'>{{ itemcount }}</li>
+                <li class='itemcount' v-else style="color: transparent">.</li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-8 col-lg-7">
+                <div class="row" id='products'>
+                    <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4" v-for='product in products'>
+                        <div class="cardku">
+                            <div class="card-head">
+                                <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
+                                <div class="product-detail">
+                                    <h2>{{ product.name }}</h2>
+                                    <p>{{ product.description }}</p>
+                                </div>
+                                <span class="back-text">
+                                    {{ product.backtext }}
+                                </span>
                             </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                    Hartbee<b>spoort</b>
-                                    <span class="badge">
-                                        New
+                            <div class="card-bodyku">
+                                <div class="product-desc">
+                                    <span class="product-title">
+                                        <b>{{ product.name }}</b>
                                     </span>
-                                </span>
-                                <span class="product-caption">
-                                    Athletic Shoes
-                                </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
+                                    <span class="product-caption">
+                                        {{ product.category.name }}
+                                    </span>
+                                    <span class="product-rating">
+                                    <i class="fa fa-star" v-for='i in product.rating'></i>
+                                    <i class="fa fa-star grey" v-for='i in (5 - product.rating)'></i>
+                                    </span>
+                                </div><br>
+                                <div class="product-properties">
+                                    <span class="product-price">
+                                        IDR<b>{{ product.price | moneySlice }}</b>
+                                    </span>
+                                </div>
+                                <div class='atclogo' title="Add to Cart">
+                                    <span>
+                                        <i class="fas fa-cart-plus" v-on:click='addToCart(product)'></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- ITEM 2 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            <div class="col-0 col-lg-1"></div>
+        </div>
+        <div id="backdrop" v-if='openBackdrop'></div>
+        <div id='signmodal' v-if='openSignModal'>
+            <div id='redhalf' v-bind:style='{height: redhalfHeight, top: redhalfTop}'>
+                <div id='signinform' v-if='isSigningIn'>
+                    <input type="text" id='email' v-bind:style='{color: emailColor}' v-model='email' v-on:keyup='validateEmail()' placeholder="Email"><br>
+                    <input type="password" id='password' v-bind:style='{color: passwordColor}' v-model='password' v-on:keyup='validatePassword()' placeholder="Password">
                 </div>
-                <!-- ITEM 3 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                <div id='signupform' v-else>
+                    <input type="text" id='newname' v-model='newname' placeholder="Name"><br>
+                    <input type="text" id='newemail' v-model='newemail' v-bind:style='{color: newEmailColor}' v-on:keyup='validateNewEmail()' placeholder="Email"><br>
+                    <input type="password" id='newpassword' v-model='newpassword' v-bind:style='{color: newPasswordColor}' v-on:keyup='validateNewPassword()' placeholder="Password (min. 6 characters)">
                 </div>
-                <!-- ITEM 4 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ITEM 5 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ITEM 6 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ITEM 7 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ITEM 8 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ITEM 9 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ITEM 10 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ITEM 11 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ITEM 12 -->
-                <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="cardku">
-                        <div class="card-head">
-                            <img src="https://s5.postimg.cc/wy79025cz/nike_Logo_White.png" alt="logo" class="card-logo">
-                            <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                            <div class="product-detail">
-                                <h2>Hartbeespoort</h2> Support and Nike Zoom Air come together for a more supportive feel with high-speed responsiveness
-                            </div>
-                            <span class="back-text">
-                                FAST
-                            </span>
-                        </div>
-                        <div class="card-bodyku">
-                            <div class="product-desc">
-                                <span class="product-title">
-                                        Hartbee<b>spoort</b>
-                                        <span class="badge">
-                                        New
-                                        </span>
-                                </span>
-                                <span class="product-caption">
-                                        Athletic Shoes
-                                    </span>
-                                <span class="product-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star grey"></i>
-                                </span>
-                            </div><br>
-                            <div class="product-properties">
-                                <span class="product-price">
-                                    IDR<b>800K</b>
-                                </span>
-                            </div>
-                            <div class='atclogo' title="Add to Cart">
-                                <span>
-                                    <i class="fas fa-cart-plus"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div id='whitehalf'>
+                <button id='signin-btn' v-on:click='signin()'>SIGN IN</button>
+                <button id='close-btn' v-on:click='signModal()'><i class="far fa-times-circle"></i></button>
+                <button id='signup-btn' v-on:click='signup()'>SIGN UP</button>
             </div>
         </div>
-        <div class="col-0 col-lg-1"></div>
-    </div>
-    <div id="backdrop"></div>
-    <div id='signmodal'>
-        <div id='redhalf'>
-            <div id='signinform'>
-                <input type="text" id='email'><br>
-                <input type="password" id='password'>
+        <div id='cartmodal' v-if='openCartModal'>
+            <div id='cartcontent'>
+                <div class="row mb-4" v-for="item in cart">
+                    <div class="col-xl-4">
+                        <div class="row">
+                            <div class="col-12 text-center text-xl-left"><strong>{{ item.name }}</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center text-xl-left">{{ item.count }}xRp{{ item.price }}</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="row">
+                            <div class="col-12 text-center text-xl-right pt-2 pt-xl-4 pr-xl-4 mb-4" style="height:20px"><strong>{{ item.total }}</strong></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class='row no-gutters'>
+                            <div class="col-5">
+                                <button class="btn cartBtn" title="Remove" v-on:click="removeFromCart(item.name, item.price)" style='width:100%'>-</button>
+                            </div>
+                            <div class="col-2"></div>
+                            <div class="col-5">
+                                <button class="btn cartBtn" title="Add" v-on:click="addFromCart(item.name, item.price)" style='width:100%'>+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="width: 100%" v-if='totalsum > 0 && isLogin'>
+                    <div class="col-6 text-left mb-2">Total:</div>
+                    <div class="col-6 text-right mb-2"><strong>Rp{{ totalsum }}</strong></div>
+                    <div class="col-6 text-center">
+                        <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
+                    </div>
+                    <div class="col-6 text-center">
+                        <button id='checkOutBtn' v-on:click="checkOut()" class="btn cartBtn">Check Out</button>
+                    </div>
+                </div>
+                <div class="row" style="width: 100%" v-else-if='totalsum > 0'>
+                    <div class="col-6 text-left mb-2">Total:</div>
+                    <div class="col-6 text-right mb-2"><strong>Rp{{ totalsum }}</strong></div>
+                    <div class="col-12 text-center mb-2">You should sign in to check out</div>
+                    <div class="col-12 text-center">
+                        <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
+                    </div>
+                </div>
+                <div class="row" style="width: 100%" v-else>
+                    <div class="col-12 text-center mb-2">You haven't add anything to your cart</div>
+                    <div class="col-12 text-center">
+                        <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
+                    </div>
+                </div>
             </div>
-            <div id='signupform'>
-                <input type="text" id='newname'><br>
-                <input type="text" id='newemail'><br>
-                <input type="password" id='newpassword'>
-            </div>
-        </div>
-        <div id='whitehalf'>
-            <button id='signin-btn' onclick='signin()'>SIGN IN</button>
-            <button id='close-btn' onclick='closeSignModal()'><i class="far fa-times-circle"></i></button>
-            <button id='signup-btn' onclick='signup()'>SIGN UP</button>
         </div>
     </div>
     <script>
-        let cartItemCounter = 0
-        $('#backdrop').hide()
-        $('#signmodal').hide()
-        $('#signupform').hide()
-
-
-        $('.fa-cart-plus').click(() => {
-            cartItemCounter++
-            $('#cartitemcount').text(cartItemCounter)
-            $('#cartitemcount').css('color', 'white')
-        })
-        $('#sidebar').hover(() => {
-            $('#cartitemcount').css('color', 'transparent');
-        }, () => {
-            if (cartItemCounter > 0) {
-                $('#cartitemcount').css('color', 'white');
+        var app = new Vue({
+            el: '#app',
+            data: {
+                categories: [],
+                products: [],
+                email: '',
+                password: '',
+                newname: '',
+                newpassword: '',
+                openBackdrop: false,
+                openSignModal: false,
+                openCartModal: false,
+                isSigningIn: true,
+                menuhover: false,
+                itemcount: 0,
+                items: [],
+                cart: [],
+                totalsum: 0,
+                emailColor: 'rgba(0, 0, 0, 0.5)',
+                passwordColor: 'rgba(0, 0, 0, 0.5)',
+                newEmailColor: 'rgba(0, 0, 0, 0.5)',
+                newPasswordColor: 'rgba(0, 0, 0, 0.5)',
+                redhalfHeight: '20vh',
+                redhalfTop: '30vh',
+                isLogin: true
+            },
+            methods: {
+                getCategory() {
+                    axios({
+                        url: 'http://localhost:3000/categories'
+                    })
+                    .then(data => {
+                        this.categories = data.data
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                },
+                getProducts() {
+                    axios({
+                        url: 'http://localhost:3000/products'
+                    })
+                    .then(data => {
+                        this.products = data.data
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                },
+                addToCart(product) {
+                    this.itemcount ++
+                    let i = this.items.indexOf(product.name)
+                    if (i === -1) {
+                        this.items.push(product.name)
+                        this.cart.push({
+                            name: product.name,
+                            price: product.price,
+                            count: 1,
+                            total: product.price
+                        })
+                        app.totalsum += product.price
+                    } else {
+                        this.cart[i].count ++
+                        this.cart[i].total += product.price
+                        this.totalsum += product.price
+                    }
+                    
+                    localStorage.setItem('items', JSON.stringify(this.items))
+                    localStorage.setItem('cart', JSON.stringify(this.cart))
+                    localStorage.setItem('totalsum', this.totalsum)
+                },
+                menuHover() {
+                    this.menuhover = true
+                },
+                menuLeave() {
+                    this.menuhover = false
+                },
+                signModal() {
+                    this.openBackdrop = !this.openBackdrop
+                    this.openSignModal = !this.openSignModal
+                    this.email = ''
+                    this.newemail = ''
+                    this.password = ''
+                    this.newpassword = ''
+                    this.name = ''
+                },
+                signin() {
+                    this.redhalfHeight = '20vh'
+                    this.redhalfTop = '30vh'
+                    this.isSigningIn = true
+                    this.email = this.newemail
+                    this.password = this.newpassword
+                    this.newemail = ''
+                    this.newpassword = ''
+                    this.validateEmail()
+                    this.validatePassword()
+                },
+                signup() {
+                    this.redhalfHeight = '30vh'
+                    this.redhalfTop = '20vh'
+                    this.isSigningIn = false
+                    this.newemail = this.email
+                    this.newpassword = this.password
+                    this.email = ''
+                    this.password = ''
+                    this.validateNewEmail()
+                    this.validateNewPassword()
+                },
+                validateEmail() {
+                    if (/\S+@\S+\.\S+/.test(this.email) === true) {
+                        this.emailColor = '#fa782e'
+                    } else {
+                        this.emailColor = 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                validateNewEmail() {
+                    if (/\S+@\S+\.\S+/.test(this.newemail) === true) {
+                        this.newEmailColor = '#fa782e'
+                    } else {
+                        this.newEmailColor = 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                validatePassword() {
+                    if (this.password.length > 5) {
+                        this.passwordColor = '#fa782e'
+                    } else {
+                        this.passwordColor = 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                validateNewPassword() {
+                    if (this.newpassword.length > 5) {
+                        this.newPasswordColor = '#fa782e'
+                    } else {
+                        this.newPasswordColor = 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                cartModal() {
+                    this.openCartModal = !this.openCartModal
+                    this.openBackdrop = !this.openBackdrop
+                }
+            },
+            filters: {
+                moneySlice: function (value) {
+                    let str = String(value)
+                    if (str.length > 3) {
+                        return str.slice(0, str.length-3) + 'K'
+                    } else {
+                        return str
+                    }
+                }
+            },
+            created() {
+                this.getCategory()
+                this.getProducts()
             }
         })
-        $('#email').keyup(() => {
-            if (/\S+@\S+\.\S+/.test($('#email').val()) === true) {
-                $('#email').css('color', '#fa782e')
-            } else {
-                $('#email').css('color', 'rgba(0, 0, 0, 0.5)')
-            }
-        })
-        $('#newemail').keyup(() => {
-            if (/\S+@\S+\.\S+/.test($('#newemail').val()) === true) {
-                $('#newemail').css('color', '#fa782e')
-            } else {
-                $('#newemail').css('color', 'rgba(0, 0, 0, 0.5)')
-            }
-        })
-        $('#password').keyup(() => {
-            if ($('#password').val().length > 5) {
-                $('#password').css('color', '#fa782e')
-            } else {
-                $('#password').css('color', 'rgba(0, 0, 0, 0.5)')
-            }
-        })
-        $('#newpassword').keyup(() => {
-            if ($('#newpassword').val().length > 5) {
-                $('#newpassword').css('color', '#fa782e')
-            } else {
-                $('#newpassword').css('color', 'rgba(0, 0, 0, 0.5)')
-            }
-        })
-
-        function signin () {
-            $('#backdrop').show()
-            $('#signmodal').show()
-            $('#signupform').hide()
-            $('#signinform').show()
-            $('#redhalf').css('height', '20vh')
-            $('#redhalf').css('top', '30vh')
-        }
-
-        function signup () {
-            $('#signupform').show()
-            $('#signinform').hide()
-            $('#redhalf').css('height', '30vh')
-            $('#redhalf').css('top', '20vh')
-        }
-
-        function closeSignModal () {
-            $('#signmodal').hide()
-            $('#backdrop').hide()
-        }
     </script>
 </body>
 </html>

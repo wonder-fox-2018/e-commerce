@@ -5,7 +5,7 @@ var { showAll, showByCategory, add, edit, remove } = require('../controllers/pro
 router.get('/', showAll)
 router.get('/:category', showByCategory)
 router.post('/', add)
-router.put('/', edit)
-router.delete('/', remove)
+router.put('/:id', edit)
+router.delete('/:id', remove)
 
 module.exports = router;

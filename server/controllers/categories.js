@@ -6,7 +6,7 @@ module.exports = {
     show: function (req, res) {
         Category.find({})
         .then(data => {
-            res.status(200).json({data: data})
+            res.status(200).json(data)
         })
         .catch(err => {
             res.status(500).json({error: err})
@@ -15,7 +15,8 @@ module.exports = {
 
     add: function (req, res) {
         Category.create({
-            name: req.body.name
+            name: req.body.name,
+            icon: req.body.icon,
         })
         .then(() => {
             res.status(201).json({message: 'New category added.'})
@@ -29,7 +30,8 @@ module.exports = {
         Category.updateOne({
             _id: req.params.id
         }, {
-            name: req.body.name
+            name: req.body.name,
+            icon: req.body.icon,
         })
         .then(() => {
             res.status(200).json({message: `Category '${req.params.id}' updated.`})

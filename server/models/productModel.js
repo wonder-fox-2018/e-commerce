@@ -6,9 +6,22 @@ const productSchema = new Schema({
       type: String,
       required: true
     },
+    description: {
+      type: String,
+      required: true
+    },
+    backtext: {
+      type: String,
+      required: true,
+      maxlength: 4
+    },
     price: {
       type: Number,
       required: true
+    },
+    rating: {
+      type: Number,
+      default: 0
     },
     category: {
       type: Schema.Types.ObjectId,
