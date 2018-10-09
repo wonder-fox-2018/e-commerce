@@ -14,284 +14,346 @@
     crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <title>TokoLapak</title>
 </head>
 
 <body>
-  <header class="ui">
-    <nav class="navbar navbar-light" style="background-color: rgb(69, 73, 73); color: whitesmoke">
-      <!-- <img src="./img/tokolapak.png" alt="#" class="logo"> -->
-      <h1><span style="color:rgb(20, 160, 20)">Toko</span><i class="fab fa-opencart"></i><span style="color:rgb(194, 27, 27)">Lapak</span></h1>
-      <div class="ui buttons">
-          <button class="ui teal button">Register</button>
+  <div id="app">
+    <header class="ui">
+      <nav class="navbar navbar-light" style="background-color: rgb(69, 73, 73); color: whitesmoke">
+        <!-- <img src="./img/tokolapak.png" alt="#" class="logo"> -->
+        <h1><span style="color:rgb(20, 160, 20)">Toko</span><i class="fab fa-opencart"></i><span style="color:rgb(194, 27, 27)">Lapak</span></h1>
+        <div class="ui buttons">
+          <button class="ui teal button" id="register">Register</button>
           <div class="or"></div>
-          <button class="ui blue button">Sign In</button>
+          <button class="ui blue button" id="login">login</button>
         </div>
-      <div class="ui vertical animated button" tabindex="0">
-          <div class="hidden content">Cart</div>
-          <div class="visible content">
-            <i class="shop icon"></i>
-          </div>
+        <div class="ui compact menu" id="cart">
+          <a class="item">
+            <i class="icon cart"></i> Cart
+            <div class="floating ui teal label">{{totalItems}}</div>
+          </a>
         </div>
-      <form class="form-inline mt-2 mt-md-0">
-        <h3><a class="nav-link" onclick="logout()" style="color: white">logout</a></h3>
-      </form>
-    </nav>
-  </header>
-  <main>
-  <div class="ui" style="padding-top:50px;">
-      <div class="ui grid">
-        <div class="offset-sm-0.5"></div>
-        <div class="ui vertical menu">
-          <a class="active item">
-            <div class="ui small teal label">666</div>
-            Buku
-          </a>
-          <a class="item">
-            <div class="ui small label">7</div>
-            Kamera
-          </a>
-          <a class="item">
-            <div class="ui small label">77</div>
-            Sepatu
-          </a>
-          <div class="item">
-            <div class="ui icon input">
-              <input type="text" placeholder="Search by category...">
-              <i class="search icon"></i>
+        <form class="form-inline mt-2 mt-md-0">
+          <h3><a type="button" class="nav-link" @click='logout' style="color: rgb(10, 0, 0)">logout</a></h3>
+        </form>
+      </nav>
+    </header>
+    <main>
+      <div class="ui" style="padding:50px 0px;">
+        <div class="ui grid">
+          <div class="offset-sm-0.5"></div>
+          <div class="ui vertical menu" style="background-color: rgb(77, 84, 90);">
+            <a class="item" v-for='category in categories'>
+              <div class="ui small teal label">666</div>
+              {{category}}
+            </a>
+            <div class="item">
+              <div class="ui icon input">
+                <input type="text" placeholder="Search item" v-model='itemFound' @keyup='findItem' >
+                <i class="search icon"></i>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="ui one wide column"></div>
-        <!-- cards -->
-      <div class="ui eleven wide column">
-        <div class="ui link cards">
-          <div class="ui special cards" id="cards-template">
-            <div class="search" style="padding-top:50px;"></div>
-            <div class="ui special cards">
-              <div class="card">
-                <div class="blurring dimmable image">
-                  <div class="ui dimmer">
-                    <div class="content">
-                      <div class="center">
-                        <div class="ui inverted button">Add to cart</div>
-                      </div>
-                    </div>
-                  </div>
-                  <img src="./img/1.jpg">
-                </div>
-                <div class="content">
-                  <a class="header">Team Fu</a>
-                  <div class="meta">
-                    <span class="date">Created in Sep 2014</span>
-                  </div>
-                </div>
-                <div class="extra content">
-                  <a>
-                    <i class="users icon"></i>
-                    2 Members
-                  </a>
-                </div>
-              </div>
-              <div class="card">
-                <div class="blurring dimmable image">
-                  <div class="ui dimmer">
-                    <div class="content">
-                      <div class="center">
-                        <div class="ui inverted button">Add to cart</div>
-                      </div>
-                    </div>
-                  </div>
-                  <img src="./img/2.jpg">
-                </div>
-                <div class="content">
-                  <a class="header">Team Fu</a>
-                  <div class="meta">
-                    <span class="date">Created in Sep 2014</span>
-                  </div>
-                </div>
-                <div class="extra content">
-                  <a>
-                    <i class="users icon"></i>
-                    2 Members
-                  </a>
-                </div>
-              </div>
-              <div class="card">
-                  <div class="blurring dimmable image">
-                    <div class="ui dimmer">
-                      <div class="content">
-                        <div class="center">
-                          <div class="ui inverted button">Add to cart</div>
-                        </div>
-                      </div>
-                    </div>
-                    <img src="./img/3.jpg">
-                  </div>
-                  <div class="content">
-                    <a class="header">Team Fu</a>
-                    <div class="meta">
-                      <span class="date">Created in Sep 2014</span>
-                    </div>
-                  </div>
-                  <div class="extra content">
-                    <a>
-                      <i class="users icon"></i>
-                      2 Members
-                    </a>
-                  </div>
-                </div>
-                <div class="card">
+          <div class="ui one wide column"></div>
+          <!-- cards -->
+          <div class="ui eleven wide column">
+            <div class="ui link cards">
+              <div class="ui special cards" id="cards-template">
+                <div class="search" style="padding-top:50px;"></div>
+                <div class="ui special cards">
+                  <div class="card" v-for='item in items'>
                     <div class="blurring dimmable image">
                       <div class="ui dimmer">
                         <div class="content">
                           <div class="center">
-                            <div class="ui inverted button">Add to cart</div>
+                            <div class="ui inverted button" >Add to
+                                
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <img src="./img/3.jpg">
+                      <img src="./img/1.jpg">
                     </div>
                     <div class="content">
-                      <a class="header">Team Fu</a>
+                      <a class="header">{{ item.name }}</a>
                       <div class="meta">
-                        <span class="date">Created in Sep 2014</span>
+                        <span class="date">{{ item.price }}</span>
                       </div>
                     </div>
                     <div class="extra content">
-                      <a>
-                        <i class="users icon"></i>
-                        2 Members
-                      </a>
+                      <p>
+                        Quantity:
+                        {{ item.quantity }}
+                        <!-- {{ item._id}} -->
+                      </p>
+                      <button type="submit" class="btn btn-success" @click='addToCart(item)' v-if="isLogin">Add to cart</button>
                     </div>
                   </div>
-                  <div class="card">
-                      <div class="blurring dimmable image">
-                        <div class="ui dimmer">
-                          <div class="content">
-                            <div class="center">
-                              <div class="ui inverted button">Add to cart</div>
-                            </div>
-                          </div>
-                        </div>
-                        <img src="./img/3.jpg">
-                      </div>
-                      <div class="content">
-                        <a class="header">Team Fu</a>
-                        <div class="meta">
-                          <span class="date">Created in Sep 2014</span>
-                        </div>
-                      </div>
-                      <div class="extra content">
-                        <a>
-                          <i class="users icon"></i>
-                          2 Members
-                        </a>
-                      </div>
-                    </div>
-                    <div class="card">
-                        <div class="blurring dimmable image">
-                          <div class="ui dimmer">
-                            <div class="content">
-                              <div class="center">
-                                <div class="ui inverted button">Add to cart</div>
-                              </div>
-                            </div>
-                          </div>
-                          <img src="./img/3.jpg">
-                        </div>
-                        <div class="content">
-                          <a class="header">Team Fu</a>
-                          <div class="meta">
-                            <span class="date">Created in Sep 2014</span>
-                          </div>
-                        </div>
-                        <div class="extra content">
-                          <a>
-                            <i class="users icon"></i>
-                            2 Members
-                          </a>
-                        </div>
-                      </div>
-              <div class="card">
-                <div class="blurring dimmable image">
-                  <div class="ui dimmer">
-                    <div class="content">
-                      <div class="center">
-                        <div class="ui inverted button">Add to cart</div>
-                      </div>
-                    </div>
-                  </div>
-                  <img src="./img/3.jpg">
-                </div>
-                <div class="content">
-                  <a class="header">Team Fu</a>
-                  <div class="meta">
-                    <span class="date">Created in Sep 2014</span>
-                  </div>
-                </div>
-                <div class="extra content">
-                  <a>
-                    <i class="users icon"></i>
-                    2 Members
-                  </a>
-                </div>
-              </div>
-              <div class="card">
-                <div class="blurring dimmable image">
-                  <div class="ui dimmer">
-                    <div class="content">
-                      <div class="center">
-                        <div class="ui inverted button">Add to cart</div>
-                      </div>
-                    </div>
-                  </div>
-                  <img src="./img/4.jpg">
-                </div>
-                <div class="content">
-                  <a class="header">Team Fu</a>
-                  <div class="meta">
-                    <span class="date">Created in Sep 2014</span>
-                  </div>
-                </div>
-                <div class="extra content">
-                  <a>
-                    <i class="users icon"></i>
-                    2 Members
-                  </a>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- footer -->
-  <footer>
-    <div class="container-footer text-center static-bottom" style="">
-      <div class="row">
-        <div class="col-sm-12">
-          <p>&copy; copyrigth 2018 | built by <a href="https://github.com/agungatd" target="blank">Agung Tri Atidhira</a></p>
+      <!-- Login Modal -->
+      <div class="ui modal login">
+        <i class="close icon"></i>
+        <div class="header">
+          Login Form
         </div>
-        <div class="col-sm-12">
-          <a href="https://github.com/agungatd"><i class="fab fa-github"></i></a>&nbsp;
-          <a href="https://facebook.com/agung.triatidhira"><i class="fab fa-facebook"></i></a>&nbsp;
-          <a href="https://www.instagram.com/agung_atidhira/?hl=en"><i class="fab fa-instagram"></i></a>&nbsp;
-          <a href="https://twitter.com/agungatidhira"><i class="fab fa-twitter"></i></a>&nbsp;
+          <div class="description">
+            <form action="" method="post">
+              <label for="email">Email:</label><br>
+              <input type="email" name="email" placeholder="Enter Email" v-model='email'><br><br>
+              <label for="password">Password:</label><br>
+              <input type="password" name="password" placeholder="Enter Password" v-model='password'><br><br>
+            </form>
+        </div>
+        <div class="actions">
+          <div class="ui red deny button">
+            Cancel
+          </div>
+          <div class="ui positive right labeled icon button" @click='login'>
+            Login
+            <i class="checkmark icon"></i>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
-  </footer>
-  <!-- akhir footer -->
+      <!-- Register Modal -->
+      <div class="ui modal register">
+        <i class="close icon"></i>
+        <div class="header">
+          Register Form
+        </div>
+          <div class="description">
+            <form action="" method="post">
+              <label for="name">Name:</label><br>
+              <input type="text" name="name" placeholder="Enter Name" v-model='name'><br><br>
+              <label for="email">Email:</label><br>
+              <input type="email" name="email" placeholder="Enter Email" v-model='email'><br><br>
+              <label for="password">Password:</label><br>
+              <input type="password" name="password" placeholder="Enter Password" v-model='password'><br><br>
+            </form>
+        </div>
+        <div class="actions">
+          <div class="ui red deny button">
+            Cancel
+          </div>
+          <div class="ui positive right labeled icon button" @click='register'>
+            Register
+            <i class="checkmark icon"></i>
+          </div>
+        </div>
+      </div>
+      <!-- CART MODAL -->
+      <div class="ui modal cart">
+        <i class="close icon"></i>
+        <div class="header">
+          Order Summary
+        </div>
+        <div id="payment">
+          <h5 class="text-dark">Order Summary</h5><br>
+          <ul>
+            <div class="row justify-content-between" v-for="cart in carts">
+              <li class="text-dark" style="list-style-type: none;">
+                  {{cart.name}} ({{cart.category}})
+              </li>
+              <h6 class="text-dark">{{cart.price}}</h6>
+            </div>
+          </ul>
+          <h5 class="text-dark">Payment Information</h5><br>
+          <ul>
+            <div class="justify-content-between">
+              <h6 class="text-dark">Total Price : {{paymentDetail}}</h6>
+            </div>
+          </ul>
+          <button type="button" data-dismiss="modal" @click="checkout(carts,paymentDetail)">Checkout</button>
+        </div>
+      </div>
+      <!-- footer -->
+      <footer>
+        <div class="container-footer text-center static-bottom" style="">
+          <div class="row">
+            <div class="col-sm-12">
+              <p>&copy; copyrigth 2018 | built by <a href="https://github.com/agungatd" target="blank">Agung Tri
+                  Atidhira</a></p>
+            </div>
+            <div class="col-sm-12">
+              <a href="https://github.com/agungatd"><i class="fab fa-github"></i></a>&nbsp;
+              <a href="https://facebook.com/agung.triatidhira"><i class="fab fa-facebook"></i></a>&nbsp;
+              <a href="https://www.instagram.com/agung_atidhira/?hl=en"><i class="fab fa-instagram"></i></a>&nbsp;
+              <a href="https://twitter.com/agungatidhira"><i class="fab fa-twitter"></i></a>&nbsp;
+            </div>
+          </div>
+        </div>
+    </main>
+    </footer>
+    <!-- akhir footer -->
+  </div>
   <!-- scripts -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    
+    let app = new Vue({
+      el: '#app',
+      data: {
+        name: '',
+        email: '',
+        password: '',
+        isLogin: false,
+        item_id: '',
+        itemFound: '',
+        items: [],
+        categories: ['Buku','Kamera','Sepatu'],
+        itemsInCart: [],
+        totalItems: 0,
+        carts: [],
+        transaction: [],
+        category: '',
+        success: false,
+        error: false,
+        errorMessage: '',
+        successMessage: ''
+      },
+      created() {
+        this.showItems()
+      },
+      computed: {
+        paymentDetail() {
+          let totalPrice = 0
+          this.carts.forEach(cart => {
+              totalPrice += cart.price
+          });
+          return totalPrice
+        },
+        transactionDetail() {
+          let total = 0
+          this.transaction.forEach(data => {
+              data.listItem.forEach(item => {
+                  total += item.price
+              })
+          });
+          return total
+        }
+      },
+      methods: {
+        login() {
+          // console.log('melogin')
+          let self = this
+          axios.post('http://localhost:3000/customers/login', {
+              email: self.email,
+              password: self.password
+          })
+          .then((response) => {
+            console.log(response)
+            localStorage.setItem('token',response.data.token)
+            localStorage.setItem('id', response.data.result._id)
+            self.successMessage = 'Login Success'
+            self.isLogin = true
+          }).catch((err) => {
+            self.errorMessage = `Error: ${err.Error}`
+          });
+        },
+        logout() {
+          this.name = ''
+          this.email = ''
+          this.password = ''
+          localStorage.removeItem('token')
+          localStorage.removeItem('id')
+          this.isLogin = false
+        },
+        register() {
+          let self = this
+          axios.post('http://localhost:3000/customers/register', {
+              name: self.name,
+              email: self.email,
+              password: self.password
+          })
+          .then((response) => {
+            console.log(response)
+            self.successMessage = 'Registration Success'
+          }).catch((err) => {
+            self.errorMessage = `Error: ${err.Error}`
+          })
+        },
+        showItems() {
+          let self = this
+          axios.get('http://localhost:3000/items')
+          .then(function (response) {
+            self.items = response.data.items
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        },
+        findItem() {
+          let self = this
+          let arr = []
+          if (this.itemFound === '') {
+            this.showItems()
+          } else {
+            axios.get('http://localhost:3000/items')
+            .then(function (response) {
+              response.data.items.forEach(item=>{
+                if (item.name.indexOf(self.itemFound) !== -1) {
+                  arr.push(item)
+                }
+              })
+              self.items = arr;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          }
+        },
+        addToCart(selectedItem) {
+          this.carts.push(selectedItem)
+          this.totalItems++
+        },
+        checkout(carts, paymentDetail) {
+          let id = localStorage.getItem('id')
+          let token = localStorage.getItem('token')
+          let totalTransaction = paymentDetail
+          this.totalItems = 0
+          let data = {
+            carts,
+            id,
+            totalTransaction
+          }
+          this.carts = []
+          axios.post('http://localhost:3000/carts', data, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+          })
+          .then(response => {
+              console.log(response);
+          })
+          .catch(err => {
+              console.log(err);
+          })
+        }
+      }
+    })
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js" integrity="sha256-0gIvTkdsp0OOeV8tx3UTdi3ehppGwZbzQMvZJYhbzsE="
     crossorigin="anonymous"></script>
   <script>
     $('.special.cards .image').dimmer({
       on: 'hover'
     });
+
+    $('#login').on('click',(e)=>{
+      $('.ui.modal.login').modal('show');
+    } )
+    $('#register').on('click',(e)=>{
+      $('.ui.modal.register').modal('show');
+    } )
+    $('#cart').on('click',(e)=>{
+      $('.ui.modal.cart').modal('show');
+    } )
   </script>
 </body>
 
