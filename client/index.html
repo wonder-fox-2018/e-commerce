@@ -19,282 +19,166 @@
 </head>
 
 <body>
-    <!-- header -->
-    <header class="bg-dark logo">
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <h1><span class="badge badge-primary">SwingFit</span></h1>
-            </li>
-        </ul>
-    </header>
+    <div id="app">
 
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <a class="navbar-brand login-btn" href="#">Login</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <!-- header -->
+        <header class="bg-dark logo">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <h1><span class="badge badge-primary">SwingFit</span></h1>
+                </li>
+            </ul>
+        </header>
+
+        <!-- navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            <a class="navbar-brand login-btn">Login</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- account navbar -->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link">Account <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Link</a>
+                    </li>
+
+                    <!-- cart navbar -->
+                    <li class="nav-item dropdown" id="cart">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-shopping-cart"><span> ({{itemInCart}})</span></i>
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item">Checkout</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#modal-cart">See cart</a>
+                        </div>
+                    </li>
+
+                    <!-- category navbar -->
+                    <li class="nav-item dropdown" id="category">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Browse by category
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item">Show all</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item">Tees</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item">Jacket</a>
+                        </div>
+                    </li>
+
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search for product" aria-label="Search">
+                    <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </nav>
+
+
+        <!-- cart modal -->
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-cart">
+            Launch demo modal
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- account navbar -->
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Account <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-
-                <!-- cart navbar -->
-                <li class="nav-item dropdown" id="cart">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-shopping-cart"></i>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Checkout</a>
-                        <a class="dropdown-item" href="#">See cart</a>
+        <!-- Modal -->
+        <div class="modal fade" id="modal-cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </li>
-
-                <!-- category navbar -->
-                <li class="nav-item dropdown" id="category">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Browse by category
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Show all</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Tees</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Jacket</a>
+                    <div class="modal-body">
+                        {{cart.list}}
                     </div>
-                </li>
-
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search for product" aria-label="Search">
-                <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-            </form>
-        </div>
-    </nav>
-
-
-    <!-- login modal -->
-    <div class="ui tiny modal" id="login-modal">
-        <i class="close icon"></i>
-        <div class="header">
-            Login
-        </div>
-
-        <form class="ui form">
-            <div class="field">
-                <label>Email</label>
-                <input type="text" name="email" placeholder="Email">
-            </div>
-            <div class="field">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="Password">
-            </div>
-        </form>
-
-
-        <div class="actions">
-            <div class="ui positive right labeled icon button">
-                Login
-                <i class="checkmark icon"></i>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- content -->
-
-    <div class="flex-container">
-
-        <div class="container">
-
-            <div class="row background">
-                New arrival
-            </div>
-
-
-        </div>
-
-        <!-- items -->
-        <div class="container">
-            <div class="row">
-
-                <div class="col-sm item-grid">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://images.urbanoutfitters.com/is/image/UrbanOutfitters/44531341_010_b?$medium$&qlt=60&fit=constrain"
-                            alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title"><b>Basic</b></h5>
-                            <div class="flex-column">
-                                <div class="ui tag labels">
-                                    <div class="ui label">
-                                        Rp 200.000
-                                    </div>
-                                </div>
-                                <div class="ui vertical animated button" tabindex="0">
-                                    <div class="hidden content">buy</div>
-                                    <div class="visible content">
-                                        <i class="shop icon"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div class="col-sm item-grid">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://images.urbanoutfitters.com/is/image/UrbanOutfitters/47430145_018_b?$medium$&qlt=60&fit=constrain"
-                            alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title"><b>Dark</b></h5>
-                            <div class="flex-column">
-                                <div class="ui tag labels">
-                                    <div class="ui label">
-                                        Rp 200.000
-                                    </div>
-                                </div>
-                                <div class="ui vertical animated button" tabindex="0">
-                                    <div class="hidden content">buy</div>
-                                    <div class="visible content">
-                                        <i class="shop icon"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm item-grid">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://images.urbanoutfitters.com/is/image/UrbanOutfitters/46941738_031_b?$medium$&qlt=60&fit=constrain"
-                            alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title"><b>Dark Sleeves</b></h5>
-                            <div class="flex-column">
-                                <div class="ui tag labels">
-                                    <div class="ui label">
-                                        Rp 200.000
-                                    </div>
-                                </div>
-                                <div class="ui vertical animated button" tabindex="0">
-                                    <div class="hidden content">buy</div>
-                                    <div class="visible content">
-                                        <i class="shop icon"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- content 2 -->
-        <div class="container">
-            <div class="row">
-
-                <div class="col-sm item-grid">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://images.urbanoutfitters.com/is/image/UrbanOutfitters/47714282_107_b?$medium$&qlt=60&fit=constrain"
-                            alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title"><b>Basic</b></h5>
-                            <div class="flex-column">
-                                <div class="ui tag labels">
-                                    <div class="ui label">
-                                        Rp 200.000
-                                    </div>
-                                </div>
-                                <div class="ui vertical animated button" tabindex="0">
-                                    <div class="hidden content">buy</div>
-                                    <div class="visible content">
-                                        <i class="shop icon"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
+        
 
 
-                </div>
 
-                <div class="col-sm item-grid">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://images.urbanoutfitters.com/is/image/UrbanOutfitters/47896030_001_b?$medium$&qlt=60&fit=constrain"
-                            alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title"><b>Dark</b></h5>
-                            <div class="flex-column">
-                                <div class="ui tag labels">
-                                    <div class="ui label">
-                                        Rp 200.000
-                                    </div>
-                                </div>
-                                <div class="ui vertical animated button" tabindex="0">
-                                    <div class="hidden content">buy</div>
-                                    <div class="visible content">
-                                        <i class="shop icon"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm item-grid">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://images.urbanoutfitters.com/is/image/UrbanOutfitters/48582498_031_b?$medium$&qlt=60&fit=constrain "
-                            alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title"><b>Green Floral</b></h5>
-                            <div class="flex-column">
-                                <div class="ui tag labels">
-                                    <div class="ui label">
-                                        Rp 200.000
-                                    </div>
-                                </div>
-                                <div class="ui vertical animated button" tabindex="0">
-                                    <div class="hidden content">buy</div>
-                                    <div class="visible content">
-                                        <i class="shop icon"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="background">
+            New arrival
         </div>
+        <!-- content -->
 
-
-    </div>
-
-
-    <!-- footer -->
-    <footer class="bg-dark" id="footer">
         <div class="flex-container">
-            Designed by: Payoga Putra
-            <div class="social-media">
-                <i class="fab fa-github"></i>
-                <i class="fab fa-linkedin"></i>
-                <i class="far fa-envelope"></i>
+
+
+            <!-- items -->
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-sm-4 item-grid" v-for="(item) in items">
+                        <div class="card" style="width: 18rem;">
+                            <img class="card-img-top" v-bind:src="item.picture" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title"><b>{{item.name}}</b></h5>
+                                <div class="flex-column">
+                                    <div class="ui tag labels">
+                                        <div class="ui label">
+                                            {{item.price}}
+                                        </div>
+                                    </div>
+                                    <div class="ui vertical animated button" tabindex="0" v-on:click="addToCart(item._id)">
+                                        <div class="hidden content">buy</div>
+                                        <div class="visible content">
+                                            <i class="shop icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
             </div>
+
+
+
+
+
         </div>
-    </footer>
+
+
+        <!-- footer -->
+        <footer class="bg-dark" id="footer">
+            <div class="flex-container">
+                Designed by: Payoga Putra
+                <div class="social-media">
+                    <i class="fab fa-github"></i>
+                    <i class="fab fa-linkedin"></i>
+                    <i class="far fa-envelope"></i>
+                </div>
+            </div>
+        </footer>
 
 
 
@@ -305,7 +189,7 @@
 
 
 
-
+    </div>
 
 
 
@@ -320,8 +204,69 @@
         crossorigin="anonymous"></script>
     <!-- semantic -->
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.js"></script>
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- js script -->
-    <script src="./main.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                items: [],
+                itemInCart: 0,
+                cart: '',
+                token: ''
+            },
+            created: function () {
+                this.fetchItems();
+                this.fetchCart();
+            },
+            methods: {
+                fetchItems: function () {
+                    axios.get('http://localhost:3000/item').then((result) => {
+                        result.data.forEach(currentItem => {
+                            this.items.push(currentItem);
+                        });
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                },
+                fetchCart: function () {
+                    axios.get('http://localhost:3000/cart', {
+                        headers: {
+                            'access-token': this.token
+                        }
+                    }).then((result) => {
+                        this.cart = result.data;
+                        this.itemInCart = result.data.list.length;
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                },
+                addToCart: function (itemId) {
+                    axios({
+                        method: 'PUT',
+                        url: `http://localhost:3000/cart/${itemId}`,
+                        headers: {
+                            'access-token': this.token
+                        }
+                    }).then((result) => {
+                        console.log(result);
+                        this.itemInCart++;
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }
+            },
+            watch: {
+                itemInCart: function () {
+                    itemInCart = this.cart.list.length;
+                    console.log(itemInCart, 'tessss');
+                }
+            }
+        })
+    </script>
 </body>
 
 </html>

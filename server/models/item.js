@@ -5,6 +5,8 @@ const itemSchema = new Schema({
     name: String,
     price: Number,
     picture: String,
+    stock: Number,
+    category:String
 }, {
     timestamps: true
 })
