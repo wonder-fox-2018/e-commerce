@@ -3,6 +3,7 @@
 const Transaction = require('../models/transaction')
 const User = require('../models/user')
 const nodemailer = require('nodemailer')
+const CronJob = require('cron').CronJob
 
 class TransactionController {
     //create transaction
@@ -24,11 +25,18 @@ class TransactionController {
             })
               .then(user => {
                 
-                res.status(200).json({
-                    msg: 'Transaction success',
-                    data: newtransaction,
-                    owner: user
-                })
+                // NOTE: Only triggered when user hit transaction button
+                // and will continue doing background job after hit
+                // thus will cost your server a life
+                // --->better to keep it foreground
+                // set a background process
+                // console.log('Before job instantiation');
+                // const job = new CronJob('* * * * * *', function() {
+                // 	const d = new Date();
+                // 	console.log('Every second:', d);
+                // });
+                // console.log('After job instantiation');
+                // job.start();
 
                 // create email
                 let transporter = nodemailer.createTransport(
@@ -60,41 +68,15 @@ class TransactionController {
                 
                         // only needed when using pooled connections
                         // transporter.close();
-                    }
-                
-                        
+                    }                        
                 })
 
-                // nodemailer.createTestAccount((err,account)=>{
-                //     if(err){
-                //         console.error('Failed to create a testing account');
-                //         console.error(err);
-                //         return process.exit(1);
-                //     }
 
-
-                    
-
-                //     transporter.sendMail(mailOptions, (error, info) => {
-                //         if (error) {
-                //             console.log('Error occurred');
-                //             console.log(error.message);
-                //             return process.exit(1);
-                //         }
-                
-                //         console.log('Message sent successfully!');
-                //         console.log(nodemailer.getTestMessageUrl(info));
-                
-                //         // only needed when using pooled connections
-                //         transporter.close();
-                //     });
-                // });
-
-                // res.status(200).json({
-                //     msg: 'Transaction success',
-                //     data: newtransaction,
-                //     owner: user
-                // })
+                res.status(200).json({
+                    msg: 'Transaction success',
+                    data: newtransaction,
+                    owner: user
+                })
               })
               .catch(error => {
                   res.status(500).json({
