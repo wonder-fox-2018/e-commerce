@@ -54,7 +54,7 @@
 }
 
 .fontIconMargin {
-    width : 200px;
+    width : 300px;
     font-size: small;
     margin-top: 10px;
     margin-right: 60px;
@@ -72,6 +72,10 @@
 
 #cartModal{
     font-family: Quicksand, Arvo, Amiri,Cambria, Cochin;
+}
+
+#searchbar{
+   margin-top: 70px; 
 }
 
 #footer {

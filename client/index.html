@@ -44,8 +44,15 @@
                         </a>
                     </div>
                     <hr>
-                    <div class="col-md-3 offset-md-3">
+                    <div v-if= "token === '' || token === null " class="col-md-3">
                         <button type="button" data-toggle="modal" data-target="#loginUser">Login</button>
+                    </div>
+                    <br>
+                    <div v-if= "token === '' || token === null " class="col-md-3">
+                        <button type="button" data-toggle="modal" data-target="#registerUser">Register</button>
+                    </div>
+                    <div v-if= "token !== '' && token !== null " class="col-md-3">
+                        <button type="button" v-on:click="logout()" >Logout</button>
                     </div>
                 </div>
             </div>
@@ -55,6 +62,11 @@
             <div class="row">
                 <div class = "col-md-3 border">
                     <div> <!--  class="navBarFixedLeft" -->
+                        <div id="searchbar">
+                            <input class="form-control mr-sm-2" type="text" v-model= "searchkeyword" placeholder="Search" aria-label="Search">
+                            <hr>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click= "getitembysearch()">Search</button>
+                        </div>
                         <h3 class="my-4">Categories</h3>
                         <div class="list-group">
                             <button class="list-group-item sideBarCustom" v-on:click="getallitems()" >All Items</button> 
@@ -184,18 +196,53 @@
                         <form>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                <input type="password" v-model="userpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
                             </div>
                         </form>
                         <br/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Login</button>
+                        <button type="button" class="btn btn-primary" v-on:click= "loginUser()">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Modal -->
+        <div class="modal fade" id="registerUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Name</label>
+                                <input type="text" v-model="username" class="form-control" id="exampleInputName2" aria-describedby="emailHelp" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" v-model="userpassword" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                            </div>
+                        </form>
+                        <br/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" v-on:click= "registerUser()">Register</button>
                     </div>
                 </div>
             </div>
@@ -237,22 +284,31 @@
           el: '#app',
           data: {
              listitems: [],
-             listcategories: [] 
+             listcategories: [],
+             searchkeyword: '',
+             username: '',
+             useremail: '',
+             userpassword: '',
+             token: ''
           },
           methods:{
+             // get all items 
              getallitems () {
+               let self = this  
                axios({
                  method: 'GET',
                  url: 'http://localhost:3007/items/lists'       
                })
                  .then(items => {
-                    console.log('GET ALL ITEMS----', items.data.data) 
-                    self.listitems = items.data.data 
+                    // console.log('GET ALL ITEMS----', items.data.data) 
+                    self.listitems = items.data.data
+                    
                  })
                  .catch(error => {
                     console.log('ERROR Get List of Items', error)     
                  })  
              },
+             // get item by category
              getitembycategory (input) {
             //    console.log('Category id----',input)
                let self = this
@@ -266,8 +322,73 @@
                     self.listitems = categories.data.data.listitemcategory
                 })
                 .catch(error =>{
-                    console.log('ERROR Get List of Categories', error)  
+                   console.log('ERROR Get List of Categories', error)  
                 })
+             },
+             // get item by search
+             getitembysearch (){
+                let self = this
+                let key = this.searchkeyword
+                // console.log('This Key-----', key)
+                axios({
+                  method: 'POST',
+                  url: 'http://localhost:3007/items/search',
+                  data: {
+                     keyword: key    
+                  }    
+                })
+                  .then(searchitems => {
+                    self.listitems = searchitems.data.data
+                    console.log('HASIL------', searchitems.data.data)  
+                  })
+                  .catch(error =>{
+                    console.log('ERROR Get Search result', error) 
+                  })
+             },
+             loginUser(){
+                let self = this
+                axios({
+                   method: 'POST',
+                   url: 'http://localhost:3007/user/login',
+                   data: {
+                      email: self.useremail,
+                      password: self.userpassword 
+                   }
+                })
+                 .then(user =>{
+                    self.token = user.data.token
+                    localStorage.setItem('token',self.token)
+                    // console.log('Result Login----' ,user.data)
+                    $('#loginUser').modal('hide')
+                 })
+                 .catch(error => {
+                    console.log('ERROR User Login: ',error)
+                 })
+             },
+             registerUser(){
+                let self = this
+                axios({
+                   method: 'POST',
+                   url: 'http://localhost:3007/user/register',
+                   data: {
+                      name: self.username,
+                      email: self.useremail,
+                      password: self.userpassword  
+                   }
+                })
+                  .then(user => {
+                    self.token = user.data.token
+                    localStorage.setItem('token',selt.token)
+                    // console.log('Result Register ----' ,user.data)
+                    $('#registerUser').modal('hide')
+                  })
+                  .catch(error =>{
+                    console.log('ERROR User Register: ',error)
+                  })
+             },
+             logout() {
+                this.token = ''
+                localStorage.removeItem('token') 
              }
           },
           created () {
@@ -292,7 +413,7 @@
             })
               .then(categories =>{
                 self.listcategories = categories.data.data
-                console.log('Categories------', categories.data.data)
+                // console.log('Categories------', categories.data.data)
               })
               .catch(error=>{
                   console.log('ERROR Get List of Categories', error)
