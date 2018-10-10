@@ -189,13 +189,13 @@ class ItemController{
                     })
                     .catch(error =>{
                         res.status(500).json({
-                            msg: 'ERROR Delete Item from Category'
+                            msg: 'ERROR Delete Item from Category ',error
                         })      
                     })
               })
               .catch(error => {
                   res.status(500).json({
-                      msg: 'ERROR Delete Item from Category'
+                      msg: 'ERROR Delete Item from Category ',error
                   })
               })
          })
@@ -203,6 +203,31 @@ class ItemController{
             res.status(500).json({
                msg: 'ERROR Delete Items ',error
             }) 
+         })
+    }
+
+    // search item by keyword
+    static searchItemByKeyword (req,res) {
+        Item.find({})
+         .then(items =>{
+             let sortedArr = []
+             let regex = new RegExp(`${req.body.keyword}`, 'i')
+
+             items.forEach( item =>{
+                if(regex.test(item.itemname)){
+                    sortedArr.push(item)
+                }
+             })
+             console.log('sorted arr--------',sortedArr)
+             res.status(200).json({
+                msg: 'List of sorted data',
+                data: sortedArr 
+             })
+         })
+         .catch(error => {
+             res.status(500).json({
+               msg: 'ERROR Search Item by Keyword in name: ',error
+             })
          })
     }
 }

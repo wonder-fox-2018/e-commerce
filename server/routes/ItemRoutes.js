@@ -11,5 +11,6 @@ router.post('/', isLogin, isAdmin, ItemController.createItem)
       .get('/:id', ItemController.getDetail)
       .put('/:id', isLogin, isAdmin, ItemController.editItem)
       .delete('/:id', isLogin, isAdmin, ItemController.deleteItem)
+      .post('/search' , ItemController.searchItemByKeyword)
 
 module.exports = router
