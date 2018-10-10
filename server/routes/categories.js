@@ -1,7 +1,7 @@
 const router = require('express').Router()
+const categoryController = require('../controllers/categoryController')
 
-router.get('/',(req,res)=>{
-    res.send('halo dari categories')
-})
+router.post('/create',categoryController.create)
+router.get('/',categoryController.read)
 
 module.exports = router;

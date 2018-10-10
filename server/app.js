@@ -3,15 +3,21 @@ const express  = require('express')
 const app = express()
 require('dotenv').config()
 
+//CLIENT AND SERVER
+const cors = require('cors')
+app.use(cors())
+app.use(express.urlencoded({extended : false}))
+app.use(express.json())
+
 //ROUTES
 const routes   = require('./routes')
 const userRoutes = require('./routes/users')
 const categoryRoutes = require('./routes/categories')
-const productRoutes = require('./routes/products')
+const itemRoutes = require('./routes/items')
 app.use('/', routes)
 app.use('/users',userRoutes)
 app.use('/categories',categoryRoutes)
-app.use('/products',productRoutes)
+app.use('/items',itemRoutes)
 
 //DATABASE
 const mongoose = require('mongoose')
@@ -21,12 +27,6 @@ db.on('error', console.error.bind(console, 'mongo failed to connect:'));
 db.once('open', function() {
   console.log('mongo connected')
 });
-
-//CLIENT AND SERVER
-const cors     = require('cors')
-app.use(cors())
-app.use(express.urlencoded({extended : false}))
-app.use(express.json())
 
 //PORT
 const port = 3000
