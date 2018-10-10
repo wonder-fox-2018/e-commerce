@@ -1,6 +1,15 @@
 let app = new Vue({
     el:'#app',
     data:{
+        register : {
+            name : '',
+            email : '',
+            password : '',
+            address : '',
+            city : '',
+            state : '',
+            zip : ''
+        },
         user : {
             id : 1,
             fname : 'Fransiskus',
@@ -57,11 +66,25 @@ let app = new Vue({
     },
     methods :{
         allProduct: function () {
-            let temp = []
-            for(let i = 0; i < this.card.length; i++) {
-                    temp.push(this.card[i])
-            }
-            this.card = temp
+            // let temp = []
+            // for(let i = 0; i < this.card.length; i++) {
+            //         temp.push(this.card[i])
+            // }
+            // this.card = temp
+            axios({
+                method : 'GET',
+                url : 'http://localhost:3000/products/showAll'
+            })
+            .then(dataProduct => {
+                let products = dataProduct.data.products
+                console.log(products)
+                products.forEach(list => {
+                    this.card.push(list)
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
         },
         cart : function(buy){
             this.user.price_count = this.user.price_count + buy.price
@@ -96,6 +119,29 @@ let app = new Vue({
                 }
             }
             this.card = temp
+        },
+        signup: function(){
+            axios({
+                method : 'POST',
+                url : 'http://localhost:3000/signup',
+                data : {
+                    email : this.register.email,
+                    password : this.register.password,
+                    name : this.register.name,
+                    address : this.register.address,
+                    city : this.register.city,
+                    state : this.register.state,
+                    zip : this.register.zip
+                }
+            })
+            .then(register => {
+                console.log(register)
+
+                this.register
+            })
+            .catch(err => {
+                console.log(err)
+            })
         }
     }
 })
