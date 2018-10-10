@@ -6,48 +6,65 @@ let app = new Vue({
             fname : 'Fransiskus',
             lname : 'Arnoldy',
             cart : [],
-            count : 0
+            count : 0, 
+            price_count : 0
         },
         card : [{
             id : 1,
             title : 'Wing Zero',
-            price : 350000,
+            price : 895000,
             total : 1,
-            img : "https://images-na.ssl-images-amazon.com/images/I/91uA4x0IfzL._SX425_.jpg",
+            img : "https://images-na.ssl-images-amazon.com/images/I/71muGqdVxnL._SL1421_.jpg",
             description : `Some quick example text to build on the card title and make up the bulk of the
             card's
-            content.`
+            content.`,
+            catergory : 'mg'
         },{
             id : 2,
             title : 'Red Sinanju',
-            price : 450000,
+            price : 1300000,
             total : 1,
-            img : "https://images-na.ssl-images-amazon.com/images/I/91uA4x0IfzL._SX425_.jpg",
+            img : "https://images-na.ssl-images-amazon.com/images/I/51-RTTuzRHL._SL500_AC_SS350_.jpg",
             description : `Some quick example text to build on the card title and make up the bulk of the
             card's
-            content.`
+            content.`,
+            catergory : 'rg'
         },{
             id : 3,
             title : 'Astry Red Frame',
-            price : 250000,
+            price : 489000,
             total : 1,
-            img : "https://images-na.ssl-images-amazon.com/images/I/91uA4x0IfzL._SX425_.jpg",
+            img : "https://images.amain.com/images/large/ban/ban200634.jpg?width=475",
             description : `Some quick example text to build on the card title and make up the bulk of the
             card's
-            content.`
+            content.`,
+            catergory : 'mg'
+
         },{
             id : 4,
             title : 'Exia',
-            price : 200000,
+            price : 2500000,
             total : 1,
-            img : "https://images-na.ssl-images-amazon.com/images/I/91uA4x0IfzL._SX425_.jpg",
+            img : "https://da.lnwfile.com/_/da/_raw/e1/0z/zp.jpg",
             description : `Some quick example text to build on the card title and make up the bulk of the
             card's
-            content.`
+            content.`,
+            catergory : 'pg'
         }]
     },
+    created: function(){
+        this.allProduct()
+    },
     methods :{
+        allProduct: function () {
+            let temp = []
+            for(let i = 0; i < this.card.length; i++) {
+                    temp.push(this.card[i])
+            }
+            this.card = temp
+        },
         cart : function(buy){
+            this.user.price_count = this.user.price_count + buy.price
             this.user.count=this.user.count+1
             let status=0
             if(this.user.cart.length > 0){
@@ -67,6 +84,18 @@ let app = new Vue({
             if(status==0){
                 this.user.cart.push(buy)
             }
+        },
+        category : function(value){
+
+            let temp = []
+            console.log('not all')
+            for(let i = 0; i < this.card.length; i++) {
+                // console.log(this.card[i].catergory)
+                if(this.card[i].catergory == value){
+                    temp.push(this.card[i])
+                }
+            }
+            this.card = temp
         }
     }
 })

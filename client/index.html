@@ -6,13 +6,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <link rel="stylesheet" href="./style.css">
-
+  
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous">
-
-
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css">
   <title>Otakubeli</title>
 </head>
 
@@ -34,19 +32,19 @@
               aria-haspopup="true" aria-expanded="false">
               Kategori
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Super Deformed</a>
-              <a class="dropdown-item" href="#">High Grade</a>
-              <a class="dropdown-item" href="#">No Grade</a>
-              <a class="dropdown-item" href="#">Real Grade</a>
-              <a class="dropdown-item" href="#">Master Grade</a>
-              <a class="dropdown-item" href="#">Perfect Grede</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+              <a class="dropdown-item" href="#" v-on:click="category('sd')" >Super Deformed</a>
+              <a class="dropdown-item" href="#" v-on:click="category('hg')" >High Grade</a>
+              <a class="dropdown-item" href="#" v-on:click="category('ng')" >No Grade</a>
+              <a class="dropdown-item" href="#" v-on:click="category('rg')" >Real Grade</a>
+              <a class="dropdown-item" href="#" v-on:click="category('mg')">Master Grade</a>
+              <a class="dropdown-item" href="#" v-on:click="category('pg')">Perfect Grede</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <a class="dropdown-item" href="#" v-on:click="category('all')">All</a>
             </div>
           </li>
           <li>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCart">>
               Notifications <span class="badge badge-light">{{ user.count }}</span>
             </button>
           </li>
@@ -59,8 +57,8 @@
               <button class="btn btn-outline-success" type="button">Search</button>
             </div>
           </div>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-right:10px; margin-left:10px">Daftar</button>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+          <button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#modalRegister" type="button"  style="margin-right:10px; margin-left:10px">Daftar</button>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#modalLogin">Login</button>
         </form>
       </div>
     </nav>
@@ -81,8 +79,8 @@
         </div>
       </div>
     </div>
- <!-- Modal -->
- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+ <!-- Modal cart -->
+ <div class="modal fade" id="modalCart" tabindex="-1" role="dialog" aria-labelledby="modalCart" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -98,6 +96,7 @@
               <th>Jumlah</th>
               <th>Harga</th>
               <th>Total Harga</th>
+              <th>Action</th>
             </thead>
             <tbody v-for="value in user.cart">
               <tr>
@@ -105,6 +104,15 @@
                 <td><input class="form-control" type="text" v-bind:value="value.total" readonly style="text-align:center"></td>
                 <td><input class="form-control" type="text" v-bind:value="value.price" readonly style="text-align:right"></td>
                 <td><input class="form-control" type="text" v-bind:value="value.total * value.price" readonly style="text-align:right"></td>
+                <td style="text-align:center"><i class="fas fa-cart-plus"></i></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td> Total Pembelian </td>
+                <td><input class="form-control" type="text" v-bind:value="user.price_count" readonly style="text-align:right"></td>
               </tr>
             </tbody>
           </table>
@@ -116,6 +124,91 @@
       </div>
     </div>
   </div>
+
+   <!-- Modal Register -->
+ <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="modalRegister" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Register</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputEmail4">Email</label>
+              <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputPassword4">Password</label>
+              <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputAddress">Address</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+          </div>
+          <div class="form-group">
+            <label for="inputAddress2">Address 2</label>
+            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputCity">City</label>
+              <input type="text" class="form-control" id="inputCity">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputState">State</label>
+              <select id="inputState" class="form-control">
+                <option selected>Choose...</option>
+                <option>...</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="inputZip">Zip</label>
+              <input type="text" class="form-control" id="inputZip">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal LOGIN -->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="modalLogin" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Sign In</button>
+      </div>
+    </div>
+  </div>
+</div>
   </div>
 
  
