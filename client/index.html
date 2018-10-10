@@ -78,8 +78,8 @@
 
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search for product" aria-label="Search">
-                    <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search for product" aria-label="Search" v-model="filterProduct">
+                    <!-- <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button> -->
                 </form>
             </div>
         </nav>
@@ -104,11 +104,35 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        {{cart.list}}
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">item id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">qty</th>
+                                <th scope="col">sub total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="(property) in cartDisplay" >
+                                <th scope="row">{{property.id}}</th>
+                                <td>{{property.name}}</td>
+                                <td>{{property.qty}}</td>
+                                <td>{{property.subTotal}}</td>
+                                <td><button type="button" class="btn-sm btn-danger">remove</button></td>
+                              </tr>
+                              <tr>
+                                  <td> <h4>Total price</h4></td>
+                                  <td></td>
+                                  <td></td>
+                                  <th>{{totalPrice}}</th>
+                                  <td></td> 
+                              </tr>
+                            </tbody>
+                          </table>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-outline-primary checkout-btn" data-toggle="modal" data-target="#modal-cart" v-on:click="checkOut">Check out</button>
                     </div>
                 </div>
             </div>
@@ -181,7 +205,7 @@
         </footer>
 
 
-
+        {{cartDisplay}}
 
 
 
@@ -216,14 +240,17 @@
                 items: [],
                 itemInCart: 0,
                 cart: '',
-                token: ''
+                cartDisplay: [],
+                totalPrice: 0,
+                filterProduct:'',
+                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWQiOiI1YmJjZTcyM2FmYzI5NTUxMWNiYWZmYWIiLCJpYXQiOjE1MzkxMDY1OTd9.1uVKEmQ-ScZTfjoM_E-DQlHesEDgkeZ6qWck1SS-Wo4'
             },
             created: function () {
                 this.fetchItems();
                 this.fetchCart();
             },
             methods: {
-                fetchItems: function () {
+                fetchItems: function() {
                     axios.get('http://localhost:3000/item').then((result) => {
                         result.data.forEach(currentItem => {
                             this.items.push(currentItem);
@@ -232,19 +259,33 @@
                         console.log(err);
                     });
                 },
-                fetchCart: function () {
+
+                fetchItemsByName: function(keyWord) {
+                    axios.get(`http://localhost:3000/item?keyWord=${keyWord}`).then((result) => {
+                        this.items = [];
+                        result.data.forEach(currentItem => {
+                            this.items.push(currentItem);
+                        });
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                },
+
+                fetchCart: function() {
                     axios.get('http://localhost:3000/cart', {
                         headers: {
                             'access-token': this.token
                         }
                     }).then((result) => {
+                        console.log(result.data.list);
                         this.cart = result.data;
                         this.itemInCart = result.data.list.length;
+                        this.groupCartByItems();
                     }).catch((err) => {
                         console.log(err);
                     });
                 },
-                addToCart: function (itemId) {
+                addToCart: function(itemId) {
                     axios({
                         method: 'PUT',
                         url: `http://localhost:3000/cart/${itemId}`,
@@ -252,17 +293,69 @@
                             'access-token': this.token
                         }
                     }).then((result) => {
-                        console.log(result);
-                        this.itemInCart++;
+                        this.fetchCart();
                     }).catch((err) => {
                         console.log(err);
+                    });
+                },
+                isEmpty: function(arr) {
+                    return arr.length === 0;
+                },
+
+                groupCartByItems: function() {
+                    this.cartDisplay = [];
+                    let pushedItem = [];
+                    this.cart.list.forEach(currentItem => {
+                        this.totalPrice += currentItem.price;
+                        if (pushedItem.indexOf(currentItem._id) === -1) {
+                            this.cartDisplay.push({
+                                id: currentItem._id,
+                                name: currentItem.name,
+                                subTotal: currentItem.price,
+                                qty: 1
+                            })
+                            pushedItem.push(currentItem._id);
+                        } else {
+                            
+                            
+                            let index = this.cartDisplay.findIndex( (element) => {
+                                
+                                return element.id === currentItem._id
+                            });
+                            console.log(index);
+                            
+                            this.cartDisplay[index].subTotal += currentItem.price;
+                            this.cartDisplay[index].qty++;
+                        }
+
+                        
+                    });
+                     
+                },
+
+                checkOut: function() {
+                    
+                    axios({
+                        method: 'PATCH',
+                        url: `http://localhost:3000/cart`,
+                        headers: {
+                            'access-token': this.token
+                        }
+                    }).then((result) => {
+                        this.itemInCart = 0;
+                        this.cartDisplay = [];
+                        this.totalPrice = 0;
+                    }).catch((err) => {
+                       console.log(err);
                     });
                 }
             },
             watch: {
-                itemInCart: function () {
-                    itemInCart = this.cart.list.length;
-                    console.log(itemInCart, 'tessss');
+                itemInCart: function(val) {
+                    val = this.cart.list.length;
+                },
+                filterProduct: function(val) {
+                    this.fetchItemsByName(val);
                 }
             }
         })

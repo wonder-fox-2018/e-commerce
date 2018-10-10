@@ -36,8 +36,28 @@ module.exports = {
     },
 
     showAll: (req, res) => {
-        Item.find({}).then((items) => {
-            res.status(200).json(items);
+
+        if (req.query.keyWord) {
+            Item.find({name: new RegExp(req.query.keyWord, 'i')}).then((items) => {
+                res.status(200).json(items);
+            }).catch((err) => {
+                res.status(500).json(err);
+            });
+        } else {
+            Item.find({}).then((items) => {
+                res.status(200).json(items);
+            }).catch((err) => {
+                res.status(500).json(err);
+            });
+        }
+
+
+        
+    },
+
+    findByName: (req, res) => {
+        Item.find({name: req.param.keyWord}).then((result) => {
+            res.status(200),json(result);
         }).catch((err) => {
             res.status(500).json(err);
         });

@@ -28,5 +28,17 @@ module.exports = {
         }).catch((err) => {
             res.status(500).json(err);
         });
+    },
+
+    checkOut: (req, res) => {
+        console.log(req.decoded.id);
+        Cart.updateOne({userId: req.decoded.id}, {
+            list: []
+        }).then((result) => {
+            
+            res.status(200).json(result);
+        }).catch((err) => {
+            res.status(500).json(err);
+        });
     }
 };
