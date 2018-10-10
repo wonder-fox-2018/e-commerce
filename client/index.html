@@ -54,14 +54,13 @@
         <div class="container-fluid border">
             <div class="row">
                 <div class = "col-md-3 border">
-                    <div class="navBarFixedLeft">
+                    <div> <!--  class="navBarFixedLeft" -->
                         <h3 class="my-4">Categories</h3>
                         <div class="list-group">
-                            <button class="list-group-item sideBarCustom">All Items</button>
-                            <button class="list-group-item sideBarCustom">Lipstick</button>
-                            <button class="list-group-item sideBarCustom">Powder</button>
-                            <button class="list-group-item sideBarCustom">Shampoo</button>
-                            <button class="list-group-item sideBarCustom">Eye lashes</button>
+                            <button class="list-group-item sideBarCustom">All Items</button> 
+                        </div>
+                        <div class="list-group">
+                            <button v-for="category in listcategories" class="list-group-item sideBarCustom">{{ category.name }}</button>    
                         </div>
                     </div>
                 </div>
@@ -241,7 +240,12 @@
              listcategories: [] 
           },
           methods:{
-
+            //  getallitems () {
+            //    axios({
+            //      method: 'GET',
+            //      url: 'http://localhost:3007/items/lists'       
+            //    })    
+            //  } 
           },
           created () {
             let self = this
@@ -253,7 +257,7 @@
             })
               .then(items =>{
                   self.listitems = items.data.data
-                  console.log('ITEMS------', items.data.data)
+                //   console.log('ITEMS------', items.data.data)
               })
               .catch(error =>{
                   console.log('ERROR Get List of Items', error)
