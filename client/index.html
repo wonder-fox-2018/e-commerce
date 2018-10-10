@@ -57,10 +57,10 @@
                     <div> <!--  class="navBarFixedLeft" -->
                         <h3 class="my-4">Categories</h3>
                         <div class="list-group">
-                            <button class="list-group-item sideBarCustom">All Items</button> 
+                            <button class="list-group-item sideBarCustom" v-on:click="getallitems()" >All Items</button> 
                         </div>
                         <div class="list-group">
-                            <button v-for="category in listcategories" class="list-group-item sideBarCustom">{{ category.name }}</button>    
+                            <button v-for="category in listcategories" class="list-group-item sideBarCustom" v-on:click= "getitembycategory(category._id)">{{ category.name }}</button>    
                         </div>
                     </div>
                 </div>
@@ -240,12 +240,35 @@
              listcategories: [] 
           },
           methods:{
-            //  getallitems () {
-            //    axios({
-            //      method: 'GET',
-            //      url: 'http://localhost:3007/items/lists'       
-            //    })    
-            //  } 
+             getallitems () {
+               axios({
+                 method: 'GET',
+                 url: 'http://localhost:3007/items/lists'       
+               })
+                 .then(items => {
+                    console.log('GET ALL ITEMS----', items.data.data) 
+                    self.listitems = items.data.data 
+                 })
+                 .catch(error => {
+                    console.log('ERROR Get List of Items', error)     
+                 })  
+             },
+             getitembycategory (input) {
+            //    console.log('Category id----',input)
+               let self = this
+               let categoryid = input  
+               axios({
+                   method: 'GET',
+                   url: `http://localhost:3007/categories/${categoryid}`
+               })
+                .then(categories => {
+                    // console.log('RESULT------', categories.data.data.listitemcategory)
+                    self.listitems = categories.data.data.listitemcategory
+                })
+                .catch(error =>{
+                    console.log('ERROR Get List of Categories', error)  
+                })
+             }
           },
           created () {
             let self = this
@@ -256,11 +279,10 @@
               url: 'http://localhost:3007/items/lists'    
             })
               .then(items =>{
-                  self.listitems = items.data.data
-                //   console.log('ITEMS------', items.data.data)
+                self.listitems = items.data.data
               })
               .catch(error =>{
-                  console.log('ERROR Get List of Items', error)
+                console.log('ERROR Get List of Items', error)
               })
 
             // get list of categories
@@ -269,8 +291,8 @@
                url: 'http://localhost:3007/categories/lists' 
             })
               .then(categories =>{
-                  self.listcategories = categories.data.data
-                  console.log('Categories------', categories.data.data)
+                self.listcategories = categories.data.data
+                console.log('Categories------', categories.data.data)
               })
               .catch(error=>{
                   console.log('ERROR Get List of Categories', error)
