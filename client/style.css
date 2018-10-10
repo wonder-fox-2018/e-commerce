@@ -17,6 +17,13 @@ body {
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
 }
+
+#loading-page {
+    z-index: 20000;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
   
 .load-bg {
     width: 100vw;

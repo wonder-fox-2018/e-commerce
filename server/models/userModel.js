@@ -18,10 +18,14 @@ const userSchema = new Schema({
       type: Number,
       default: 0
     },
-    cart: {
+    items: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Product'
+    }],
+    counts: {
       type: Array
     },
-    items: {
+    total: {
       type: Array
     },
     totalsum: {

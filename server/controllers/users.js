@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const Product = require('../models/productModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs');
 
@@ -137,8 +138,9 @@ module.exports = {
 
     getCart: function (req, res) {
         User.findById(req.userId)
+        .populate('items')
         .then(data => {
-            res.status(200).json({cart: data.cart, items: data.items, totalsum: data.totalsum})
+            res.status(200).json({items: data.items, counts: data.counts, total: data.total, totalsum: data.totalsum})
         })
         .catch(err => {
             res.status(200).json({message: err})
@@ -146,18 +148,37 @@ module.exports = {
     },
 
     updateCart: function (req, res) {
-        User.updateOne({
-            _id: req.userId
-        }, {
-            cart: req.body.cart,
-            items: req.body.items,
-            totalsum: req.body.totalsum
+        var items = req.body.items
+        var counts = req.body.counts
+        var total = []
+        var totalsum = 0
+        Product.find({
+            _id: {
+                $in: items
+            }
         })
-        .then(() => {
-            res.status(200).json({})
+        .then(data => {
+            for (let i = 0; i < data.length; i++) {
+                total.push(data[i].price * counts[i])
+                totalsum += (data[i].price * counts[i])
+            }
+            User.updateOne({
+                _id: req.userId
+            }, {
+                items: items,
+                counts: counts,
+                total: total,
+                totalsum: totalsum
+            })
+            .then(() => {
+                res.status(200).json({})
+            })
+            .catch(err => {
+                res.status(500).json({message: err})
+            })
         })
         .catch(err => {
-            res.status(500).json({message: err})
+            console.log(err)
         })
     },
 
@@ -165,13 +186,22 @@ module.exports = {
         User.findById(req.userId)
         .then(data => {
             let transaction = data.transaction
-            transaction.push(data.cart)
+            transaction.push({
+                cart: {
+                    items: data.items,
+                    counts: data.counts,
+                    total: data.total,
+                    totalsum: data.totalsum
+                },
+                date: new Date()
+            })
             User.updateOne({
                 _id: req.userId
             }, {
                 transaction: transaction,
-                cart: [],
                 items: [],
+                counts: [],
+                total: [],
                 totalsum: 0
             })
             .then(() => {
@@ -180,6 +210,16 @@ module.exports = {
             .catch(err => {
                 res.status(500).json({message: err})
             })
+        })
+        .catch(err => {
+            res.status(500).json({message: err})
+        })
+    },
+
+    getTransactions: function (req, res) {
+        User.findById(req.userId)
+        .then(data => {
+            res.status(200).json(data.transaction)
         })
         .catch(err => {
             res.status(500).json({message: err})

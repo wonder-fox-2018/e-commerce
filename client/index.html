@@ -16,7 +16,7 @@
 </head>
 <body>
     <div id='app'>
-        <div v-if='loading'>
+        <div v-if='loading' id='loading-page'>
             <div class="load-bg"></div>
             <div class="loader">Loading...</div>
         </div>
@@ -28,6 +28,7 @@
                     <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-for='category in categories' v-on:click='showByC(category.name)'><i v-bind:class="category.icon" class="mx-4" ></i><span class="menutext ml-2">{{ category.name }}</span></li>
                 </ul>
                 <ul class="mt-4" id='bottommenu'>
+                    <li v-if='isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="showPH()"><i class="fas fa-history mx-4"></i><span class="menutext ml-2">Purchase History</span></li>
                     <li v-if='!isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signModal()"><i class="fas fa-sign-in-alt mx-4"></i><span class="menutext ml-2">Sign In / Register</span></li>
                     <li v-else v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signout()"><i class="fas fa-sign-out-alt mx-4"></i><span class="menutext ml-2">Sign Out</span></li>
                     <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="cartModal()"><i class="fas fa-shopping-cart mx-4"></i><span class="menutext ml-2">My Cart ( {{ itemcount }} )</span></li>
@@ -38,7 +39,10 @@
             <div class="row">
                 <div class="col-3"></div>
                 <div class="col-9">
-                    <div class="row" id='products' v-if='products.length > 0'>
+                    <div class="row" v-if='openPH'>
+
+                    </div>
+                    <div class="row" id='products' v-else-if='products.length > 0'>
                         <div class="containerku col-sm-6 col-md-5 col-lg-3" v-for='product in products'>
                             <div class="cardku">
                                 <div class="card-head">
@@ -186,6 +190,8 @@
                 menuhover: false,
                 itemcount: 0,
                 items: [],
+                itemsReal: [],
+                counts: [],
                 cart: [],
                 totalsum: 0,
                 emailColor: 'rgba(0, 0, 0, 0.5)',
@@ -196,7 +202,9 @@
                 redhalfTop: '25vh',
                 isLogin: false,
                 afterCheckOut: false,
-                keyword: ''
+                keyword: '',
+                openPH: false,
+                transactions: [] 
             },
             methods: {
                 getCategory() {
@@ -216,6 +224,7 @@
                     })
                     .then(data => {
                         this.products = data.data
+                        this.openPH = false
                     })
                     .catch(err => {
                         console.log(err)
@@ -233,13 +242,18 @@
                             total: product.price
                         })
                         this.totalsum += product.price
+
+                        this.itemsReal.push(product._id)
+                        this.counts.push(1)
                     } else {
                         this.cart[i].count ++
                         this.cart[i].total += product.price
                         this.totalsum += product.price
+                        this.counts[i] ++
                     }
                     
                     localStorage.setItem('items', JSON.stringify(this.items))
+                    localStorage.setItem('itemsID', JSON.stringify(this.itemsReal))
                     localStorage.setItem('cart', JSON.stringify(this.cart))
                     localStorage.setItem('totalsum', this.totalsum)
 
@@ -253,9 +267,8 @@
                             token: localStorage.getItem('token')
                         },
                         data: {
-                            cart: this.cart,
-                            items: this.items,
-                            totalsum: this.totalsum
+                            items: this.itemsReal,
+                            counts: this.counts
                         }
                     })
                     .then(() => {})
@@ -421,6 +434,8 @@
                         this.totalsum = 0
                         this.itemcount = 0
                         this.afterCheckOut = true
+                        this.itemsReal = []
+                        this.counts = []
 
                         this.updateCart()
 
@@ -437,16 +452,19 @@
                     this.cart[i].count --
                     this.cart[i].total -= item.price
                     this.totalsum -= item.price
+                    this.counts[i] --
                     
                     if (this.cart[i].count === 0) {
                         this.items.splice(i, 1)
                         this.cart.splice(i, 1)
+                        this.itemsReal.splice(i, 1)
                     }
                     
                     this.itemcount --
                     this.updateCart()
                     
                     localStorage.setItem('items', JSON.stringify(this.items))
+                    localStorage.setItem('itemsID', JSON.stringify(this.itemsReal))
                     localStorage.setItem('cart', JSON.stringify(this.cart))
                     localStorage.setItem('totalsum', this.totalsum)
                 },
@@ -455,11 +473,11 @@
                     this.cart[i].count ++
                     this.cart[i].total += item.price
                     this.totalsum += item.price
+                    this.counts[i] ++
 
                     this.itemcount ++
                     this.updateCart()
 
-                    localStorage.setItem('items', JSON.stringify(this.items))
                     localStorage.setItem('cart', JSON.stringify(this.cart))
                     localStorage.setItem('totalsum', this.totalsum)
                 },
@@ -473,33 +491,56 @@
                     .then(data => {
                         let localCart = JSON.parse(localStorage.getItem('cart'))
                         let localItems = JSON.parse(localStorage.getItem('items'))
-                        let validCart = data.data.cart
+                        let localItemsID = JSON.parse(localStorage.getItem('itemsID'))
+
                         let validItems = data.data.items
-                        this.itemcount = 0
+                        let validCounts = data.data.counts
+                        let validTotal = data.data.total
                         this.totalsum = data.data.totalsum
+
+                        this.itemcount = 0
+                        
+                        let validCart = []
+                        let validItemNames = []
+                        let validItemsID = []
+                        for (let i = 0; i < validItems.length; i++) {
+                            validItemsID.push(validItems[i]._id)
+                            validItemNames.push(validItems[i].name)
+                            validCart.push({
+                                name: validItems[i].name,
+                                price: validItems[i].price,
+                                count: validCounts[i],
+                                total: validTotal[i]
+                            })
+                        }
+
                         if (localCart && localItems) {
-                            for (let i = 0; i < localItems.length; i++) {
+                            for (let j = 0; j < localItems.length; j++) {
                                 let valid = false
-                                for (let j = 0; j < validItems.length; j++) {
-                                    this.itemcount += validCart[j].count
-                                    if (localItems[i] === validItems[j]) {
+                                for (let k = 0; k < validItemNames.length; k++) {
+                                    this.itemcount += validCounts[k]
+                                    if (localItems[j] === validItemNames[k]) {
                                         valid = true
                                     }
                                 }
                                 if (!valid) {
-                                    validItems.push(localItems[i])
-                                    validCart.push(localCart[i])
-                                    this.totalsum += localCart[i].total
-                                    this.itemcount += localCart[i].count
+                                    validItemNames.push(localItems[j])
+                                    validItemsID.push(localItemsID[j])
+                                    validCart.push(localCart[j])
+                                    validCounts.push(localCart[j].count)
+                                    this.totalsum += localCart[j].total
+                                    this.itemcount += localCart[j].count
                                 }
                             }
                         } else {
-                            for (let i = 0; i < validCart.length; i++) {
-                                this.itemcount += validCart[i].count
+                            for (let j = 0; j < validCart.length; j++) {
+                                this.itemcount += validCart[j].count
                             }
                         }
                         this.cart = validCart
-                        this.items = validItems
+                        this.items = validItemNames
+                        this.itemsReal = validItemsID
+                        this.counts = validCounts
 
                         this.updateCart()
 
@@ -532,6 +573,7 @@
                     })
                     .then(data => {
                         this.products = data.data
+                        this.openPH = false
                     })
                     .catch(err => {
                         console.log('Not found')
@@ -543,6 +585,22 @@
                     })
                     .then(data => {
                         this.products = data.data
+                        this.openPH = false
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                },
+                showPH() {
+                    this.openPH = true
+                    axios({
+                        url: 'http://localhost:3000/users/ph',
+                        headers: {
+                            token: localStorage.getItem('token')
+                        }
+                    })
+                    .then(data => {
+                        console.log(data.data)
                     })
                     .catch(err => {
                         console.log(err)
@@ -592,6 +650,11 @@
                         setTimeout(() => {
                             this.loading = false
                         }, 2000)
+                    } else if (this.keyword === '') {
+                        this.loading = true
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 10000)
                     }
                 }
             }
