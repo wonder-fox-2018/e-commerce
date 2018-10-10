@@ -1,10 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var { show, add, edit, remove } = require('../controllers/categories')
+const express = require('express');
+const router = express.Router();
+const { show, add, edit, remove } = require('../controllers/categories')
+const { isLogin, isAdmin } = require('../middlewares/isAuth')
 
 router.get('/', show)
-router.post('/', add)
-router.put('/:id', edit)
+router.post('/', isLogin, isAdmin, add)
+router.put('/:id', isLogin, isAdmin, edit)
 router.delete('/:id', remove)
 
 module.exports = router;

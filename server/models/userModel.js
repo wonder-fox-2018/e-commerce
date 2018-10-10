@@ -21,6 +21,13 @@ const userSchema = new Schema({
     cart: {
       type: Array
     },
+    items: {
+      type: Array
+    },
+    totalsum: {
+      type: Number,
+      default: 0
+    },
     transaction: {
       type: Array
     }

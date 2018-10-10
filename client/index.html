@@ -16,139 +16,151 @@
 </head>
 <body>
     <div id='app'>
-        <div id="sidebar" v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'>
-            <ul class="mt-4">
-                <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'><i class="fas fa-archive mx-4"></i><span class="menutext ml-2">Home</span></li>
-                <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-for='category in categories'><i v-bind:class="category.icon" class="mx-4"></i><span class="menutext ml-2">{{ category.name }}</span></li>
-            </ul>
-            <ul class="mt-4" id='bottommenu'>
-                <li v-if='!isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signModal()"><i class="fas fa-sign-in-alt mx-4"></i><span class="menutext ml-2">Sign In / Register</span></li>
-                <li v-else v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signout()"><i class="fas fa-sign-out-alt mx-4"></i><span class="menutext ml-2">Sign Out</span></li>
-                <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="cartModal()"><i class="fas fa-shopping-cart mx-4"></i><span class="menutext ml-2">My Cart ( {{ itemcount }} )</span></li>
-                <li class='itemcount' v-if='itemcount > 0 && menuhover === false'>{{ itemcount }}</li>
-                <li class='itemcount' v-else style="color: transparent">.</li>
-            </ul>
+        <div v-if='loading'>
+            <div class="load-bg"></div>
+            <div class="loader">Loading...</div>
         </div>
-        <div class="row">
-            <div class="col-4"></div>
-            <div class="col-8 col-lg-7">
-                <div class="row" id='products'>
-                    <div class="containerku col-sm-8 col-md-6 col-lg-5 col-xl-4" v-for='product in products'>
-                        <div class="cardku">
-                            <div class="card-head">
-                                <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
-                                <div class="product-detail">
-                                    <h2>{{ product.name }}</h2>
-                                    <p>{{ product.description }}</p>
+        <div v-else>
+            <div id="sidebar" v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'>
+                <ul class="mt-4">
+                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click='getProducts()'><i class="fas fa-archive mx-4"></i><span class="menutext ml-2">Home</span></li>
+                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'><i class="fas fa-search mx-4"></i><input class="menutext ml-2 search" type="text" placeholder="Search" v-model='keyword' v-on:keyup='search()'></li>
+                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-for='category in categories' v-on:click='showByC(category.name)'><i v-bind:class="category.icon" class="mx-4" ></i><span class="menutext ml-2">{{ category.name }}</span></li>
+                </ul>
+                <ul class="mt-4" id='bottommenu'>
+                    <li v-if='!isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signModal()"><i class="fas fa-sign-in-alt mx-4"></i><span class="menutext ml-2">Sign In / Register</span></li>
+                    <li v-else v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signout()"><i class="fas fa-sign-out-alt mx-4"></i><span class="menutext ml-2">Sign Out</span></li>
+                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="cartModal()"><i class="fas fa-shopping-cart mx-4"></i><span class="menutext ml-2">My Cart ( {{ itemcount }} )</span></li>
+                    <li class='itemcount' v-if='itemcount > 0 && menuhover === false'>{{ itemcount }}</li>
+                    <li class='itemcount' v-else style="color: transparent">.</li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-9">
+                    <div class="row" id='products' v-if='products.length > 0'>
+                        <div class="containerku col-sm-6 col-md-5 col-lg-3" v-for='product in products'>
+                            <div class="cardku">
+                                <div class="card-head">
+                                    <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
+                                    <div class="product-detail">
+                                        <h2>{{ product.name }}</h2>
+                                        <p>{{ product.description }}</p>
+                                    </div>
+                                    <span class="back-text">
+                                        {{ product.backtext }}
+                                    </span>
                                 </div>
-                                <span class="back-text">
-                                    {{ product.backtext }}
-                                </span>
+                                <div class="card-bodyku">
+                                    <div class="product-desc">
+                                        <span class="product-title">
+                                            <b>{{ product.name }}</b>
+                                        </span>
+                                        <span class="product-caption">
+                                            {{ product.category.name }}
+                                        </span>
+                                        <span class="product-rating">
+                                        <i class="fa fa-star" v-for='i in product.rating'></i>
+                                        <i class="fa fa-star grey" v-for='i in (5 - product.rating)'></i>
+                                        </span>
+                                    </div><br>
+                                    <div class="product-properties">
+                                        <span class="product-price">
+                                            IDR<b>{{ product.price | priceSlice }}</b>
+                                        </span>
+                                    </div>
+                                    <div class='atclogo' title="Add to Cart">
+                                        <span>
+                                            <i class="fas fa-cart-plus" v-on:click='addToCart(product)'></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-bodyku">
-                                <div class="product-desc">
-                                    <span class="product-title">
-                                        <b>{{ product.name }}</b>
-                                    </span>
-                                    <span class="product-caption">
-                                        {{ product.category.name }}
-                                    </span>
-                                    <span class="product-rating">
-                                    <i class="fa fa-star" v-for='i in product.rating'></i>
-                                    <i class="fa fa-star grey" v-for='i in (5 - product.rating)'></i>
-                                    </span>
-                                </div><br>
-                                <div class="product-properties">
-                                    <span class="product-price">
-                                        IDR<b>{{ product.price | moneySlice }}</b>
-                                    </span>
-                                </div>
-                                <div class='atclogo' title="Add to Cart">
-                                    <span>
-                                        <i class="fas fa-cart-plus" v-on:click='addToCart(product)'></i>
-                                    </span>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="row">
+                        <div class="col text-center" style="margin-top: 5vh">
+                            <i class="fas fa-archive mb-4" style="font-size: 200px; height: 200px; width: 200px"></i>
+                            <h3 class="mt-4">Sorry, but we can't find anything like that</h3>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-0 col-lg-1"></div>
-        </div>
-        <div id="backdrop" v-if='openBackdrop'></div>
-        <div id='signmodal' v-if='openSignModal'>
-            <div id='redhalf' v-bind:style='{height: redhalfHeight, top: redhalfTop}'>
-                <div id='signinform' v-if='isSigningIn'>
-                    <input type="text" id='email' v-bind:style='{color: emailColor}' v-model='email' v-on:keyup='validateEmail()' placeholder="Email" v-on:keyup.enter='signin()'><br>
-                    <input type="password" id='password' v-bind:style='{color: passwordColor}' v-model='password' v-on:keyup='validatePassword()' placeholder="Password" v-on:keyup.enter='signin()'>
-                    <div id='notice' v-if='notice.length > 0' class='text-center pt-3' style="color:white; font-size: 12px; height: 3vh;">{{ notice }}</div>
-                    <div id='notice' v-else style="color:transparent; height: 3vh;">.</div>
+            <div id="backdrop" v-if='openBackdrop'></div>
+            <div id='signmodal' v-if='openSignModal'>
+                <div id='redhalf' v-bind:style='{height: redhalfHeight, top: redhalfTop}'>
+                    <div id='signinform' v-if='isSigningIn'>
+                        <input type="text" id='email' v-bind:style='{color: emailColor}' v-model='email' v-on:keyup='validateEmail()' placeholder="Email" v-on:keyup.enter='signin()'><br>
+                        <input type="password" id='password' v-bind:style='{color: passwordColor}' v-model='password' v-on:keyup='validatePassword()' placeholder="Password" v-on:keyup.enter='signin()'>
+                        <div id='notice' v-if='notice.length > 0' class='text-center pt-3' style="color:white; font-size: 12px; height: 3vh;">{{ notice }}</div>
+                        <div id='notice' v-else style="color:transparent; height: 3vh;">.</div>
+                    </div>
+                    <div id='signupform' v-else>
+                        <input type="text" id='newname' v-model='newname' placeholder="Name"><br>
+                        <input type="text" id='newemail' v-model='newemail' v-bind:style='{color: newEmailColor}' v-on:keyup='validateNewEmail()' placeholder="Email" v-on:keyup.enter='signup()'><br>
+                        <input type="password" id='newpassword' v-model='newpassword' v-bind:style='{color: newPasswordColor}' v-on:keyup='validateNewPassword()' placeholder="Password (min. 6 characters)" v-on:keyup.enter='signup()'>
+                        <div id='notice' v-if='notice.length > 0' class='text-center pt-3' style="color:white; font-size: 12px; height: 3vh;">{{ notice }}</div>
+                        <div id='notice' v-else style="color:transparent; height: 3vh;">.</div>
+                    </div>
                 </div>
-                <div id='signupform' v-else>
-                    <input type="text" id='newname' v-model='newname' placeholder="Name"><br>
-                    <input type="text" id='newemail' v-model='newemail' v-bind:style='{color: newEmailColor}' v-on:keyup='validateNewEmail()' placeholder="Email" v-on:keyup.enter='signup()'><br>
-                    <input type="password" id='newpassword' v-model='newpassword' v-bind:style='{color: newPasswordColor}' v-on:keyup='validateNewPassword()' placeholder="Password (min. 6 characters)" v-on:keyup.enter='signup()'>
-                    <div id='notice' v-if='notice.length > 0' class='text-center pt-3' style="color:white; font-size: 12px; height: 3vh;">{{ notice }}</div>
-                    <div id='notice' v-else style="color:transparent; height: 3vh;">.</div>
+                <div id='whitehalf'>
+                    <button id='signin-btn' v-on:click='signin()'>SIGN IN</button>
+                    <button id='close-btn' v-on:click='signModal()'><i class="far fa-times-circle"></i></button>
+                    <button id='signup-btn' v-on:click='signup()'>SIGN UP</button>
                 </div>
             </div>
-            <div id='whitehalf'>
-                <button id='signin-btn' v-on:click='signin()'>SIGN IN</button>
-                <button id='close-btn' v-on:click='signModal()'><i class="far fa-times-circle"></i></button>
-                <button id='signup-btn' v-on:click='signup()'>SIGN UP</button>
-            </div>
-        </div>
-        <div id='cartmodal' v-if='openCartModal'>
-            <div id='cartcontent'>
-                <div class="row mb-4" v-for="item in cart">
-                    <div class="col-xl-4">
-                        <div class="row">
-                            <div class="col-12 text-center text-xl-left"><strong>{{ item.name }}</strong></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 text-center text-xl-left">{{ item.count }}xRp{{ item.price }}</div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="row">
-                            <div class="col-12 text-center text-xl-right pt-2 pt-xl-4 pr-xl-4 mb-4" style="height:20px"><strong>{{ item.total }}</strong></div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class='row no-gutters'>
-                            <div class="col-5">
-                                <button class="btn cartBtn" title="Remove" v-on:click="removeFromCart(item.name, item.price)" style='width:100%'>-</button>
+            <div id='cartmodal' v-if='openCartModal'>
+                <div id='cartcontent'>
+                    <div class="row mb-4" v-for="item in cart">
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <div class="col-12 text-center text-xl-left"><strong>{{ item.name }}</strong></div>
                             </div>
-                            <div class="col-2"></div>
-                            <div class="col-5">
-                                <button class="btn cartBtn" title="Add" v-on:click="addFromCart(item.name, item.price)" style='width:100%'>+</button>
+                            <div class="row">
+                                <div class="col-12 text-center text-xl-left">{{ item.count }} x Rp{{ item.price | currencySlice }}</div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <div class="col-12 text-center text-xl-right pt-2 pt-xl-4 pr-xl-4 mb-4" style="height:20px"><strong>Rp{{ item.total | currencySlice }}</strong></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class='row no-gutters'>
+                                <div class="col-5">
+                                    <button class="btn cartBtn" title="Remove" v-on:click="removeFromCart(item)" style='width:100%'>-</button>
+                                </div>
+                                <div class="col-2"></div>
+                                <div class="col-5">
+                                    <button class="btn cartBtn" title="Add" v-on:click="addFromCart(item)" style='width:100%'>+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" style="width: 100%" v-if='totalsum > 0 && isLogin'>
-                    <div class="col-6 text-left mb-2">Total:</div>
-                    <div class="col-6 text-right mb-2"><strong>Rp{{ totalsum }}</strong></div>
-                    <div class="col-6 text-center">
-                        <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
+                    <div class="row" style="width: 100%" v-if='totalsum > 0 && isLogin'>
+                        <div class="col-6 text-left mb-2">Total:</div>
+                        <div class="col-6 text-right mb-2"><strong>Rp{{ totalsum | currencySlice}}</strong></div>
+                        <div class="col-6 text-center">
+                            <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
+                        </div>
+                        <div class="col-6 text-center">
+                            <button id='checkOutBtn' v-on:click="checkOut()" class="btn cartBtn">Check Out</button>
+                        </div>
                     </div>
-                    <div class="col-6 text-center">
-                        <button id='checkOutBtn' v-on:click="checkOut()" class="btn cartBtn">Check Out</button>
+                    <div class="row" style="width: 100%" v-else-if='totalsum > 0'>
+                        <div class="col-6 text-left mb-2">Total:</div>
+                        <div class="col-6 text-right mb-2"><strong>Rp{{ totalsum | currencySlice}}</strong></div>
+                        <div class="col-12 text-center mb-2">You should sign in to check out</div>
+                        <div class="col-12 text-center">
+                            <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
+                        </div>
                     </div>
-                </div>
-                <div class="row" style="width: 100%" v-else-if='totalsum > 0'>
-                    <div class="col-6 text-left mb-2">Total:</div>
-                    <div class="col-6 text-right mb-2"><strong>Rp{{ totalsum }}</strong></div>
-                    <div class="col-12 text-center mb-2">You should sign in to check out</div>
-                    <div class="col-12 text-center">
-                        <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
-                    </div>
-                </div>
-                <div class="row" style="width: 100%" v-else>
-                    <div class="col-12 text-center mb-2" v-if='!afterCheckOut'>You haven't add anything to your cart</div>
-                    <div class="col-12 text-center mb-2" v-else>Thank you very much,<br>your purchase has been processed</div>
-                    <div class="col-12 text-center">
-                        <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
+                    <div class="row" style="width: 100%" v-else>
+                        <div class="col-12 text-center mb-2" v-if='!afterCheckOut'>You haven't add anything to your cart</div>
+                        <div class="col-12 text-center mb-2" v-else>Thank you very much,<br>your purchase has been processed</div>
+                        <div class="col-12 text-center">
+                            <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,6 +170,7 @@
         var app = new Vue({
             el: '#app',
             data: {
+                loading: true,
                 categories: [],
                 products: [],
                 email: '',
@@ -182,7 +195,8 @@
                 redhalfHeight: '25vh',
                 redhalfTop: '25vh',
                 isLogin: false,
-                afterCheckOut: false
+                afterCheckOut: false,
+                keyword: ''
             },
             methods: {
                 getCategory() {
@@ -218,7 +232,7 @@
                             count: 1,
                             total: product.price
                         })
-                        app.totalsum += product.price
+                        this.totalsum += product.price
                     } else {
                         this.cart[i].count ++
                         this.cart[i].total += product.price
@@ -239,12 +253,14 @@
                             token: localStorage.getItem('token')
                         },
                         data: {
-                            cart: this.cart
+                            cart: this.cart,
+                            items: this.items,
+                            totalsum: this.totalsum
                         }
                     })
                     .then(() => {})
                     .catch(err => {
-                        console.log(err)
+                        console.log("Don't worry, it's just that you haven't signed in :)")
                     })
                 },
 
@@ -289,6 +305,7 @@
                             localStorage.setItem('token', data.data.token)
                             this.isLogin = true
                             this.signModal()
+                            this.compareCarts()
                         })
                         .catch(err => {
                             this.notice = err.response.data.message
@@ -378,9 +395,11 @@
                     })
                     .then(() => {
                         this.isLogin = true
+                        this.compareCarts()
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.log("Don't worry, it's just that you haven't signed in :)")
+                        this.getLocalCart()
                     })
                 },
                 cartModal() {
@@ -412,15 +431,153 @@
                     .catch(err => {
                         console.log(err)
                     })
+                },
+                removeFromCart(item) {
+                    let i = this.items.indexOf(item.name)
+                    this.cart[i].count --
+                    this.cart[i].total -= item.price
+                    this.totalsum -= item.price
+                    
+                    if (this.cart[i].count === 0) {
+                        this.items.splice(i, 1)
+                        this.cart.splice(i, 1)
+                    }
+                    
+                    this.itemcount --
+                    this.updateCart()
+                    
+                    localStorage.setItem('items', JSON.stringify(this.items))
+                    localStorage.setItem('cart', JSON.stringify(this.cart))
+                    localStorage.setItem('totalsum', this.totalsum)
+                },
+                addFromCart(item) {
+                    let i = this.items.indexOf(item.name)
+                    this.cart[i].count ++
+                    this.cart[i].total += item.price
+                    this.totalsum += item.price
+
+                    this.itemcount ++
+                    this.updateCart()
+
+                    localStorage.setItem('items', JSON.stringify(this.items))
+                    localStorage.setItem('cart', JSON.stringify(this.cart))
+                    localStorage.setItem('totalsum', this.totalsum)
+                },
+                compareCarts() {
+                    axios({
+                        url: 'http://localhost:3000/users/cart',
+                        headers: {
+                            token: localStorage.getItem('token')
+                        }
+                    })
+                    .then(data => {
+                        let localCart = JSON.parse(localStorage.getItem('cart'))
+                        let localItems = JSON.parse(localStorage.getItem('items'))
+                        let validCart = data.data.cart
+                        let validItems = data.data.items
+                        this.itemcount = 0
+                        this.totalsum = data.data.totalsum
+                        if (localCart && localItems) {
+                            for (let i = 0; i < localItems.length; i++) {
+                                let valid = false
+                                for (let j = 0; j < validItems.length; j++) {
+                                    this.itemcount += validCart[j].count
+                                    if (localItems[i] === validItems[j]) {
+                                        valid = true
+                                    }
+                                }
+                                if (!valid) {
+                                    validItems.push(localItems[i])
+                                    validCart.push(localCart[i])
+                                    this.totalsum += localCart[i].total
+                                    this.itemcount += localCart[i].count
+                                }
+                            }
+                        } else {
+                            for (let i = 0; i < validCart.length; i++) {
+                                this.itemcount += validCart[i].count
+                            }
+                        }
+                        this.cart = validCart
+                        this.items = validItems
+
+                        this.updateCart()
+
+                        localStorage.setItem('items', JSON.stringify(this.items))
+                        localStorage.setItem('cart', JSON.stringify(this.cart))
+                        localStorage.setItem('totalsum', this.totalsum)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                },
+                getLocalCart() {
+                    let localCart = JSON.parse(localStorage.getItem('cart'))
+                    let localItems = JSON.parse(localStorage.getItem('items'))
+                    let localTotalSum = JSON.parse(localStorage.getItem('totalsum'))
+
+                    if (localCart && localItems && localTotalSum) {
+                        this.cart = localCart
+                        this.items = localItems
+                        this.totalsum = localTotalSum
+
+                        for (let i = 0; i < localCart.length; i++) {
+                            this.itemcount += localCart[i].count
+                        }
+                    }                   
+                },
+                search() {
+                    axios({
+                        url: `http://localhost:3000/products/search?keyword=${this.keyword}`
+                    })
+                    .then(data => {
+                        this.products = data.data
+                    })
+                    .catch(err => {
+                        console.log('Not found')
+                    })
+                },
+                showByC(name) {
+                    axios({
+                        url: `http://localhost:3000/products/${name}`
+                    })
+                    .then(data => {
+                        this.products = data.data
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
                 }
             },
             filters: {
-                moneySlice: function (value) {
+                priceSlice: function (value) {
                     let str = String(value)
-                    if (str.length > 3) {
+                    if (str.length > 7) {
+                        return str.slice(0, str.length-6) + 'M'
+                    } else if (str.length > 3) {
                         return str.slice(0, str.length-3) + 'K'
                     } else {
                         return str
+                    }
+                },
+                currencySlice: function (value) {
+                    let str = String(value)
+                    let reversed = str.split('').reverse()
+                    let counter = 0
+                    for (let i = 1; i < reversed.length; i++) {
+                        if (i % 3 === 0 && i + counter < reversed.length) {
+                            reversed.splice(i + counter, 0, '.')
+                            counter ++
+                        }
+                    }
+                    if (reversed.length > 10) {
+                        if (reversed[reversed.length-5] !== '0') {
+                            return reversed.reverse().join('').slice(0, reversed.length-6) + 'M'
+                        } else {
+                            return reversed.reverse().join('').slice(0, reversed.length-8) + 'M'
+                        }
+                    } else {
+                        return reversed.reverse().join('')
                     }
                 }
             },
@@ -428,6 +585,15 @@
                 this.getCategory()
                 this.getProducts()
                 this.checkLogin()
+            },
+            watch: {
+                products() {
+                    if (this.products.length > 0) {
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 2000)
+                    }
+                }
             }
         })
     </script>

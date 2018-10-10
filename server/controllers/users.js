@@ -138,7 +138,7 @@ module.exports = {
     getCart: function (req, res) {
         User.findById(req.userId)
         .then(data => {
-            res.status(200).json({cart: data.cart})
+            res.status(200).json({cart: data.cart, items: data.items, totalsum: data.totalsum})
         })
         .catch(err => {
             res.status(200).json({message: err})
@@ -149,7 +149,9 @@ module.exports = {
         User.updateOne({
             _id: req.userId
         }, {
-            cart: req.body.cart
+            cart: req.body.cart,
+            items: req.body.items,
+            totalsum: req.body.totalsum
         })
         .then(() => {
             res.status(200).json({})
@@ -167,7 +169,10 @@ module.exports = {
             User.updateOne({
                 _id: req.userId
             }, {
-                transaction: transaction
+                transaction: transaction,
+                cart: [],
+                items: [],
+                totalsum: 0
             })
             .then(() => {
                 res.status(200).json({})

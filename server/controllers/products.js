@@ -35,6 +35,19 @@ module.exports = {
         })
     },
 
+    search: function (req, res) {
+        Product.find({
+            name: new RegExp(req.query.keyword, 'i')
+        })
+        .populate('category')
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err => {
+            res.status(500).json({message: err + " --> in other words, we can't find what you want"})
+        })
+    },
+
     add: function (req, res) {
         Category.findOne({
             name: req.body.category
@@ -74,17 +87,29 @@ module.exports = {
     },
 
     edit: function (req, res) {
-        Product.updateOne({
-            _id: req.params.id
-        }, {
-            name: req.body.name,
-            description: req.body.description,
-            backtext: req.body.backtext,
-            price: req.body.price,
-            category: req.body.category
+        Category.findOne({
+            name: req.body.category
         })
-        .then(() => {
-            res.status(200).json({message: `Product '${req.params.id}' updated.`})
+        .then(category => {
+            if (category) {
+                Product.updateOne({
+                    _id: req.params.id
+                }, {
+                    name: req.body.name,
+                    description: req.body.description,
+                    backtext: req.body.backtext,
+                    price: req.body.price,
+                    category: category._id
+                })
+                .then(() => {
+                    res.status(200).json({message: `Product '${req.params.id}' updated.`})
+                })
+                .catch(err => {
+                    res.status(500).json({error: err})
+                })
+            } else {
+                res.status(500).json({message: 'The category is unregistered.'})
+            }
         })
         .catch(err => {
             res.status(500).json({error: err})
