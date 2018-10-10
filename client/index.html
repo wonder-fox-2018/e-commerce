@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>H8</title>
+
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/jBox.css" type="text/css">
+    <link rel="stylesheet" href="css/card.css" type="text/css">
+    <link rel="stylesheet" href="css/component.css" type="text/css" />
+    <link rel="stylesheet" href="css/cart.css" type="text/css" />
+    <link rel="stylesheet" href="css/loginRegister.css" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/modernizr.custom.js"></script>
+    <script src="js/jBox.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <meta name="google-signin-client_id" content="736311652491-j77r9uqltc9nucbensuiet5avlpb6046.apps.googleusercontent.com">
+
+</head>
+
+<body>
+    <div id="container">
+        <div class="se-pre-con"></div>
+
+        <header>
+            <div class="linkBar">
+                <div onclick="location.href='#article';">+ SHOP</div>
+                <div onclick="location.href='#footer';">+ ABOUT</div>
+                <div onclick="location.href='#main';">+ HELP</div>
+                <div onclick="signOut();">- SIGN OUT</div>
+            </div>
+
+            <div class="logoSect">H8 </div>
+            <div class="linkBar">
+                <div class="cartLink" href="#">+ CHART</div>
+                <div >+ USER</div>
+                <div class="registerLink" href="#">+ SIGN UP</div>
+                <div class="loginLink" href="#">+ SIGN IN</div>
+            </div>
+        </header>
+
+        <section>
+            <img src="https://picsum.photos/1200/400/?random" alt="">
+        </section>
+
+        <main id="main">
+            <div v-for="item in categories.slice(0,6)" :key="item.id" class="grid cs-style-3">
+                <div class="mainCard">
+                    <figure>
+                        <div><img v-bind:src="'https://picsum.photos/500/30'+item._id+'/?random'" alt="img05"></div>
+                        <figcaption>
+                            <h3> {{ item.categoryName }} </h3>
+                            <span> {{ item.description }} </span>
+                            <a href="">Take a look</a>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </main>
+
+        <nav>
+            <div class="categoriesContainer">
+                <ul>
+                    <li v-for="item in categories" :key="item.id" class="fa fa-star">
+                        {{ item.categoryName }}
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <article id="article">
+            <div v-for="(item, i) in products" :key="item.id" class="productCard">
+                <div class="box-wrapper" v-bind:id="item._id">
+                    <img v-bind:src="'https://picsum.photos/401/20'+item.rating+'/?random'" alt="rhcp" />
+                    <div class="box-content">
+                        <a class="buy" v-on:click="addToCart(item)" href="javascript:void(0)"><span><i class="fa fa-cart-plus"></i></span></a>
+                        <div class="title"> {{item.productName}} </div>
+                        <div class="desc"> {{item.productDesc}} </div>
+                        <span class="price">Rp {{item.price}}</span>
+                        <div class="footer">
+                            <ul>
+                                <li v-for="n in item.rating" class="fa fa-star"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="success"></div>
+                </div>
+            </div>
+        </article>
+
+        <aside>
+
+            <div class="post-module">
+                <!-- Thumbnail-->
+                <div class="thumbnail">
+                    <div class="date">
+                        <div class="day">27</div>
+                        <div class="month">Mar</div>
+                    </div><img src="https://picsum.photos/301/206/?random" />
+                </div>
+                <!-- Post Content-->
+                <div class="post-content">
+                    <div class="category">Photos</div>
+                    <h1 class="title">City Lights in New York</h1>
+                    <h2 class="sub_title">The city that never sleeps.</h2>
+                    <p class="description">New York, the largest city in the U.S., is an architectural marvel with
+                        plenty of
+                        historic monuments, magnificent buildings and countless dazzling skyscrapers.</p>
+                    <div class="post-meta"><span class="timestamp"><i class="fa fa-clock-">o</i> 6 mins ago</span>
+                        <span class="comments"><i class="fa fa-comments"></i><a href="#"> 39 comments</a></span></div>
+                </div>
+            </div>
+
+
+        </aside>
+
+        <footer id="footer">
+
+
+        </footer>
+
+
+
+        <div id="login-box" style="display:none;">
+            <div class="left">
+                <h1>Sign up</h1>
+
+                <input type="text" id="registerUsername" name="username" placeholder="Username" />
+                <input type="text" id="registerEmail" name="email" placeholder="E-mail" />
+                <input type="password" id="registerPassword" name="password" placeholder="Password" />
+                <input type="password" name="password2" placeholder="Retype password" />
+
+                <input type="submit" name="signup_submit" value="Sign me up" />
+            </div>
+
+            <div class="right">
+                <span class="loginwith">Sign in with<br />social network</span>
+
+                <button class="social-signin facebook">Log in with facebook</button>
+                <button class="social-signin twitter">Log in with Twitter</button>
+                <button class="social-signin google">Log in with Google+</button>
+            </div>
+            <div class="or">OR</div>
+        </div>
+
+        <div id="signin-box" style="display:none;">
+            <div class="left">
+                <input type="text" id="loginUsername" name="username" placeholder="Username" />
+                <input type="password" id="loginPassword" name="password" placeholder="Password" />
+                <input type="submit" name="login_submit" value="Sign In" /> 
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            </div>
+        </div>
+
+        <div id="cartContainer" style="display:none;">
+            <div class="wrap cf">
+
+                <div class="heading cf">
+                    <h1>My Cart</h1>
+                    <a href="#" class="continue">Continue Shopping</a>
+                </div>
+                <div class="cart">
+                    <ul class="cartWrap">
+                        <li v-for="(item, index) in cart.cartcontent" class="items even">
+
+                            <div class="infoWrap">
+                                <div class="cartSection">
+                                    <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" class="itemImg" />
+                                    <p class="itemNumber"> {{item.Product.id}} </p>
+                                    <h3> {{ item.Product.productName}} </h3>
+
+                                    <p> <input type="text" class="qty" v-bind:placeholder="item.qty" /> x
+                                        {{item.Product.price}}</p>
+
+                                    <p class="stockStatus"> In Stock</p>
+                                </div>
+
+
+                                <div class="prodTotal cartSection">
+                                    <p> {{ item.qty * item.Product.price }} </p>
+                                </div>
+                                <div class="cartSection removeWrap">
+                                    <a href="#" v-on:click="deleteFromCart(item.Product.id)" class="remove">x</a>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="subtotal cf">
+                    <ul>
+                        <li class="totalRow"><span class="label">Subtotal</span><span class="value"> {{cart.subTotal}}
+                            </span></li>
+
+                        <li class="totalRow"><span class="label">Shipping</span><span class="value"> {{cart.shipping}}
+                            </span></li>
+
+                        <li class="totalRow"><span class="label">Tax</span><span class="value"> {{cart.tax}} </span></li>
+                        <li class="totalRow final"><span class="label">Total</span><span class="value"> {{cart.total}}
+                            </span></li>
+                        <li class="totalRow"><a href="#" class="btn continue">Checkout</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+    </script>
+
+    <script src="js/toucheffects.js"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/vue.js"></script>
+</body>
+
+</html>
