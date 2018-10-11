@@ -5,8 +5,14 @@
 
 .btn, .btn-outline-danger {
     background-color: linear-gradient(45deg, rgb(250, 149, 154) 0%, rgb(255, 190, 170) 100%)!important;
-    color: rgba(255, 149, 165)!important;
-    border-color: rgb(255, 149, 165)!important;
+    color: rgba(255, 117, 137)!important;
+    border-color: rgb(255, 117, 137)!important;
+    
+}
+.btn:hover, .btn-outline-danger:hover {
+    background-color: linear-gradient(45deg, rgb(250, 149, 154) 0%, rgb(255, 190, 170) 100%)!important;
+    color: rgb(255, 255, 255)!important;
+    /* border-color: rgb(255, 255, 255)!important; */
     
 }
 
@@ -42,4 +48,8 @@ placeholder {
 
 .dropdown-item {
     color: rgb(247, 128, 148) !important;
+}
+
+.my-pinky {
+    color: rgb(255, 132, 116) !important; 
 }
