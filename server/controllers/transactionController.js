@@ -29,13 +29,7 @@ module.exports = {
                 }
             });
 
-            /* res.send({
-                userId: req.decoded.id,
-                purchased_item: purchasedItem,
-                total_price: total_price
-            }) */
-
-
+           
             Transaction.create({
                 userId: req.decoded.id,
                 purchased_item: purchasedItem,

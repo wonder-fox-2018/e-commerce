@@ -18,32 +18,14 @@ module.exports = {
             email,password,first_name,last_name
         }).then((user) => {
             Cart.create({userId: user._id}).then((result) => {
-                res.json(user);
+                res.status(200).json(result);
             }).catch((err) => {
-                
+                res.status(500).json(err);
             });
         }).catch((err) => {
             res.json(err);
         });
 
-
-        /* Cart.create({}).then((cart) => {
-            let {email, password, first_name, last_name} = req.body;
-
-            User.create({
-                email,
-                password,
-                first_name,
-                last_name,
-                cart:cart
-            }).then((user) => {
-                res.json(user)
-            }).catch((err) => {
-                
-            });
-        }).catch((err) => {
-            res.status(500);
-        }); */
     },
 
     login: (req, res) => {

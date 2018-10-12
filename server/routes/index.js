@@ -12,35 +12,41 @@ router.get('/', function(req, res, next) {
   res.send('home');
 });
 
+
+//public
 router.post('/login', UserController.login);
 
 router.post('/register', UserController.register);
 
-router.get('/user-info', Middlewares.isLogin, UserController.findById);
-
-router.post('/item', ItemControler.create); 
-
-router.post('/cart', CartController.create);
-
-router.get('/cart', Middlewares.isLogin, CartController.getCart);
-
-router.put('/cart/:id', Middlewares.isLogin, CartController.addItemToCart);
-
 router.get('/item', ItemControler.showAll);
-
-
-router.post('/transaction', Middlewares.isLogin, TransactionController.create);
-
-
 
 router.post('/category', CategortController.create);
 
 router.put('/category/:id', CategortController.addItem);
 
-
-
 router.get('/category/:name', CategortController.showCategory);
 
+
+//auth
+
+router.get('/user-info', Middlewares.isLogin, UserController.findById);
+
+router.post('/transaction', Middlewares.isLogin, TransactionController.create);
+
+
+router.get('/cart', Middlewares.isLogin, CartController.getCart);
+router.put('/cart/:id', Middlewares.isLogin, CartController.addItemToCart);
+
+
+
+
+
+
+
+//admin
+router.post('/item', ItemControler.create); 
+
+router.post('/cart', CartController.create);
 
 
 
