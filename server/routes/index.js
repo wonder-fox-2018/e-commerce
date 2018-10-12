@@ -35,7 +35,7 @@ router.put('/category/:id', CategortController.addItem);
 
 router.patch('/cart', Middlewares.isLogin, CartController.checkOut);
 
-
+router.get('/category/:name', CategortController.showCategory);
 
 
 module.exports = router;

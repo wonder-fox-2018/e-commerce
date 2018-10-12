@@ -61,7 +61,7 @@ module.exports = {
             if (user) {
                 let token = Token.sign(user);
 
-                ServerResponse.success(res, 200, 'user has been logged in', token);
+                res.status(200).json(token);
             } else {
 
                 ServerResponse.error(res, 401, {

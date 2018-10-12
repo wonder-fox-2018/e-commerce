@@ -32,7 +32,7 @@
 
         <!-- navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-            <a class="navbar-brand login-btn">Login</a>
+            <a class="navbar-brand login-btn" data-toggle="modal" data-target="#modal-login">Login</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -78,21 +78,16 @@
 
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search for product" aria-label="Search" v-model="filterProduct">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search for product" aria-label="Search"
+                        v-model="filterProduct">
                     <!-- <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button> -->
                 </form>
             </div>
         </nav>
 
 
-        <!-- cart modal -->
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-cart">
-            Launch demo modal
-        </button>
-
-        <!-- Modal -->
+        <!-- Cart Modal -->
         <div class="modal fade" id="modal-cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -106,39 +101,79 @@
                     <div class="modal-body">
                         <table class="table">
                             <thead>
-                              <tr>
-                                <th scope="col">item id</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">qty</th>
-                                <th scope="col">sub total</th>
-                              </tr>
+                                <tr>
+                                    <th scope="col">item id</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">qty</th>
+                                    <th scope="col">sub total</th>
+                                </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="(property) in cartDisplay" >
-                                <th scope="row">{{property.id}}</th>
-                                <td>{{property.name}}</td>
-                                <td>{{property.qty}}</td>
-                                <td>{{property.subTotal}}</td>
-                                <td><button type="button" class="btn-sm btn-danger">remove</button></td>
-                              </tr>
-                              <tr>
-                                  <td> <h4>Total price</h4></td>
-                                  <td></td>
-                                  <td></td>
-                                  <th>{{totalPrice}}</th>
-                                  <td></td> 
-                              </tr>
+                                <tr v-for="(property) in cartDisplay">
+                                    <th scope="row">{{property.id}}</th>
+                                    <td>{{property.name}}</td>
+                                    <td>{{property.qty}}</td>
+                                    <td>{{property.subTotal}}</td>
+                                    <td><button type="button" class="btn-sm btn-danger">remove</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4>Total price</h4>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <th>{{totalPrice}}</th>
+                                    <td></td>
+                                </tr>
                             </tbody>
-                          </table>
+                        </table>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-primary checkout-btn" data-toggle="modal" data-target="#modal-cart" v-on:click="checkOut">Check out</button>
+                        <button type="button" class="btn btn-outline-primary checkout-btn" data-toggle="modal"
+                            data-target="#modal-cart" v-on:click="checkOut">Check out</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        
+        <!-- login-modal -->
+        <div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="email">Email address</label>
+                                <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
+                                    placeholder="Enter email" v-model="inputEmailLogin">
+                            </div>
+    
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password" placeholder="Password" v-model="inputPasswordLogin" >
+                            </div>
+    
+                            <div class="form-group">
+                                <small id="emailHelp" class="form-text text-muted">Has no account?</small>
+                                <button type="button" class="btn  btn-sm">Register Here</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-login" v-on:click="login" >Login</button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
 
 
@@ -242,15 +277,34 @@
                 cart: '',
                 cartDisplay: [],
                 totalPrice: 0,
-                filterProduct:'',
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWQiOiI1YmJjZTcyM2FmYzI5NTUxMWNiYWZmYWIiLCJpYXQiOjE1MzkxMDY1OTd9.1uVKEmQ-ScZTfjoM_E-DQlHesEDgkeZ6qWck1SS-Wo4'
+                filterProduct: '',
+                inputEmailLogin: '',
+                inputPasswordLogin: ''
             },
             created: function () {
                 this.fetchItems();
+
                 this.fetchCart();
             },
             methods: {
-                fetchItems: function() {
+                login: function() {
+                    
+                    axios({
+                        method: 'POST',
+                        url: 'http://localhost:3000/login',
+                        data: {
+                            email: this.inputEmailLogin,
+                            password: this.inputPasswordLogin
+                        }
+                    }).then((result) => {
+                        localStorage.setItem('access-token', result.data);
+                        this.inputEmailLogin = '';
+                        this.inputPasswordLogin = '';
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                },
+                fetchItems: function () {
                     axios.get('http://localhost:3000/item').then((result) => {
                         result.data.forEach(currentItem => {
                             this.items.push(currentItem);
@@ -260,7 +314,7 @@
                     });
                 },
 
-                fetchItemsByName: function(keyWord) {
+                fetchItemsByName: function (keyWord) {
                     axios.get(`http://localhost:3000/item?keyWord=${keyWord}`).then((result) => {
                         this.items = [];
                         result.data.forEach(currentItem => {
@@ -271,10 +325,10 @@
                     });
                 },
 
-                fetchCart: function() {
+                fetchCart: function () {
                     axios.get('http://localhost:3000/cart', {
                         headers: {
-                            'access-token': this.token
+                            'access-token': localStorage.getItem('access-token')
                         }
                     }).then((result) => {
                         console.log(result.data.list);
@@ -285,12 +339,12 @@
                         console.log(err);
                     });
                 },
-                addToCart: function(itemId) {
+                addToCart: function (itemId) {
                     axios({
                         method: 'PUT',
                         url: `http://localhost:3000/cart/${itemId}`,
                         headers: {
-                            'access-token': this.token
+                            'access-token': localStorage.getItem('access-token')
                         }
                     }).then((result) => {
                         this.fetchCart();
@@ -298,11 +352,11 @@
                         console.log(err);
                     });
                 },
-                isEmpty: function(arr) {
+                isEmpty: function (arr) {
                     return arr.length === 0;
                 },
 
-                groupCartByItems: function() {
+                groupCartByItems: function () {
                     this.cartDisplay = [];
                     let pushedItem = [];
                     this.cart.list.forEach(currentItem => {
@@ -316,45 +370,43 @@
                             })
                             pushedItem.push(currentItem._id);
                         } else {
-                            
-                            
-                            let index = this.cartDisplay.findIndex( (element) => {
-                                
+
+
+                            let index = this.cartDisplay.findIndex((element) => {
+
                                 return element.id === currentItem._id
                             });
                             console.log(index);
-                            
+
                             this.cartDisplay[index].subTotal += currentItem.price;
                             this.cartDisplay[index].qty++;
                         }
 
-                        
+
                     });
-                     
+
                 },
 
-                checkOut: function() {
-                    
+                checkOut: function () {
+
                     axios({
                         method: 'PATCH',
                         url: `http://localhost:3000/cart`,
                         headers: {
-                            'access-token': this.token
+                            'access-token': localStorage.getItem('access-token')
                         }
                     }).then((result) => {
                         this.itemInCart = 0;
                         this.cartDisplay = [];
                         this.totalPrice = 0;
                     }).catch((err) => {
-                       console.log(err);
+                        console.log(err);
                     });
                 }
             },
             watch: {
-                itemInCart: function(val) {
-                    val = this.cart.list.length;
-                },
-                filterProduct: function(val) {
+               
+                filterProduct: function (val) {
                     this.fetchItemsByName(val);
                 }
             }
