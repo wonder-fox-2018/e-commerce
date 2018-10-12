@@ -218,7 +218,7 @@ class ItemController{
                     sortedArr.push(item)
                 }
              })
-             console.log('sorted arr--------',sortedArr)
+            //  console.log('sorted arr--------',sortedArr)
              res.status(200).json({
                 msg: 'List of sorted data',
                 data: sortedArr 
