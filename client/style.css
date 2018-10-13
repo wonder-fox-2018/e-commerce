@@ -289,7 +289,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 14vw;
 }
 
-.fas,.fa {
+.fas, .fa, .fab {
     width: 25px;
     height: 25px;
 }
@@ -447,4 +447,64 @@ h1, h2, h3, h4, h5, h6 {
     background: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
     background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
     background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
+}
+
+#ap {
+    margin-top: 50px;
+}
+
+.adminmenugroup {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.adminmenu {
+    height: 350px !important;
+    max-width: 275px !important;
+    min-width: 275px !important;
+    background: white;
+    border: solid 5px;
+    border-color: #fa782e;
+    border-color: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    border-color: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    border-color: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
+    border-radius: 50px;
+    display: flex;
+    cursor: pointer;
+    margin-bottom: 100px;
+}
+
+.adminmenu div {
+    margin: auto;
+    font-size: 50px;
+}
+
+.adminmenu div h3 {
+    padding-top: 25px;
+}
+
+.adminpromote {
+    height: 300px !important;
+    display: flex;
+}
+
+.adminpromote div {
+    margin: auto;
+}
+
+.adminpromote div input {
+    font-size: 20px;
+    padding: 10px 20px;
+    width: 400px;
+}
+
+#promoteBtn {
+    color: white;
+    background: #fa782e;
+    background: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
+    height: 50px;
+    width: 400px;
 }

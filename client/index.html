@@ -23,15 +23,16 @@
         <div v-else>
             <div id="sidebar" v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'>
                 <ul class="mt-4">
-                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click='getProducts()'><i class="fas fa-archive mx-4"></i><span class="menutext ml-2">Home</span></li>
-                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'><i class="fas fa-search mx-4"></i><input class="menutext ml-2 search" type="text" placeholder="Search" v-model='keyword' v-on:keyup='search()'></li>
-                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-for='category in categories' v-on:click='showByC(category.name)'><i v-bind:class="category.icon" class="mx-4" ></i><span class="menutext ml-2">{{ category.name }}</span></li>
+                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click='getProducts()'><i class="fas fa-archive mx-4"></i><span class="menutext ml-2 mt-1">Home</span></li>
+                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()'><i class="fas fa-search mx-4"></i><input class="menutext ml-2 mt-1 search" type="text" placeholder="Search" v-model='keyword' v-on:keyup='search()'></li>
+                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-for='category in categories' v-on:click='showByC(category.name)'><i v-bind:class="category.icon" class="mx-4" ></i><span class="menutext ml-2 mt-1">{{ category.name }}</span></li>
                 </ul>
                 <ul class="mt-4" id='bottommenu'>
-                    <li v-if='isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="showPH()"><i class="fas fa-history mx-4"></i><span class="menutext ml-2">Purchase History</span></li>
-                    <li v-if='!isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signModal()"><i class="fas fa-sign-in-alt mx-4"></i><span class="menutext ml-2">Sign In / Register</span></li>
-                    <li v-else v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signout()"><i class="fas fa-sign-out-alt mx-4"></i><span class="menutext ml-2">Sign Out</span></li>
-                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="cartModal()"><i class="fas fa-shopping-cart mx-4"></i><span class="menutext ml-2">My Cart ( {{ itemcount }} )</span></li>
+                    <li v-if='isAdmin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="showAP()"><i class="fab fa-asymmetrik mx-4"></i><span class="menutext ml-2 mt-1">Admin Page</span></li>
+                    <li v-if='isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="showPH()"><i class="fas fa-history mx-4"></i><span class="menutext ml-2 mt-1">Purchase History</span></li>
+                    <li v-if='!isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signModal()"><i class="fas fa-sign-in-alt mx-4"></i><span class="menutext ml-2 mt-1">Sign In / Register</span></li>
+                    <li v-else v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signout()"><i class="fas fa-sign-out-alt mx-4"></i><span class="menutext ml-2 mt-1">Sign Out</span></li>
+                    <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="cartModal()"><i class="fas fa-shopping-cart mx-4"></i><span class="menutext ml-2 mt-1">My Cart ( {{ itemcount }} )</span></li>
                     <li class='itemcount' v-if='itemcount > 0 && menuhover === false'>{{ itemcount }}</li>
                     <li class='itemcount' v-else style="color: transparent">.</li>
                 </ul>
@@ -39,7 +40,7 @@
             <div class="row">
                 <div class="col-3"></div>
                 <div class="col-9">
-                    <div class="row mt-4" v-if='openPH'>
+                    <div class="row mt-4" v-if='openTab === "ph"'>
                         <div class="row col-12 mb-4" v-for='(transaction, index) in transactions.slice().reverse()'>
                             <div class="col-1"></div>
                             <div class="card col-10 px-0">
@@ -75,6 +76,44 @@
                             </div>
                             <div class="col-1"></div>
                         </div>
+                    </div>
+                    <div class="row" id='ap' v-else-if='openTab === "ap"'>
+                        <div class="col-11">
+                            <div class="adminmenugroup row">
+                                <div class="col-sm-6 col-md-3 text-center adminmenu">
+                                    <div>
+                                        <i class="fas fa-plus"></i>
+                                        <h3>Add New Product</h3>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 text-center adminmenu">
+                                    <div>
+                                        <i class="fas fa-plus"></i>
+                                        <h3>Add New Category</h3>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 text-center adminmenu">
+                                    <div>
+                                        <i class="fas fa-plus"></i>
+                                        <h3>Add New User</h3>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 text-center adminmenu">
+                                    <div>
+                                        <i class="fas fa-plus"></i>
+                                        <h3>Add New Coupon</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4 adminpromote text-center border-top">
+                                <div>
+                                    <h2 class="mb-4">Promote A User Into Admin</h2>
+                                    <input type="text" placeholder="Search user by name / email"><br><br>
+                                    <button class='btn' id='promoteBtn'>Promote</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1"></div>
                     </div>
                     <div class="row" id='products' v-else-if='products.length > 0'>
                         <div class="containerku col-sm-6 col-md-5 col-lg-3" v-for='product in products'>
@@ -237,10 +276,10 @@
                 redhalfTop: '25vh',
                 isLogin: false,
                 authUserId: '',
-                isAdmin: 0,
+                isAdmin: false,
                 afterCheckOut: false,
                 keyword: '',
-                openPH: false,
+                openTab: 'all',
                 transactions: [],
                 starColors: []
             },
@@ -256,13 +295,15 @@
                         console.log(err)
                     })
                 },
-                getProducts() {
+                getProducts(stop) {
                     axios({
                         url: 'http://localhost:3000/products'
                     })
                     .then(data => {
-                        this.products = data.data
-                        this.openPH = false
+                        if (!stop) {
+                            this.products = data.data
+                            this.openTab = 'all'
+                        }
                     })
                     .catch(err => {
                         console.log(err)
@@ -367,6 +408,7 @@
                 },
                 signout() {
                     this.isLogin = false
+                    this.isAdmin = false
                     this.items = []
                     this.cart = []
                     this.totalsum = 0
@@ -452,6 +494,7 @@
                             this.isLogin = true
                             this.authUserId = data.data.id
                             this.isAdmin = data.data.isAdmin
+                            console.log(data.data.isAdmin)
                             this.compareCarts()
                         }
                     })
@@ -618,7 +661,7 @@
                     })
                     .then(data => {
                         this.products = data.data
-                        this.openPH = false
+                        this.openTab = 'all'
                     })
                     .catch(err => {
                         console.log("Not found")
@@ -630,14 +673,14 @@
                     })
                     .then(data => {
                         this.products = data.data
-                        this.openPH = false
+                        this.openTab = category
                     })
                     .catch(err => {
                         console.log(err)
                     })
                 },
                 showPH() {
-                    this.openPH = true
+                    this.openTab = 'ph'
                     axios({
                         url: 'http://localhost:3000/users/ph',
                         headers: {
@@ -680,6 +723,9 @@
                     .catch(err => {
                         console.log(err)
                     })
+                },
+                showAP() {
+                    this.openTab = 'ap'
                 }
             },
             filters: {

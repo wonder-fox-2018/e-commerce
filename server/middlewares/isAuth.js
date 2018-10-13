@@ -8,14 +8,18 @@ module.exports = {
                 next(err.message)
             } else {
                 req.userId = decoded.id
-                req.isAdmin = decoded.isAdmin
+                if (decoded.isAdmin === 1) {
+                    req.isAdmin = true
+                } else {
+                    req.isAdmin = false
+                }
                 next()
             }
         })
     },
 
     isAdmin: function (req, res, next) {
-        if (req.isAdmin === 1) {
+        if (req.isAdmin) {
             next()
         } else {
             next('Access denied')
