@@ -7,6 +7,6 @@ const isLogin = require('../middlewares/isLogin')
 
 // get detail of user
 router.get('/', isLogin, UserController.getUserDetail)
-
+      .get('/credentials', isLogin, UserController.getCredentials)
 
 module.exports = router

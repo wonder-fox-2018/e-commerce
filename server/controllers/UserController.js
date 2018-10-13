@@ -140,7 +140,7 @@ class UserController{
                 })
           }else{
             res.status(500).json({
-                msg: 'Please contact your system administrator'
+               msg: 'Please contact your system administrator'
             })
           }
        }else{
@@ -148,6 +148,29 @@ class UserController{
             msg: 'Please Check Your Email'
           })
        }
+    }
+
+    // get credentials
+    static getCredentials(req,res){
+        User.findOne({
+            _id: req.decoded.userid
+        })
+          .then(user => {
+             let obj = {
+                name: user.name,
+                role: user.role,
+                transactionslist: user.transactionslist
+             } 
+             res.status(201).json({
+                msg: 'Get Credentials Success ',
+                data: obj
+             })
+          })
+          .catch(error =>{
+            res.status(500).json({
+                msg: 'ERROR Get Credentials ',error
+             })
+          })
     }
 }
 
