@@ -96,7 +96,7 @@ Vue.component('content-item',{
         </div>
     </div>
     `,
-  props: ['getislogin'],  
+  props: ['getislogin','getlistitems'],  
   data () {
     return {
       listitems: [],
@@ -117,5 +117,10 @@ Vue.component('content-item',{
       .catch(error =>{
         console.log('ERROR Get List of Items', error)
         })
+  },
+  watch: {
+     getlistitems (val) {
+        this.listitems = val 
+     } 
   }  
 })

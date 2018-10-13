@@ -15,6 +15,7 @@
     <script src = "./component/footer.js"></script>
     <script src = "./component/navbar.js"></script>
     <script src ="./component/contentitem.js"></script>
+    <script src = "./component/sidebar.js"></script>
     <title>E-Cosmetics</title>
 </head>
 <body>
@@ -25,7 +26,9 @@
         <div class="container-fluid border">
             <div class="row">
                 <div class = "col-md-3 border">
-                    <div> <!--  class="navBarFixedLeft" -->
+                    <sidebar-section @listitems= "getitems"></sidebar-section>
+                    <!--
+                    <div>
                         <div id="searchbar">
                             <input class="form-control mr-sm-2" type="text" v-model= "searchkeyword" placeholder="Search" aria-label="Search">
                             <hr>
@@ -39,112 +42,16 @@
                             <button v-for="category in listcategories" class="list-group-item sideBarCustom" v-on:click= "getitembycategory(category._id)">{{ category.name }}</button>    
                         </div>
                     </div>
+                    -->
                 </div>
                 <div class= "col-md-9 border">
-                    <content-item :getislogin = "islogin"></content-item>
-                    <!-- content start-->
-                    <!--
-                    <div class="marginTop">
-                        <div class="row">
-                            <div class="container">
-                                <div id="carouselExampleControls" class="carousel slide carouselMarginCustom" data-ride="carousel">
-                                    <div class="carousel-inner">
-                                        <div class="carousel-item active carouselCustom">
-                                            <img class="d-block w-100" src="./assets/image/cosmetics1.jpg" alt="First slide">
-                                        </div>
-                                        <div class="carousel-item carouselCustom">
-                                            <img class="d-block w-100 " src="./assets/image/cosmetics4.jpg" alt="Second slide">
-                                        </div>
-                                        <div class="carousel-item carouselCustom">
-                                            <img class="d-block w-100 " src="./assets/image/cosmetics5.jpg" alt="Second slide">
-                                        </div>
-                                    </div>
-                                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </div>            
-                            </div> 
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">   
-                            </div>
-                        </div>
-                        <div class="marginBottom"></div>
-                        <div>
-                            <div>
-                                <div class="row">
-                                    <div v-for = "item in listitems">
-                                        <div class ="col-md-3">
-                                            <div class="itemBox">
-                                                <div class="card" style="width: 18rem;">
-                                                    <img class="card-img-top img-fluid imgCustom" v-bind:src="item.itemurlimage" alt="Card image cap">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">{{ item.itemname }}</h5>
-                                                        <p class="card-text">Rp. {{ item.itemprice }}</p>
-                                                    </div>
-                                                    <a data-toggle="modal" data-target="#loginMessage" class="btn btn-primary"><font color="white">Order Now</font></a>
-                                                </div>
-                                            </div>
-                                        </div>    
-                                        <div class="col-md-1">
-                                        </div> 
-                                    </div>    
-                                </div>
-                                <div class="row">
-                                    <div>
-                                        <div class="col-md-12">
-                                            <img height="40px" width="100%" src="./assets/image/whiteBox.jpg">
-                                        </div>
-                                    </div>
-                                </div>        
-                            </div>  
-                        </div>   
-                        <div class="row">
-                            <div>
-                                <div class="col-md-12">
-                                    <img height="30px" width="100%" src="./assets/image/whiteBox.jpg">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    -->
-                    <!-- content end-->
+                    <content-item :getislogin = "islogin" :getlistitems="listitems"></content-item>
                 </div>
             </div>
         </div>
         <footer-comp></footer-comp>
 
         <!-- Modal Part -->
-        <!-- Need to Login Message Modal-->
-        <!--
-        <div class="modal fade" id="loginMessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <label>You have to login/register first to buy</label>
-                        </div>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
 
         <!-- Shopping Cart Modal-->
         <!--
@@ -184,67 +91,65 @@
           el: '#app',
           data: {
              listitems: [],
-             listcategories: [],
-             searchkeyword: '',
              namalengkap: '',
              usercredentials: {},
              islogin: false,
              token: ''
           },
           methods:{
-             // get all items 
-             getallitems () {
-               let self = this  
-               axios({
-                 method: 'GET',
-                 url: 'http://localhost:3007/items/lists'       
-               })
-                 .then(items => {
-                    // console.log('GET ALL ITEMS----', items.data.data) 
-                    self.listitems = items.data.data
+            //  // get all items 
+            //  getallitems () {
+            //    let self = this  
+            //    axios({
+            //      method: 'GET',
+            //      url: 'http://localhost:3007/items/lists'       
+            //    })
+            //      .then(items => {
+            //         // console.log('GET ALL ITEMS----', items.data.data) 
+            //         self.listitems = items.data.data
                     
-                 })
-                 .catch(error => {
-                    console.log('ERROR Get List of Items', error)     
-                 })  
-             },
-             // get item by category
-             getitembycategory (input) {
-            //    console.log('Category id----',input)
-               let self = this
-               let categoryid = input  
-               axios({
-                   method: 'GET',
-                   url: `http://localhost:3007/categories/${categoryid}`
-               })
-                .then(categories => {
-                    // console.log('RESULT------', categories.data.data.listitemcategory)
-                    self.listitems = categories.data.data.listitemcategory
-                })
-                .catch(error =>{
-                   console.log('ERROR Get List of Categories', error)  
-                })
-             },
-             // get item by search
-             getitembysearch (){
-                let self = this
-                let key = this.searchkeyword
-                // console.log('This Key-----', key)
-                axios({
-                  method: 'POST',
-                  url: 'http://localhost:3007/items/search',
-                  data: {
-                     keyword: key    
-                  }    
-                })
-                  .then(searchitems => {
-                    self.listitems = searchitems.data.data
-                    console.log('HASIL------', searchitems.data.data)  
-                  })
-                  .catch(error =>{
-                    console.log('ERROR Get Search result', error) 
-                  })
-             },
+            //      })
+            //      .catch(error => {
+            //         console.log('ERROR Get List of Items', error)     
+            //      })  
+            //  },
+            //  // get item by category
+            //  getitembycategory (input) {
+            // //    console.log('Category id----',input)
+            //    let self = this
+            //    let categoryid = input  
+            //    axios({
+            //        method: 'GET',
+            //        url: `http://localhost:3007/categories/${categoryid}`
+            //    })
+            //     .then(categories => {
+            //         // console.log('RESULT------', categories.data.data.listitemcategory)
+            //         self.listitems = categories.data.data.listitemcategory
+            //     })
+            //     .catch(error =>{
+            //        console.log('ERROR Get List of Categories', error)  
+            //     })
+            //  },
+            //  // get item by search
+            //  getitembysearch (){
+            //     let self = this
+            //     let key = this.searchkeyword
+            //     // console.log('This Key-----', key)
+            //     axios({
+            //       method: 'POST',
+            //       url: 'http://localhost:3007/items/search',
+            //       data: {
+            //          keyword: key    
+            //       }    
+            //     })
+            //       .then(searchitems => {
+            //         self.listitems = searchitems.data.data
+            //         console.log('HASIL------', searchitems.data.data)  
+            //       })
+            //       .catch(error =>{
+            //         console.log('ERROR Get Search result', error) 
+            //       })
+            //  },
             getusercredentials(val){
                this.usercredentials = val 
             },
@@ -255,36 +160,28 @@
                }else{
                   this.token = ''
                }
-            }    
-          },
-          created () {
-            let self = this
-
-            // // get list of items
-            // axios({
-            //   method: 'GET',
-            //   url: 'http://localhost:3007/items/lists'    
-            // })
-            //   .then(items =>{
-            //     self.listitems = items.data.data
-            //   })
-            //   .catch(error =>{
-            //     console.log('ERROR Get List of Items', error)
-            //   })
-
-            // get list of categories
-            axios({
-               method: 'GET',
-               url: 'http://localhost:3007/categories/lists' 
-            })
-              .then(categories =>{
-                self.listcategories = categories.data.data
-                // console.log('Categories------', categories.data.data)
-              })
-              .catch(error=>{
-                  console.log('ERROR Get List of Categories', error)
-              })
+            },
+            getitems(val){
+               this.listitems = val 
+            }
           }
+        //   ,
+        //   created () {
+        //     let self = this
+
+        //     // get list of categories
+        //     axios({
+        //        method: 'GET',
+        //        url: 'http://localhost:3007/categories/lists' 
+        //     })
+        //       .then(categories =>{
+        //         self.listcategories = categories.data.data
+        //         // console.log('Categories------', categories.data.data)
+        //       })
+        //       .catch(error=>{
+        //           console.log('ERROR Get List of Categories', error)
+        //       })
+        //   }
         })
     </script>
     <!-- Bootstrap Dependencies -->
