@@ -114,7 +114,7 @@
                                     <td>{{property.name}}</td>
                                     <td>{{property.qty}}</td>
                                     <td>{{property.subTotal}}</td>
-                                    <td><button type="button" class="btn-sm btn-danger">remove</button></td>
+                                    <td><button type="button" class="btn-sm btn-danger" v-on:click="removeItemFromCart(property.id)">remove</button></td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -390,8 +390,8 @@
                 checkOut: function () {
 
                     axios({
-                        method: 'PATCH',
-                        url: `http://localhost:3000/cart`,
+                        method: 'POST',
+                        url: `http://localhost:3000/transaction`,
                         headers: {
                             'access-token': localStorage.getItem('access-token')
                         }
@@ -399,6 +399,21 @@
                         this.itemInCart = 0;
                         this.cartDisplay = [];
                         this.totalPrice = 0;
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                },
+
+                removeItemFromCart(id) {
+                    console.log(id);
+                    axios({
+                        method: 'PATCH',
+                        url: `http://localhost:3000/cart/${id}`,
+                        headers: {
+                            'access-token' : localStorage.getItem('access-token')
+                        }
+                    }).then((result) => {
+                        this.fetchCart()
                     }).catch((err) => {
                         console.log(err);
                     });
