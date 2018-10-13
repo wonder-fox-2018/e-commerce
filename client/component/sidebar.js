@@ -49,14 +49,14 @@ Vue.component('sidebar-section',{
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Price</label>
-                                    <input type="text" v-model="itemprice" class="form-control" placeholder="Prie">
+                                    <input type="text" v-model="itemprice" class="form-control" placeholder="Price">
                                 </div>
                             </form>
                             <br/>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" v-on:click="createitem()" >Create Item</button>
+                            <button type="button" class="btn btn-success" v-on:click="createitem()" >Create Item</button>
                         </div>
                     </div>
                 </div>
@@ -164,7 +164,29 @@ Vue.component('sidebar-section',{
                   }
                })
                 .then(item =>{
-                   console.log('Item created-----', item.data) 
+                   console.log('Item created-----', item.data.data) 
+
+                    // get lists of item
+                    axios({
+                      method: 'GET',
+                      url: 'http://localhost:3007/items/lists'   
+                    })
+                     .then(items => {
+                        self.listitems = items.data.data 
+
+                        // empty all unnecessary variable
+                        self.itemname= '',
+                        self.itemcategory= '',
+                        self.itemurlimage= '',
+                        self.itemprice= 0,
+                        self.imageupload= ''
+
+                        // close modal
+                        $('#createItem').modal('hide')
+                     })
+                     .catch(error =>{
+                        console.log('ERROR Get List items after create ',error)  
+                     })
                 })
                 .catch(error =>{
                    console.log('ERROR Create Item  ', error) 
@@ -187,6 +209,7 @@ Vue.component('sidebar-section',{
           self.listcategories = categories.data.data
         })
        .catch(error=>{
+           console.log('ERROR Get Category ',error)
        })  
     },
     watch: {
