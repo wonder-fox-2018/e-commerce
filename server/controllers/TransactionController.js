@@ -8,13 +8,16 @@ const CronJob = require('cron').CronJob
 class TransactionController {
     //create transaction
     static createTransaction(req,res){
+        console.log('Controller ----', req.body)
+        console.log('DECODED ---------', req.decoded)
         Transaction.create({
             transactionuserid: req.decoded.userid,
             transactionitemid: req.body.transactionitemid,
             transactionamount: Number(req.body.transactionamount) 
         })
           .then(transaction => {
-            let newtransaction = transaction  
+            let newtransaction = transaction
+            console.log('new transaction-------', newtransaction)
             // update user
             User.findOneAndUpdate({
                 _id: transaction.transactionuserid
@@ -39,38 +42,37 @@ class TransactionController {
                 // job.start();
 
                 // create email
-                let transporter = nodemailer.createTransport(
-                    {
-                        service: 'gmail',
-                        auth: {
-                            user: process.env.EMAIL,
-                            pass: process.env.PASSWORD
-                        }
-                    }
-                )
+                // let transporter = nodemailer.createTransport(
+                //     {
+                //         service: 'gmail',
+                //         auth: {
+                //             user: process.env.EMAIL,
+                //             pass: process.env.PASSWORD
+                //         }
+                //     }
+                // )
 
-                let mailOptions = {
-                    from: '"ECosmetics" <ecosmetics23.wonder.gmail.com>', // sender address
-                    to: 'efrat.sadeli@gmail.com', // list of receivers
-                    subject: 'Transaction sent!', // Subject line
-                    text: 'Sent?', // plain text body
-                    html: '<b>Sent?</b>' // html body
-                };
+                // let mailOptions = {
+                //     from: '"ECosmetics" <ecosmetics23.wonder.gmail.com>', // sender address
+                //     to: 'efrat.sadeli@gmail.com', // list of receivers
+                //     subject: 'Transaction sent!', // Subject line
+                //     text: 'Sent?', // plain text body
+                //     html: '<b>Sent?</b>' // html body
+                // };
 
-                transporter.sendMail(mailOptions, (error, info)=>{
-                    if (error) {
-                            console.log('Error occurred');
-                            console.log(error.message);
-                            // return process.exit(1);
-                    }else{
-                        console.log('Message sent successfully!');
-                        console.log(nodemailer.getTestMessageUrl(info));
+                // transporter.sendMail(mailOptions, (error, info)=>{
+                //     if (error) {
+                //             console.log('Error occurred');
+                //             console.log(error.message);
+                //             // return process.exit(1);
+                //     }else{
+                //         console.log('Message sent successfully!');
+                //         console.log(nodemailer.getTestMessageUrl(info));
                 
-                        // only needed when using pooled connections
-                        // transporter.close();
-                    }                        
-                })
-
+                //         // only needed when using pooled connections
+                //         // transporter.close();
+                //     }                        
+                // })
 
                 res.status(200).json({
                     msg: 'Transaction success',

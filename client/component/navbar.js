@@ -111,27 +111,25 @@ Vue.component('navbar-section',{
                     </button>
                     </div>
                     <div class="modal-body">
-                        <h5>Hi Cantik berikut rincian belanjaan kamu: </h5>
+                        <h5>Hi {{ usercredentials.name }} berikut rincian belanjaan kamu: </h5>
                         <div >
-                            <div>
-                                Lipstick : Price 1.000.000 IDR
-                            </div>
-                            <div>
-                                Eye-lashes : Price 400.000 IDR
+                            <div v-for="(item,index) in temptransaction">
+                                {{index + 1}}. {{ item.itemname }} : {{item.itemprice}} IDR
                             </div>
                         </div>
                         <hr/>
-                        <h5>Total: 1.400.000 IDR</h5>
+                        <h5>Total: {{ totalamount }} IDR</h5>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary"><font color="white">Buy Now</font></button>
+                        <button type="button" class="btn btn-primary" v-on:click="createtransaction()"><font color="white">Buy Now</font></button>
                     </div>
                 </div>
             </div>
         </div>
      </div>
      `,
+    props: ['gettemptransaction','gettotalamount'], 
     data () {
       return {
         token: '',
@@ -139,7 +137,9 @@ Vue.component('navbar-section',{
         useremail: '',
         userpassword: '',
         usercredentials: {},
-        islogin: false
+        islogin: false,
+        temptransaction: [],
+        totalamount: 0
       }
     },
     methods: {
@@ -164,6 +164,15 @@ Vue.component('navbar-section',{
         //          })
         //      })
         // },
+        filterArray(val){
+            let rawArr = val
+            let filterArr = []
+            rawArr.forEach(item => {
+                filterArr.push(item._id)
+            });
+
+            return filterArr
+        },
         loginUser(){
             let self = this
             axios({
@@ -197,7 +206,6 @@ Vue.component('navbar-section',{
                           msg: 'ERROR Get Credentials ',error 
                        })
                    })
-
 
                 // close modal
                 $('#loginUser').modal('hide')
@@ -251,9 +259,52 @@ Vue.component('navbar-section',{
             this.token = ''
             this.getCredentials = {}
             this.islogin = false
+            this.totalamount = 0,
+            this.temptransaction = []
             localStorage.removeItem('token')
-            this.$emit('usercredentials',self.usercredentials)
-            this.$emit('islogin',self.islogin)
+            this.$emit('usercredentials',this.usercredentials)
+            this.$emit('islogin',this.islogin)
+         },
+         createtransaction(){
+            let self = this
+            // filter the id
+            let filterArr = this.filterArray(this.temptransaction)
+
+            axios({
+               method: 'POST',
+               url: 'http://localhost:3007/transactions',
+               headers: {
+                  token: self.token 
+               },
+               data:{
+                 transactionitemid: filterArr,
+                 transactionamount: self.totalamount 
+               }
+            })
+              .then(transaction =>{
+                 console.log('Transaction Success ---', transaction.data)
+                 filterArr = []
+                 self.totalamount = 0,
+                 self.temptransaction = []
+                 $('#cartModal').modal('hide')
+              })
+              .catch(error =>{
+                  console.log('ERROR Create transaction ',error)
+              })
          }
+    },
+    watch: {
+      gettemptransaction (val){
+        this.temptransaction = val 
+      },
+      gettotalamount (val){
+        this.totalamount = val
+      },
+      temptransaction(val){
+        this.$emit('updatedtemptransaction', this.temptransaction)
+      },
+      totalamount(val){
+        this.$emit('updatedtotalamount',this.totalamount)
+      }
     } 
 })

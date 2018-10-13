@@ -21,15 +21,18 @@
 <body>
     <div id="app">
         <!-- Navbar section-->
-        <navbar-section @usercredentials = "getusercredentials" @islogin= "getislogin"></navbar-section>
+        <navbar-section @usercredentials = "getusercredentials" @islogin= "getislogin" :gettemptransaction="temptransaction" :gettotalamount="totalamount">
+        </navbar-section>
 
         <div class="container-fluid border">
             <div class="row">
                 <div class = "col-md-3 border">
-                    <sidebar-section @listitems= "getitems" :getcredentials="usercredentials" :getislogin = "islogin"></sidebar-section>
+                    <sidebar-section @listitems= "getitems" :getcredentials="usercredentials" :getislogin = "islogin">                        
+                    </sidebar-section>
                 </div>
                 <div class= "col-md-9 border">
-                    <content-item :getislogin = "islogin" :getlistitems="listitems"></content-item>
+                    <content-item :getislogin = "islogin" :getlistitems="listitems" @temptransaction="gettemptransaction" @totalamount="gettotalamount">
+                    </content-item>
                 </div>
             </div>
         </div>
@@ -76,6 +79,8 @@
           data: {
              listitems: [],
              usercredentials: {},
+             temptransaction: [],
+             totalamount: 0,
              islogin: false,
              token: ''
           },
@@ -93,6 +98,12 @@
             },
             getitems(val){
                this.listitems = val 
+            },
+            gettemptransaction(val){
+               this.temptransaction = val
+            },
+            gettotalamount(val){
+               this.totalamount = val
             }
           }
         })

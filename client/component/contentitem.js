@@ -45,7 +45,7 @@ Vue.component('content-item',{
                                             <p class="card-text">Rp. {{ item.itemprice }}</p>
                                         </div>
                                         <a v-if="getislogin !== true" data-toggle="modal" data-target="#loginMessage" class="btn btn-primary"><font color="white">Order Now</font></a>
-                                        <a v-if="getislogin === true" class="btn btn-primary"><font color="white">Order Now</font></a>
+                                        <a v-if="getislogin === true" v-on:click= "gettemptransaction(item,item.itemprice)" class="btn btn-primary"><font color="white">Order Now</font></a>
                                     </div>
                                 </div>
                             </div>    
@@ -100,8 +100,20 @@ Vue.component('content-item',{
   data () {
     return {
       listitems: [],
-      token: ''
+      temptransaction: [],
+      totalamount: 0
     } 
+  },
+  methods: {
+    gettemptransaction (val, amount){
+       if(this.getislogin === true){
+         this.totalamount = this.totalamount + Number(amount)
+         this.temptransaction.push(val) 
+       }else{
+          this.totalamount = 0
+          this.temptransaction = []
+       } 
+    }
   },
   created (){
     let self = this
@@ -119,8 +131,19 @@ Vue.component('content-item',{
         })
   },
   watch: {
-     getlistitems (val) {
-        this.listitems = val 
-     } 
+    getlistitems (val) {
+      this.listitems = val 
+    },
+    temptransaction (val){
+    //   console.log('Watch temp transaction ------', val)
+      this.$emit('temptransaction',val) 
+    },
+    totalamount (val) {
+    //   console.log('Watch totalamount------', val)
+      this.$emit('totalamount',val)
+    },
+    getislogin (val){
+        
+    }
   }  
 })
