@@ -181,7 +181,7 @@ class ItemController{
                   Item.findOneAndRemove({
                       _id: req.params.id
                   })
-                    .then(category=>{
+                    .then(itemdeleted=>{
                         res.status(200).json({
                             msg: 'Item has been deleted',
                             data: deleteditem

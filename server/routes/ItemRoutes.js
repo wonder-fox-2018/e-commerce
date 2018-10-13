@@ -11,14 +11,12 @@ router.post('/uploads', isLogin,isAdmin,
       uploadGoogleHelper.multer.single('imagefile'),
       uploadGoogleHelper.sendUploadToGCS,
       (req,res) =>{
-         console.log('req-------',req)   
          res.status(201).json({
             msg: 'Upload Success',
             link: req.file.cloudStoragePublicUrl   
          })   
       }
 )
-
 
 router.post('/', isLogin, isAdmin, ItemController.createItem)
       .get('/lists', ItemController.getItemLists)
