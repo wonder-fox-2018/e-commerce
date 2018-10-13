@@ -36,6 +36,7 @@ router.post('/transaction', Middlewares.isLogin, TransactionController.create);
 
 router.get('/cart', Middlewares.isLogin, CartController.getCart);
 router.put('/cart/:id', Middlewares.isLogin, CartController.addItemToCart);
+router.patch('/cart/:id', Middlewares.isLogin, CartController.removeItem);
 
 
 
