@@ -8,9 +8,6 @@ Vue.component('navbar-section',{
                     <li class="nav-item">
                         <a class="nav-link navBarItem" href="JavaScript:Void(0)">Home</a>
                     </li>
-                    <li class="nav-item" v-if = "token !== null && token !== ''">
-                        Welcome {{ usercredentials.name }}
-                    </li>
                 </ul>
             </div>
             

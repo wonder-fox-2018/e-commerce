@@ -1,6 +1,9 @@
 Vue.component('sidebar-section',{
     template: 
       ` <div>
+            <div v-if= "getislogin === true " id="welcomemessage" >
+                <p style= "color: black">Welcome {{ usercredentials.name }} </p>
+            </div>
             <div id="searchbar">
                 <input class="form-control mr-sm-2" type="text" v-model= "searchkeyword" placeholder="Search" aria-label="Search">
                 <hr>
@@ -15,11 +18,13 @@ Vue.component('sidebar-section',{
             </div>
         </div>
       `,
+    props: ['getcredentials','getislogin'],  
     data () {
        return {
         listitems: [],
         listcategories: [],
         searchkeyword: '',
+        usercredentials: {}
        } 
     },
     methods: {
@@ -88,6 +93,9 @@ Vue.component('sidebar-section',{
     watch: {
        listitems (val){
           this.$emit('listitems',val)
+       },
+       getcredentials (val) {
+          this.usercredentials = val 
        } 
     } 
 })

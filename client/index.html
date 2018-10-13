@@ -26,23 +26,7 @@
         <div class="container-fluid border">
             <div class="row">
                 <div class = "col-md-3 border">
-                    <sidebar-section @listitems= "getitems"></sidebar-section>
-                    <!--
-                    <div>
-                        <div id="searchbar">
-                            <input class="form-control mr-sm-2" type="text" v-model= "searchkeyword" placeholder="Search" aria-label="Search">
-                            <hr>
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click= "getitembysearch()">Search</button>
-                        </div>
-                        <h3 class="my-4">Categories</h3>
-                        <div class="list-group">
-                            <button class="list-group-item sideBarCustom" v-on:click="getallitems()" >All Items</button> 
-                        </div>
-                        <div class="list-group">
-                            <button v-for="category in listcategories" class="list-group-item sideBarCustom" v-on:click= "getitembycategory(category._id)">{{ category.name }}</button>    
-                        </div>
-                    </div>
-                    -->
+                    <sidebar-section @listitems= "getitems" :getcredentials="usercredentials" :getislogin = "islogin"></sidebar-section>
                 </div>
                 <div class= "col-md-9 border">
                     <content-item :getislogin = "islogin" :getlistitems="listitems"></content-item>
@@ -91,65 +75,11 @@
           el: '#app',
           data: {
              listitems: [],
-             namalengkap: '',
              usercredentials: {},
              islogin: false,
              token: ''
           },
           methods:{
-            //  // get all items 
-            //  getallitems () {
-            //    let self = this  
-            //    axios({
-            //      method: 'GET',
-            //      url: 'http://localhost:3007/items/lists'       
-            //    })
-            //      .then(items => {
-            //         // console.log('GET ALL ITEMS----', items.data.data) 
-            //         self.listitems = items.data.data
-                    
-            //      })
-            //      .catch(error => {
-            //         console.log('ERROR Get List of Items', error)     
-            //      })  
-            //  },
-            //  // get item by category
-            //  getitembycategory (input) {
-            // //    console.log('Category id----',input)
-            //    let self = this
-            //    let categoryid = input  
-            //    axios({
-            //        method: 'GET',
-            //        url: `http://localhost:3007/categories/${categoryid}`
-            //    })
-            //     .then(categories => {
-            //         // console.log('RESULT------', categories.data.data.listitemcategory)
-            //         self.listitems = categories.data.data.listitemcategory
-            //     })
-            //     .catch(error =>{
-            //        console.log('ERROR Get List of Categories', error)  
-            //     })
-            //  },
-            //  // get item by search
-            //  getitembysearch (){
-            //     let self = this
-            //     let key = this.searchkeyword
-            //     // console.log('This Key-----', key)
-            //     axios({
-            //       method: 'POST',
-            //       url: 'http://localhost:3007/items/search',
-            //       data: {
-            //          keyword: key    
-            //       }    
-            //     })
-            //       .then(searchitems => {
-            //         self.listitems = searchitems.data.data
-            //         console.log('HASIL------', searchitems.data.data)  
-            //       })
-            //       .catch(error =>{
-            //         console.log('ERROR Get Search result', error) 
-            //       })
-            //  },
             getusercredentials(val){
                this.usercredentials = val 
             },
@@ -165,23 +95,6 @@
                this.listitems = val 
             }
           }
-        //   ,
-        //   created () {
-        //     let self = this
-
-        //     // get list of categories
-        //     axios({
-        //        method: 'GET',
-        //        url: 'http://localhost:3007/categories/lists' 
-        //     })
-        //       .then(categories =>{
-        //         self.listcategories = categories.data.data
-        //         // console.log('Categories------', categories.data.data)
-        //       })
-        //       .catch(error=>{
-        //           console.log('ERROR Get List of Categories', error)
-        //       })
-        //   }
         })
     </script>
     <!-- Bootstrap Dependencies -->
