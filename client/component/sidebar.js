@@ -28,7 +28,7 @@ Vue.component('sidebar-section',{
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Create Item</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -45,7 +45,7 @@ Vue.component('sidebar-section',{
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Image</label>
-                                    <input type="text" v-model="itemurlimage" class="form-control" placeholder="Upload Image">
+                                    <input type="file" v-on:change="getimage" class="form-control" id="file" ref="file" placeholder="Upload Image">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Price</label>
@@ -56,7 +56,7 @@ Vue.component('sidebar-section',{
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Create Item</button>
+                            <button type="button" class="btn btn-primary" v-on:click="createitem()" >Create Item</button>
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,8 @@ Vue.component('sidebar-section',{
         itemname: '',
         itemcategory: '',
         itemurlimage: '',
-        itemprice: 0
+        itemprice: 0,
+        imageupload: ''
        } 
     },
     methods: {
@@ -123,7 +124,56 @@ Vue.component('sidebar-section',{
            .catch(error =>{
              console.log('ERROR Get Search result', error) 
            })
-      }  
+      },
+      // get image 
+      getimage () {
+        console.log('By Ref------', this.$refs.file.files) 
+        this.imageupload = this.$refs.file.files[0] 
+      },
+      // create new item 
+      createitem () {
+         let self = this
+
+         // upload data to GCP first
+         let upladdata = new FormData()
+         upladdata.append('imagefile',this.imageupload)
+         console.log('Upload access----')
+         axios.post('http://localhost:3007/items/uploads', upladdata,
+         {
+           headers: {
+            'Content-Type': 'multipart/form-data',
+            'token': self.token 
+           }  
+         })
+           .then(uploadresult => {
+               self.itemurlimage = uploadresult.data.link
+               console.log('Upload Sukses---', uploadresult.data.link) 
+
+               // create item
+               axios({
+                  method: 'POST',
+                  url: 'http://localhost:3007/items',
+                  headers:{
+                    token: self.token 
+                  },
+                  data: {
+                    itemname: self.itemname,
+                    itemcategoryid: self.itemcategory,
+                    itemurlimage: self.itemurlimage,
+                    itemprice: self.itemprice
+                  }
+               })
+                .then(item =>{
+                   console.log('Item created-----', item.data) 
+                })
+                .catch(error =>{
+                   console.log('ERROR Create Item  ', error) 
+                })
+           })
+           .catch(error =>{
+               console.log('ERROR Upload ',error)
+           })
+      }
     },
     created () {
       let self = this
