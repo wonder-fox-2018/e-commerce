@@ -21,7 +21,7 @@
 <body>
     <div id="app">
         <!-- Navbar section-->
-        <navbar-section @usercredentials = "getusercredentials" @islogin= "getislogin" :gettemptransaction="temptransaction" :gettotalamount="totalamount">
+        <navbar-section @usercredentials = "getusercredentials" @islogin= "getislogin" :gettemptransaction="temptransaction" :gettotalamount="totalamount" @updatedtemptransaction="updatedtemptransaction" @updatedtotalamount="updatedtotalamount">
         </navbar-section>
 
         <div class="container-fluid border">
@@ -31,7 +31,7 @@
                     </sidebar-section>
                 </div>
                 <div class= "col-md-9 border">
-                    <content-item :getislogin = "islogin" :getlistitems="listitems" @temptransaction="gettemptransaction" @totalamount="gettotalamount">
+                    <content-item :getislogin = "islogin" :getlistitems="listitems" @temptransaction="gettemptransaction" @totalamount="gettotalamount" :updatetemptransaction="temptransaction" :updatetotalamount="totalamount">
                     </content-item>
                 </div>
             </div>
@@ -104,6 +104,12 @@
             },
             gettotalamount(val){
                this.totalamount = val
+            },
+            updatedtemptransaction(val){
+                this.temptransaction = val
+            },
+            updatedtotalamount(val){
+                this.totalamount = val
             }
           }
         })

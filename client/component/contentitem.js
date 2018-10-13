@@ -96,7 +96,7 @@ Vue.component('content-item',{
         </div>
     </div>
     `,
-  props: ['getislogin','getlistitems'],  
+  props: ['getislogin','getlistitems','updatetemptransaction','updatetotalamount'],  
   data () {
     return {
       listitems: [],
@@ -135,15 +135,17 @@ Vue.component('content-item',{
       this.listitems = val 
     },
     temptransaction (val){
-    //   console.log('Watch temp transaction ------', val)
       this.$emit('temptransaction',val) 
     },
     totalamount (val) {
-    //   console.log('Watch totalamount------', val)
       this.$emit('totalamount',val)
     },
-    getislogin (val){
-        
+    getislogin (val){},
+    updatetemptransaction(val){
+        this.temptransaction = val
+    },
+    updatetotalamount(val){
+        this.totalamount = val
     }
   }  
 })

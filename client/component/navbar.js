@@ -198,6 +198,8 @@ Vue.component('navbar-section',{
                  })
                    .then(user => {
                       self.usercredentials = user.data.data
+                      self.useremail = ''
+                      self.userpassword = ''
                       this.$emit('usercredentials',self.usercredentials)
                       this.$emit('islogin',self.islogin)
                    })
@@ -240,6 +242,8 @@ Vue.component('navbar-section',{
                  })
                    .then(user => {
                       self.usercredentials = user.data.data
+                      self.useremail = ''
+                      self.userpassword = ''
                       this.$emit('usercredentials',self.usercredentials)
                       this.$emit('islogin',self.islogin)
                    })
@@ -257,7 +261,7 @@ Vue.component('navbar-section',{
          },
          logout() {
             this.token = ''
-            this.getCredentials = {}
+            this.usercredentials = {}
             this.islogin = false
             this.totalamount = 0,
             this.temptransaction = []
@@ -282,7 +286,6 @@ Vue.component('navbar-section',{
                }
             })
               .then(transaction =>{
-                 console.log('Transaction Success ---', transaction.data)
                  filterArr = []
                  self.totalamount = 0,
                  self.temptransaction = []
