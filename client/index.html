@@ -356,7 +356,8 @@
 
                 this.fetchItems();
 
-                if (isLogin) {
+                if (localStorage['access-token']) {
+                    this.isLogin = true;
                     this.fetchCart();
                 }
 
@@ -460,6 +461,7 @@
                 groupCartByItems: function () {
                     this.cartDisplay = [];
                     let pushedItem = [];
+                    this.totalPrice = 0;
                     this.cart.list.forEach(currentItem => {
                         this.totalPrice += currentItem.price;
                         if (pushedItem.indexOf(currentItem._id) === -1) {
