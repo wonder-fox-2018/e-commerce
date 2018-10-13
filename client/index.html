@@ -272,14 +272,22 @@
         var app = new Vue({
             el: '#app',
             data: {
+                port: 'http://localhost:3000/',
+
                 items: [],
                 itemInCart: 0,
                 cart: '',
                 cartDisplay: [],
                 totalPrice: 0,
                 filterProduct: '',
+
                 inputEmailLogin: '',
-                inputPasswordLogin: ''
+                inputPasswordLogin: '',
+
+                inputEmailRegister:'',
+                inputPasswordRegister: '',
+                inputFirstNameRegister: '',
+                inputLastNameRegister: ''
             },
             created: function () {
                 this.fetchItems();
@@ -291,7 +299,7 @@
                     
                     axios({
                         method: 'POST',
-                        url: 'http://localhost:3000/login',
+                        url: this.port + 'login',
                         data: {
                             email: this.inputEmailLogin,
                             password: this.inputPasswordLogin
@@ -305,7 +313,7 @@
                     });
                 },
                 fetchItems: function () {
-                    axios.get('http://localhost:3000/item').then((result) => {
+                    axios.get(`${this.port}item`).then((result) => {
                         result.data.forEach(currentItem => {
                             this.items.push(currentItem);
                         });
@@ -315,7 +323,7 @@
                 },
 
                 fetchItemsByName: function (keyWord) {
-                    axios.get(`http://localhost:3000/item?keyWord=${keyWord}`).then((result) => {
+                    axios.get(`${this.port}item?keyWord=${keyWord}`).then((result) => {
                         this.items = [];
                         result.data.forEach(currentItem => {
                             this.items.push(currentItem);
@@ -326,7 +334,7 @@
                 },
 
                 fetchCart: function () {
-                    axios.get('http://localhost:3000/cart', {
+                    axios.get(this.port + 'cart', {
                         headers: {
                             'access-token': localStorage.getItem('access-token')
                         }
@@ -342,7 +350,7 @@
                 addToCart: function (itemId) {
                     axios({
                         method: 'PUT',
-                        url: `http://localhost:3000/cart/${itemId}`,
+                        url: `${this.port}cart/${itemId}`,
                         headers: {
                             'access-token': localStorage.getItem('access-token')
                         }
@@ -352,10 +360,7 @@
                         console.log(err);
                     });
                 },
-                isEmpty: function (arr) {
-                    return arr.length === 0;
-                },
-
+                
                 groupCartByItems: function () {
                     this.cartDisplay = [];
                     let pushedItem = [];
@@ -376,7 +381,7 @@
 
                                 return element.id === currentItem._id
                             });
-                            console.log(index);
+                           
 
                             this.cartDisplay[index].subTotal += currentItem.price;
                             this.cartDisplay[index].qty++;
@@ -391,7 +396,7 @@
 
                     axios({
                         method: 'POST',
-                        url: `http://localhost:3000/transaction`,
+                        url: `${this.port}transaction`,
                         headers: {
                             'access-token': localStorage.getItem('access-token')
                         }
@@ -408,7 +413,7 @@
                     console.log(id);
                     axios({
                         method: 'PATCH',
-                        url: `http://localhost:3000/cart/${id}`,
+                        url: `${this.port}cart/${id}`,
                         headers: {
                             'access-token' : localStorage.getItem('access-token')
                         }
