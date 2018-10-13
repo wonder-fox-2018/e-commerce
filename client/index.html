@@ -39,14 +39,39 @@
             <div class="row">
                 <div class="col-3"></div>
                 <div class="col-9">
-                    <div class="row" v-if='openPH'>
-
+                    <div class="row mt-4" v-if='openPH'>
+                        <div class="row col-12 mb-4" v-for='(transaction, index) in transactions.reverse()'>
+                            <div class="col-1"></div>
+                            <div class="card col-10 px-0">
+                                <div class="card-header row mx-0">
+                                    <h5 class="m-0 p-0 col-6 text-left"><b>Transaction {{ transactions.length - index }}</b></h5>
+                                    <h5 class="m-0 p-0 col-6 text-right">{{ transaction.date.slice(0, 10) }}</h5>
+                                </div>
+                                <div class="card-body pb-0">
+                                    <div>
+                                        <h6 class="card-title mb-4 row" v-for='(item, index) in transaction.cart.items'>
+                                            <span class="col-4 text-left">{{ item.name }}</span>
+                                            <span class="col-1 text-right">x</span>
+                                            <span class="col-1 text-left">{{ transaction.cart.counts[index] }}</span>
+                                            <span class="col-3 text-right">Rp{{ transaction.cart.total[index] | currencySlice }}</span>
+                                            <span class="col-3 text-center">Rating</span>
+                                        </h6>
+                                        <hr>
+                                        <h6 class="card-title row">
+                                            <span class="col-6 text-left"><b>Total</b></span>
+                                            <span class="col-6 text-right"><b>Rp{{ transaction.cart.totalsum | currencySlice }}</b></span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
                     </div>
                     <div class="row" id='products' v-else-if='products.length > 0'>
                         <div class="containerku col-sm-6 col-md-5 col-lg-3" v-for='product in products'>
                             <div class="cardku">
                                 <div class="card-head">
-                                    <img src="https://s5.postimg.cc/j9r8yf9gn/sws1.png" alt="Shoe" class="product-img">
+                                    <img src="shoes.png" alt="Shoe" class="product-img">
                                     <div class="product-detail">
                                         <h2>{{ product.name }}</h2>
                                         <p>{{ product.description }}</p>
@@ -601,6 +626,7 @@
                     })
                     .then(data => {
                         console.log(data.data)
+                        this.transactions = data.data
                     })
                     .catch(err => {
                         console.log(err)

@@ -32,9 +32,26 @@ const userSchema = new Schema({
       type: Number,
       default: 0
     },
-    transaction: {
-      type: Array
-    }
+    transaction: [{
+      cart: {
+        counts: Array,
+        items: [{
+          type: Schema.Types.ObjectId,
+          ref: 'Product'
+        }],
+        total: {
+          type: Array
+        },
+        totalsum: {
+          type: Number,
+          default: 0
+        },
+      },
+      date: {
+        type: Date,
+        required: true
+      }
+    }]
 }, {
   timestamps: true
 });

@@ -18,6 +18,10 @@ body {
     user-select: none; /* Standard */
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif !important;
+}
+
 #loading-page {
     z-index: 20000;
     position: fixed;
@@ -108,7 +112,7 @@ body {
 .containerku {
     max-width: 280px !important;
     min-width: 280px !important;
-    height: 500px;
+    height: 500px !important;
     margin: 5px 50px 5px 0px;
 }
 

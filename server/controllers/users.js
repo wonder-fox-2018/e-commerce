@@ -218,10 +218,12 @@ module.exports = {
 
     getTransactions: function (req, res) {
         User.findById(req.userId)
+        .populate('transaction.cart.items')
         .then(data => {
             res.status(200).json(data.transaction)
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({message: err})
         })
     }
