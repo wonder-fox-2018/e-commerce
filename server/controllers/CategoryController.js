@@ -47,22 +47,27 @@ module.exports = {
      * CategoryController.create()
      */
     create: function (req, res) {
+        
         var Category = new CategoryModel({
 			categoryName : req.body.categoryName,
 			description : req.body.description,
-			Products : req.body.Products
+			Products : req.body.Products ? req.body.Products : undefined
 
         });
 
-        Category.save(function (err, Category) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating Category',
-                    error: err
-                });
-            }
-            return res.status(201).json(Category);
+        CategoryModel.create(Category)
+        .then((result) => {
+            res.status(201).json(result);
+        }).catch((err) => {
+            console.log(err)
+            res.status(500).json({
+                message: 'Error when creating Category',
+                error: err
+            })
         });
+
+
+       
     },
 
     /**

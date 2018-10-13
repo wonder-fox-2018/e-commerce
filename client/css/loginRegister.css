@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
+
 *:focus {
   outline: none;
 }
@@ -11,6 +12,24 @@ body {
   color: #222;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
+}
+
+#admincontainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  padding: 7px;
+  background: #e4e4e4;
+}
+
+.admin-box {
+  width: 400px;
+  background: #FFF;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  display: grid;
+  justify-content: center;
+  padding: 24px;
 }
 
 #login-box {

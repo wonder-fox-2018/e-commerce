@@ -1,4 +1,11 @@
 //card
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+        console.log('User signed out.');
+    });
+}
+
 $(document).ready(function () {
     $('.post-module').hover(function () {
         $(this).find('.description').stop().animate({
@@ -36,6 +43,7 @@ $(document).ready(function () {
 
 //when google signin button clicked
 function onSignIn(googleUser) {
+   
     var id_token = googleUser.getAuthResponse().id_token
     $.ajax({
         type: "POST",
@@ -43,6 +51,7 @@ function onSignIn(googleUser) {
         data: {data:id_token},
     })
     .done((jwtToken)=>{
+        
         localStorage.setItem('token',jwtToken.token)
     })
     .fail((err)=>{
@@ -54,7 +63,7 @@ function onSignIn(googleUser) {
 // cart
 $(document).ready(function () {
 
-    new jBox('Modal', {
+    let cartModal = new jBox('Modal', {
         width: 900,
         attach: '.cartLink',
         content: $('#cartContainer')
@@ -67,6 +76,46 @@ $(document).ready(function () {
     })
 
     // Just for testing, show all items
+    $('.continue').click(function () {
+        event.preventDefault();
+        location.href='#article';
+        cartModal.close()
+            
+        
+    })
     
 
 });
+
+//scrolling
+
+$(document).ready(function () {
+    var $root = $('html, body');
+    $('.linkto').click(function() {
+        var href = $.attr(this, 'href');
+    
+        $root.animate({
+            scrollTop: $(href).offset().top
+        }, 500, function () {
+            window.location.hash = href;
+        });
+    
+        return false;
+    });
+
+    $(function() {
+        var header = $("header");
+        $(window).scroll(function() {    
+            var scroll = $(window).scrollTop();
+            
+            if (scroll >= 80) {
+                header.css("background-image", "linear-gradient(-60deg, #141414, rgba(20,20,20,0.5))");
+            } else {
+                header.css("background-image", "linear-gradient(-60deg, #747474, #3d3d3d)");
+            }
+        });
+    });
+    
+});
+
+

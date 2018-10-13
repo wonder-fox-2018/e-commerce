@@ -1,28 +1,33 @@
 //test vue
 let vm = new Vue({
-    el: '#container',
+    el: '#app',
     data: {
-        categories: [],
+
         products: [],
         user: {},
-        cart: {},
+        responAdd : ''
+
+    },
+    props: {
+        categories: {
+            default: function () {
+                return [{
+                    message: 'hello'
+                }]
+            },
+            type: Array
+        },
+        cart: {
+            default: function () {
+                return {
+                    message: 'hello'
+                }
+            },
+            type: Object
+        }
     },
     created: function () {
-        axios.get('http://localhost:3000/products', {})
-            .then(products => {
-                this.products = products.data
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-        axios.get('http://localhost:3000/categories', {})
-            .then(categories => {
-                this.categories = categories.data
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        this.getProducts()
 
 
         axios.get(`http://localhost:3000/users/${localStorage.getItem('token')}`, {})
@@ -35,16 +40,35 @@ let vm = new Vue({
             })
 
     },
+  
+
     methods: {
-        saveCart : function(){
-            
+        responAddCategory: function (val) {
+            this.responAdd = val
+            this.categories.push(val)
+          },
+        getProducts() {
+            axios.get('http://localhost:3000/products', {})
+                .then(products => {
+                    this.products = products.data
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        saveCart: function () {
+
+        },
+        showCategories: function (categoriess) {
+            this.categories = categoriess
         },
 
         addToCart: function (value) {
-            let index = this.cart.cartcontent.findIndex(cartObj=>{
-                return cartObj.Product.id == value._id 
+
+            let index = this.cart.cartcontent.findIndex(cartObj => {
+                return cartObj.Product.id == value._id
             })
-            if (index == -1 ) {
+            if (index == -1) {
                 this.cart.cartcontent.push({
                     Product: {
                         id: value._id,
@@ -58,12 +82,12 @@ let vm = new Vue({
             } else {
                 this.cart.cartcontent[index].qty += 1
             }
-            this.saveCart()
+            // this.saveCart()
         },
 
         deleteFromCart: function (productId) {
-            let index = this.cart.cartcontent.findIndex(cartItem=>{
-                return cartItem.Product.id == productId 
+            let index = this.cart.cartcontent.findIndex(cartItem => {
+                return cartItem.Product.id == productId
             })
             this.cart.cartcontent.splice(index, 1)
         },
@@ -78,12 +102,12 @@ let vm = new Vue({
 
         }
     },
-    watch: {
+    // watch: {
 
-        cart : function(){
-            
-        }
+    //     cart : function(){
 
-    },
+    //     }
+
+    // },
 
 })

@@ -102,15 +102,18 @@ module.exports = {
 
 
     glogin: (req, res) => {
+        
         const {OAuth2Client} = require('google-auth-library');
         var clientId = "736311652491-j77r9uqltc9nucbensuiet5avlpb6046.apps.googleusercontent.com"
         const client = new OAuth2Client(clientId);
-
+        
+        
         return new Promise(function (resolve, reject) {
                 client.verifyIdToken({
                     idToken: req.body.data,
                     audience: clientId
                 }, function (e, login) {
+                    
                     if (login) {
                         var payload = login.getPayload();
                         var googleId = payload['sub'];
@@ -121,23 +124,24 @@ module.exports = {
                 })
             })
             .then(function (googleId) {
-
+               
+                
                 request.get({
                         url: `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${req.body.data}`
                     },
                     (error, response, body) => {
                         if (!error) {
-
                             let userData = JSON.parse(body)
                             let email = userData.email
                             let name = userData.name
-
+                            
+                            
                             UserModel.findOne({
                                     email: email
                                 })
                                 .then((user) => {
+                                   
                                     if (!user) {
-
                                         var Cart = new CartModel({
                                             cartcontent : [],
                                             subTotal : 0,
@@ -188,8 +192,9 @@ module.exports = {
 
                                         
                                     } else {
+                                        
                                         let token = jwt.sign({
-                                                id: user.id,
+                                                id: user._id,
                                                 username: user.username,
                                                 email: user.email,
                                                 role: user.role
