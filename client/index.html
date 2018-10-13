@@ -32,7 +32,7 @@
 
         <!-- navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-            <a class="navbar-brand login-btn" data-toggle="modal" data-target="#modal-login">Login</a>
+            <a class="navbar-brand login-btn" data-toggle="modal" data-target="#modal-login" v-if="!isLogin">Login</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -42,14 +42,14 @@
                 <!-- account navbar -->
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link">Account <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" v-if="isLogin">Account <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link">Link</a>
                     </li>
 
                     <!-- cart navbar -->
-                    <li class="nav-item dropdown" id="cart">
+                    <li class="nav-item dropdown" id="cart" v-if="isLogin">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-shopping-cart"><span> ({{itemInCart}})</span></i>
@@ -82,6 +82,7 @@
                         v-model="filterProduct">
                     <!-- <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button> -->
                 </form>
+                <button class="btn btn-outline-dark my-2 my-sm-0" v-if="isLogin" @click="logout">log out</button>
             </div>
         </nav>
 
@@ -142,7 +143,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Welcome back</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -154,24 +155,83 @@
                                 <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
                                     placeholder="Enter email" v-model="inputEmailLogin">
                             </div>
-    
+
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control" name="password" placeholder="Password" v-model="inputPasswordLogin" >
+                                <input type="password" class="form-control" name="password" placeholder="Password"
+                                    v-model="inputPasswordLogin">
                             </div>
-    
+
                             <div class="form-group">
                                 <small id="emailHelp" class="form-text text-muted">Has no account?</small>
-                                <button type="button" class="btn  btn-sm">Register Here</button>
+                                <button type="button" class="btn  btn-sm" data-toggle="modal" data-target="#modal-register"
+                                    data-dismiss="modal">Register
+                                    Here</button>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-login" v-on:click="login" >Login</button> 
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-login"
+                            v-on:click="login">Login</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- register-modal -->
+        <div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Register</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="first-name">First name</label>
+                                <input type="text" class="form-control" name="first-name" aria-describedby="first-name"
+                                    placeholder="Your First name" v-model="inputFirstNameRegister">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="last-name">Last name</label>
+                                <input type="text" class="form-control" name="last-name" aria-describedby="last-name"
+                                    placeholder="Your last name" v-model="inputLastNameRegister">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email address</label>
+                                <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
+                                    placeholder="Enter email" v-model="inputEmailRegister">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password" placeholder="Password"
+                                    v-model="inputPasswordRegister">
+                            </div>
+
+                            <div class="form-group">
+                                <small id="emailHelp" class="form-text text-muted">Has an account?</small>
+                                <button type="button" class="btn  btn-sm" data-toggle="modal" data-target="#modal-login"
+                                    data-dismiss="modal">Login
+                                    Here</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-register"
+                            v-on:click="register">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
 
 
@@ -274,6 +334,9 @@
             data: {
                 port: 'http://localhost:3000/',
 
+
+                isLogin: false,
+
                 items: [],
                 itemInCart: 0,
                 cart: '',
@@ -284,19 +347,26 @@
                 inputEmailLogin: '',
                 inputPasswordLogin: '',
 
-                inputEmailRegister:'',
+                inputEmailRegister: '',
                 inputPasswordRegister: '',
                 inputFirstNameRegister: '',
                 inputLastNameRegister: ''
             },
             created: function () {
+
                 this.fetchItems();
 
-                this.fetchCart();
+                if (isLogin) {
+                    this.fetchCart();
+                }
+
+
+
+
             },
             methods: {
-                login: function() {
-                    
+                login: function () {
+
                     axios({
                         method: 'POST',
                         url: this.port + 'login',
@@ -306,6 +376,7 @@
                         }
                     }).then((result) => {
                         localStorage.setItem('access-token', result.data);
+                        this.isLogin = true;
                         this.inputEmailLogin = '';
                         this.inputPasswordLogin = '';
                     }).catch((err) => {
@@ -320,6 +391,31 @@
                     }).catch((err) => {
                         console.log(err);
                     });
+                },
+
+                register: function () {
+                    console.log(this.inputEmailRegister, this.inputPasswordRegister, this.inputFirstNameRegister,
+                        this.inputLastNameRegister);
+
+                    axios({
+                        method: 'POST',
+                        url: this.port + 'register',
+                        data: {
+                            first_name: this.inputFirstNameRegister,
+                            last_name: this.inputLastNameRegister,
+                            email: this.inputEmailRegister,
+                            password: this.inputPasswordRegister
+                        }
+                    }).then((result) => {
+
+                    }).catch((err) => {
+
+                    });
+                },
+
+                logout: function () {
+                    this.isLogin = false;
+                    localStorage.clear();
                 },
 
                 fetchItemsByName: function (keyWord) {
@@ -360,7 +456,7 @@
                         console.log(err);
                     });
                 },
-                
+
                 groupCartByItems: function () {
                     this.cartDisplay = [];
                     let pushedItem = [];
@@ -381,7 +477,7 @@
 
                                 return element.id === currentItem._id
                             });
-                           
+
 
                             this.cartDisplay[index].subTotal += currentItem.price;
                             this.cartDisplay[index].qty++;
@@ -415,7 +511,7 @@
                         method: 'PATCH',
                         url: `${this.port}cart/${id}`,
                         headers: {
-                            'access-token' : localStorage.getItem('access-token')
+                            'access-token': localStorage.getItem('access-token')
                         }
                     }).then((result) => {
                         this.fetchCart()
@@ -425,7 +521,7 @@
                 }
             },
             watch: {
-               
+
                 filterProduct: function (val) {
                     this.fetchItemsByName(val);
                 }
