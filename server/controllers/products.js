@@ -1,5 +1,6 @@
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
+const User = require('../models/userModel')
 
 module.exports = {
     
@@ -125,6 +126,49 @@ module.exports = {
         })
         .catch(err => {
             res.status(500).json({error: err})
+        })
+    },
+
+    rate: function (req, res) {
+        User.findById(req.userId)
+        .then(user => {
+            if (user.boughtProducts.indexOf(req.params.id) !== -1) {
+                Product.findById(req.params.id)
+                .then(data => {
+                    let ratedBy = data.ratedBy
+                    if (ratedBy.indexOf(req.userId) === -1) {
+                        let ratings = data.ratings
+        
+                        ratedBy.push(req.userId)
+                        ratings.push(req.body.rate)
+            
+                        let ratingsSum = (a, b) => a + b
+            
+                        let rating = ratings.reduce(ratingsSum) / ratedBy.length
+            
+                        Product.updateOne({
+                            _id: req.params.id
+                        }, {
+                            ratedBy: ratedBy,
+                            ratings: ratings,
+                            rating: rating
+                        })
+                        .then(() => {
+                            res.status(200).json({})
+                        })
+                        .catch(err => {
+                            res.status(500).json({message: err})
+                        })
+                    } else {
+                        res.status(500).json({message: "You've rated the product before"})
+                    }
+                })
+                .catch(err => {
+                    res.status(500).json({message: err})
+                })
+            } else {
+                res.status(500).json({message: "You've never bought this product, so you can't rate it"})
+            }
         })
     }
 }

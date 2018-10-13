@@ -40,21 +40,30 @@
                 <div class="col-3"></div>
                 <div class="col-9">
                     <div class="row mt-4" v-if='openPH'>
-                        <div class="row col-12 mb-4" v-for='(transaction, index) in transactions.reverse()'>
+                        <div class="row col-12 mb-4" v-for='(transaction, index) in transactions.slice().reverse()'>
                             <div class="col-1"></div>
                             <div class="card col-10 px-0">
                                 <div class="card-header row mx-0">
-                                    <h5 class="m-0 p-0 col-6 text-left"><b>Transaction {{ transactions.length - index }}</b></h5>
+                                    <h5 class="m-0 p-0 col-6 text-left"><b>Transaction {{ transaction._id }}</b></h5>
                                     <h5 class="m-0 p-0 col-6 text-right">{{ transaction.date.slice(0, 10) }}</h5>
                                 </div>
                                 <div class="card-body pb-0">
                                     <div>
-                                        <h6 class="card-title mb-4 row" v-for='(item, index) in transaction.cart.items'>
+                                        <h6 class="card-title mb-4 row" v-for='(item, index2) in transaction.cart.items'>
                                             <span class="col-4 text-left">{{ item.name }}</span>
                                             <span class="col-1 text-right">x</span>
-                                            <span class="col-1 text-left">{{ transaction.cart.counts[index] }}</span>
-                                            <span class="col-3 text-right">Rp{{ transaction.cart.total[index] | currencySlice }}</span>
-                                            <span class="col-3 text-center">Rating</span>
+                                            <span class="col-1 text-left">{{ transaction.cart.counts[index2] }}</span>
+                                            <span class="col-3 text-right">Rp{{ transaction.cart.total[index2] | currencySlice }}</span>
+                                            <span class="col-3 text-center" v-if='item.ratedBy.indexOf(authUserId) !== -1'>
+                                                You rated this
+                                                <i class="fa fa-star gold" v-for='i in item.ratings[item.ratedBy.indexOf(authUserId)]'></i>
+                                                <i class="fa fa-star" v-for='i in (5 - item.ratings[item.ratedBy.indexOf(authUserId)])'></i>
+                                            </span>
+                                            <span class="col-3 text-center" v-else>
+                                                <i class="fa fa-star gold" v-for='i in starColors[transactions.length - index - 1][index2]'  @click='starClick(transactions.length - index - 1, index2, i)'></i>
+                                                <i class="fa fa-star" v-for='i in (5 - starColors[transactions.length - index - 1][index2])' @click='starClick(transactions.length - index - 1, index2, i + starColors[transactions.length - index - 1][index2])'></i>
+                                                <button class="btn ml-2 rateBtn px-2 py-1" @click='rate(transactions.length - index - 1, index2, item._id)'>Rate</button>
+                                            </span>
                                         </h6>
                                         <hr>
                                         <h6 class="card-title row">
@@ -89,8 +98,9 @@
                                             {{ product.category.name }}
                                         </span>
                                         <span class="product-rating">
-                                        <i class="fa fa-star" v-for='i in product.rating'></i>
-                                        <i class="fa fa-star grey" v-for='i in (5 - product.rating)'></i>
+                                            <i class="fa fa-star gold" v-for='i in Math.floor(product.rating)'></i>
+                                            <i class="fa fa-star-half gold" v-for='i in Math.round(product.rating - Math.floor(product.rating))'></i>
+                                            <i class="fa fa-star" v-for='i in (5 - (Math.floor(product.rating) + Math.round(product.rating - Math.floor(product.rating))))'></i>
                                         </span>
                                     </div><br>
                                     <div class="product-properties">
@@ -125,7 +135,7 @@
                         <div id='notice' v-else style="color:transparent; height: 3vh;">.</div>
                     </div>
                     <div id='signupform' v-else>
-                        <input type="text" id='newname' v-model='newname' placeholder="Name"><br>
+                        <input type="text" id='newname' v-model='newname' placeholder="Name" v-on:keyup.enter='signup()'><br>
                         <input type="text" id='newemail' v-model='newemail' v-bind:style='{color: newEmailColor}' v-on:keyup='validateNewEmail()' placeholder="Email" v-on:keyup.enter='signup()'><br>
                         <input type="password" id='newpassword' v-model='newpassword' v-bind:style='{color: newPasswordColor}' v-on:keyup='validateNewPassword()' placeholder="Password (min. 6 characters)" v-on:keyup.enter='signup()'>
                         <div id='notice' v-if='notice.length > 0' class='text-center pt-3' style="color:white; font-size: 12px; height: 3vh;">{{ notice }}</div>
@@ -226,10 +236,13 @@
                 redhalfHeight: '25vh',
                 redhalfTop: '25vh',
                 isLogin: false,
+                authUserId: '',
+                isAdmin: 0,
                 afterCheckOut: false,
                 keyword: '',
                 openPH: false,
-                transactions: [] 
+                transactions: [],
+                starColors: []
             },
             methods: {
                 getCategory() {
@@ -341,6 +354,8 @@
                         })
                         .then(data => {
                             localStorage.setItem('token', data.data.token)
+                            this.authUserId = data.data.id
+                            this.isAdmin = data.data.isAdmin
                             this.isLogin = true
                             this.signModal()
                             this.compareCarts()
@@ -357,6 +372,7 @@
                     this.totalsum = 0
                     this.itemcount = 0
                     localStorage.clear()
+                    this.getProducts()
                 },
                 signup() {
                     if (this.isSigningIn) {
@@ -431,9 +447,13 @@
                             token: localStorage.getItem('token')
                         }
                     })
-                    .then(() => {
-                        this.isLogin = true
-                        this.compareCarts()
+                    .then(data => {
+                        if (data.data.isLogin) {
+                            this.isLogin = true
+                            this.authUserId = data.data.id
+                            this.isAdmin = data.data.isAdmin
+                            this.compareCarts()
+                        }
                     })
                     .catch(err => {
                         console.log("Don't worry, it's just that you haven't signed in :)")
@@ -601,12 +621,12 @@
                         this.openPH = false
                     })
                     .catch(err => {
-                        console.log('Not found')
+                        console.log("Not found")
                     })
                 },
-                showByC(name) {
+                showByC(category) {
                     axios({
-                        url: `http://localhost:3000/products/${name}`
+                        url: `http://localhost:3000/products/${category}`
                     })
                     .then(data => {
                         this.products = data.data
@@ -625,8 +645,37 @@
                         }
                     })
                     .then(data => {
-                        console.log(data.data)
                         this.transactions = data.data
+                        let starColors = []
+                        for (let i = 0; i < data.data.length; i++) {
+                            starColors.push([])
+                            for (let j = 0; j < data.data[i].cart.items.length; j++) {
+                                starColors[i].push(0)
+                            }
+                        }
+                        this.starColors = starColors
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                },
+                starClick(index, index2, clickedStar) {
+                    this.starColors[index].splice(index2, 1, clickedStar)
+                },
+                rate(index, index2, id) {
+                    let rate = this.starColors[index][index2]
+                    axios({
+                        url: `http://localhost:3000/products/rate/${id}`,
+                        method: 'patch',
+                        headers: {
+                            token: localStorage.getItem('token')
+                        },
+                        data: {
+                            rate: rate
+                        }
+                    })
+                    .then(() => {
+                        this.showPH()
                     })
                     .catch(err => {
                         console.log(err)

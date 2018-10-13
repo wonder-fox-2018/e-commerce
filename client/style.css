@@ -210,8 +210,8 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 11px;
 }
 
-.product-rating i.grey {
-    color: #acacab;
+.gold {
+    color: gold;
 }
 
 .product-price {
@@ -428,7 +428,6 @@ h1, h2, h3, h4, h5, h6 {
     background: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
     background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
     background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
-    outline: #fa782e;
     width: 100%;
 }
 
@@ -440,4 +439,12 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 25px;
     height: 25px;
     padding: 10px 0px;
+}
+
+.rateBtn {
+    color: white;
+    background: #fa782e;
+    background: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
 }

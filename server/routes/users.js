@@ -11,7 +11,7 @@ router.patch('/cart', isLogin, updateCart)
 router.get('/ph', isLogin, getTransactions)
 router.post('/login', login)
 router.post('/register', register)
-router.get('/check', isLogin, (req, res) => {res.status(200).json({isLogin: true})})
+router.get('/check', isLogin, (req, res) => {res.status(200).json({isLogin: true, id: req.userId, isAdmin: req.isAdmin})})
 router.patch('/checkout', isLogin, checkout)
 
 module.exports = router;

@@ -21,8 +21,16 @@ const productSchema = new Schema({
     },
     rating: {
       type: Number,
-      default: 0
+      default: 0,
+      max: 5,
+      min: 0
     },
+    ratedBy: Array,
+    ratings: [{
+      type: Number,
+      max: 5,
+      min: 0
+    }],
     category: {
       type: Schema.Types.ObjectId,
       ref: 'Category',

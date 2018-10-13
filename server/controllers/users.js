@@ -80,7 +80,7 @@ module.exports = {
                         let passwordValid = bcrypt.compareSync(req.body.password.toString(), user.password)
                         if(passwordValid) {
                             let token = jwt.sign({id: user._id, isAdmin: user.isAdmin}, process.env.JWT_KEY);
-                            res.status(200).json({token: token})
+                            res.status(200).json({token: token, id: user._id, isAdmin: user.isAdmin})
                         } else {
                             res.status(500).json({message: 'Wrong password'})
                         }
@@ -186,6 +186,8 @@ module.exports = {
         User.findById(req.userId)
         .then(data => {
             let transaction = data.transaction
+            let boughtProducts = data.boughtProducts
+
             transaction.push({
                 cart: {
                     items: data.items,
@@ -195,6 +197,13 @@ module.exports = {
                 },
                 date: new Date()
             })
+
+            for (let i = 0; i < data.items.length; i ++) {
+                if (boughtProducts.indexOf(data.items[i]) === -1) {
+                    boughtProducts.push(data.items[i])
+                } 
+            }
+
             User.updateOne({
                 _id: req.userId
             }, {
@@ -202,12 +211,14 @@ module.exports = {
                 items: [],
                 counts: [],
                 total: [],
-                totalsum: 0
+                totalsum: 0,
+                boughtProducts: boughtProducts
             })
             .then(() => {
                 res.status(200).json({})
             })
             .catch(err => {
+                conz
                 res.status(500).json({message: err})
             })
         })

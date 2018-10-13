@@ -51,7 +51,8 @@ const userSchema = new Schema({
         type: Date,
         required: true
       }
-    }]
+    }],
+    boughtProducts: Array
 }, {
   timestamps: true
 });
