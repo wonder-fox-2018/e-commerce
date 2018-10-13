@@ -16,15 +16,64 @@ Vue.component('sidebar-section',{
             <div class="list-group">
                 <button v-for="category in listcategories" class="list-group-item sideBarCustom" v-on:click= "getitembycategory(category._id)">{{ category.name }}</button>    
             </div>
+            <hr>
+            <div class="list-group" v-if="getislogin === true && usercredentials.role === 'admin' ">
+              <h3>Admin Section</h3>
+              <button class="btn btn-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#createItem" >Add Item</button>  
+            </div>
+
+            <!-- Modal part -->
+            <!-- create item modal -->
+            <div class="modal fade" id="createItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Name</label>
+                                    <input type="text" v-model="itemname" class="form-control" aria-describedby="emailHelp" placeholder="Enter Item Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Category</label>
+                                    <input type="text" v-model="itemcategory" class="form-control" aria-describedby="emailHelp" placeholder="Enter Category">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Image</label>
+                                    <input type="text" v-model="itemurlimage" class="form-control" placeholder="Upload Image">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Price</label>
+                                    <input type="text" v-model="itemprice" class="form-control" placeholder="Prie">
+                                </div>
+                            </form>
+                            <br/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Create Item</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
       `,
-    props: ['getcredentials','getislogin'],  
+    props: ['getcredentials','getislogin','token'],  
     data () {
        return {
         listitems: [],
         listcategories: [],
         searchkeyword: '',
-        usercredentials: {}
+        usercredentials: {},
+        itemname: '',
+        itemcategory: '',
+        itemurlimage: '',
+        itemprice: 0
        } 
     },
     methods: {
@@ -96,6 +145,6 @@ Vue.component('sidebar-section',{
        },
        getcredentials (val) {
           this.usercredentials = val 
-       } 
+       }
     } 
 })

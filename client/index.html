@@ -27,7 +27,7 @@
         <div class="container-fluid border">
             <div class="row">
                 <div class = "col-md-3 border">
-                    <sidebar-section @listitems= "getitems" :getcredentials="usercredentials" :getislogin = "islogin">                        
+                    <sidebar-section @listitems= "getitems" :getcredentials="usercredentials" :getislogin = "islogin" :token="token">                        
                     </sidebar-section>
                 </div>
                 <div class= "col-md-9 border">
@@ -37,41 +37,6 @@
             </div>
         </div>
         <footer-comp></footer-comp>
-
-        <!-- Modal Part -->
-
-        <!-- Shopping Cart Modal-->
-        <!--
-        <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Your cart</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    <div class="modal-body">
-                        <h5>Hi Cantik berikut rincian belanjaan kamu: </h5>
-                        <div >
-                            <div>
-                                Lipstick : Price 1.000.000 IDR
-                            </div>
-                            <div>
-                                Eye-lashes : Price 400.000 IDR
-                            </div>
-                        </div>
-                        <hr/>
-                        <h5>Total: 1.400.000 IDR</h5>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary"><font color="white">Buy Now</font></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
     </div>
     <script>
         let app = new Vue({
