@@ -256,10 +256,70 @@
                             <!--  <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button> -->
                         </form>
                     </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-outline-dark my-2 my-sm-0" data-toggle="modal" data-target="#modal-add"
+                            v-if="isAdmin">Add item</button>
+                    </li>
                     <li class="list-group-item">Show all</li>
                     <li class="list-group-item">Sort by price</li>
                     <li class="list-group-item">sort by name</li>
                 </ul>
+
+                <!-- modal add -->
+                <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add item</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="item-name">Name</label>
+                                        <input type="text" class="form-control" name="item-name" aria-describedby="item-name"
+                                            placeholder="Item name" v-model="inputNameAddItem">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <input type="text" class="form-control" name="price" aria-describedby="price"
+                                            placeholder="item price" v-model="inputPriceAddItem">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="category">Category</label>
+                                        <input type="text" class="form-control" name="category" aria-describedby="category"
+                                            placeholder="item category" v-model="inputCategoryAddItem">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="picture">Upload picture</label>
+                                        <input type="file" class="form-control" v-on:change="getImageAdd($event)">
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add"
+                                    v-on:click="submitAdd">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
 
 
             </div>
@@ -429,7 +489,12 @@
                 inputPriceEditItem: '',
                 inputPictureEditItem: '',
                 inputCategoryEditItem: '',
-                prevPictureEditItem: ''
+                prevPictureEditItem: '',
+
+                inputNameAddItem: '',
+                inputPriceAddItem: '',
+                inputCategoryAddItem: '',
+                inputPictureAddItem: ''
             },
             created: function () {
 
@@ -616,7 +681,7 @@
 
                 },
 
-                
+
                 submitEdit: function () {
 
                     let skipUpload = this.prevPictureEditItem === this.inputPictureEditItem;
@@ -680,6 +745,7 @@
 
                     this.inputPictureEditItem = link.target.files[0];
 
+
                 },
 
                 deleteItem(id) {
@@ -691,7 +757,54 @@
                     }).catch((err) => {
                         console.log(err);
                     });
-                }
+                },
+
+                submitAdd() {
+                    let formdata = new FormData()
+
+                    formdata.append('image', this.inputPictureAddItem);
+
+                    axios.post(`${this.port}item/upload`, formdata, {
+                        headers: {
+                            'access-token': localStorage.getItem('access-token')
+                        }
+                    }).then((result) => {
+                        axios({
+                            method: 'POST',
+                            url: `${this.port}item`,
+                            headers: {
+                                'access-token': localStorage.getItem('access-token')
+                            },
+                            data: {
+                                name: this.inputNameAddItem,
+                                price: this.inputPriceAddItem,
+                                picture: result.data.link,
+                                category: this.inputCategoryAddItem
+                            }
+                        }).then((result) => {
+                            this.inputNameAddItem = '';
+                            this.inputPriceAddItem = '';
+                            this.inputCategoryAddItem = '';
+                            this.inputPictureAddItem = '';
+                            this.fetchItems();
+                        }).catch((err) => {
+
+                        });
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+
+
+                },
+
+                getImageAdd(link) {
+
+
+                    this.inputPictureAddItem = link.target.files[0];
+
+
+
+                },
             },
             watch: {
 
