@@ -1,4 +1,5 @@
 Vue.component('main-content', {
+    props : ['islogin','isadmin'],
     template: `
     <div class="row">
         <div class="col-md-4" v-for="(item, index) in items">
@@ -7,15 +8,21 @@ Vue.component('main-content', {
                 <!-- {{item.img}} -->
                 <figcaption class="info-wrap">
                     <h4 class="title">{{ item.name }}</h4>
-                    <p class="desc">{{ item.description }}</p>
+                    <p class="desc" v-if="isadmin === false">{{ item.description }}</p>
                     <p class="desc"><b>Category :</b> {{ item.category.name }}</p>
-                    <!-- <div class="rating-wrap">
-                        <div class="label-rating">132 reviews</div>
-                        <div class="label-rating">154 orders </div>
-                    </div> -->
+                    <div v-if="isadmin === true">
+                        <div class="rating-wrap">
+                            <center>
+                            <b>Administrator Menu</b>
+                            <br>
+                            <a class="btn btn-sm btn-primary"> Edit </a>
+                            <a class="btn btn-sm btn-primary"> Delete </a>
+                            </center>
+                        </div>
+                    </div>
                 </figcaption>
                 <div class="bottom-wrap">
-                    <a class="btn btn-sm btn-primary float-right" v-on:click="addItemToCart(index)">Add to Cart</a>
+                    <a class="btn btn-sm btn-primary float-right" v-if="islogin === true && isadmin === false" v-on:click="addItemToCart(index)">Add to Cart</a>
                     <div class="price-wrap h5">
                         <span class="price-new">$ {{ item.price }}</span>
                         <!-- <del class="price-old">$1980</del> -->
@@ -35,7 +42,12 @@ Vue.component('main-content', {
     created: function () {
         this.getAllItems()
     },
-
+    watch : {
+        islogin : function(val){
+            this.getAllItems()
+        }
+    }
+    ,
     methods: {
         getAllItems: function () {
             axios({
