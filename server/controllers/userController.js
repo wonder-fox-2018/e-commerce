@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Transaction = require('../models/transaction')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
@@ -60,7 +61,7 @@ class UserController{
     }
     static showProfile(req, res){
         User.findOne({
-            _id : req.headers.id
+            _id : req.login.id
         })
         .then(user => {
             res.status(200).json(user)
@@ -99,6 +100,61 @@ class UserController{
             res.status(500).json({
                 message : err.message
             })
+        })
+    }
+    static checkout(req, res){
+        User.findOne({_id : req.body.user_id})
+        .then(user => {
+            if(user._id == req.login.id){
+                // res.send({login : req.login, user})
+                Transaction.create({
+                    user : req.body.user_id,
+                    list_item : req.body.list_item,
+                    total_item : req.body.total_item,
+                    price_count : req.body.price_count
+                })
+                .then(checkout =>{
+                    res.status(200).json(checkout)
+                })
+            }
+            else{
+                res.status(200).json({
+                    message : 'u dont have permisson for this action'
+                })
+            }
+        })
+        .catch(err =>{
+            res.status(500).json(err)
+        })
+    }
+    static showUserCheckout(req, res){
+        User.findOne({_id : req.params.id})
+        .then(user => {
+            if(user._id == req.login.id){
+                // res.send(user)
+                Transaction.find({})
+                .then(checkout => {
+                    res.status(200).json(checkout)
+                })
+            }
+            else{
+                res.status(200).json('you dont have permission for this action')
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
+    static checkoutPerUser(req, res){
+        User.findOne({_id : req.login.id})
+        .then(user => {
+                Transaction.find({user : req.login.id})
+                .then(checkoutUser => {
+                    res.status(200).json(checkoutUser)
+                })
+        })
+        .catch(err => {
+            res.status(500).json(err)
         })
     }
 }

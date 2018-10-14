@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const productController = require('../controllers/productController')
+const midleware = require('../midleware/auth')
 
 router.get('/', (req, res) => {
     res.send('ini dari product')
@@ -7,7 +8,7 @@ router.get('/', (req, res) => {
 
 
 router.post('/add/category', productController.addCategory)
-router.post('/add', productController.addProduct)
+router.post('/add',midleware.isLogin, productController.addProduct)
 router.get('/showAll', productController.showAll)
 router.get('/showAllCategory', productController.showAllCategory)
 router.put('/edit/:id', productController.updateProduct)

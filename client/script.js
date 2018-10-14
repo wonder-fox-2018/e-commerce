@@ -1,6 +1,8 @@
+
 let app = new Vue({
     el:'#app',
     data:{
+        isLogin : '',
         register : {
             name : '',
             email : '',
@@ -8,76 +10,89 @@ let app = new Vue({
             address : '',
             city : '',
             state : '',
-            zip : ''
+            zip : '',
         },
+        checkout : [],
         user : {
-            id : 1,
-            fname : 'Fransiskus',
-            lname : 'Arnoldy',
+            id : '',
+            name : '',
             cart : [],
             count : 0, 
             price_count : 0
         },
-        card : [{
-            id : 1,
-            title : 'Wing Zero',
-            price : 895000,
-            total : 1,
-            img : "https://images-na.ssl-images-amazon.com/images/I/71muGqdVxnL._SL1421_.jpg",
-            description : `Some quick example text to build on the card title and make up the bulk of the
-            card's
-            content.`,
-            catergory : 'mg'
-        },{
-            id : 2,
-            title : 'Red Sinanju',
-            price : 1300000,
-            total : 1,
-            img : "https://images-na.ssl-images-amazon.com/images/I/51-RTTuzRHL._SL500_AC_SS350_.jpg",
-            description : `Some quick example text to build on the card title and make up the bulk of the
-            card's
-            content.`,
-            catergory : 'rg'
-        },{
-            id : 3,
-            title : 'Astry Red Frame',
-            price : 489000,
-            total : 1,
-            img : "https://images.amain.com/images/large/ban/ban200634.jpg?width=475",
-            description : `Some quick example text to build on the card title and make up the bulk of the
-            card's
-            content.`,
-            catergory : 'mg'
-
-        },{
-            id : 4,
-            title : 'Exia',
-            price : 2500000,
-            total : 1,
-            img : "https://da.lnwfile.com/_/da/_raw/e1/0z/zp.jpg",
-            description : `Some quick example text to build on the card title and make up the bulk of the
-            card's
-            content.`,
-            catergory : 'pg'
-        }]
+        card : []
     },
     created: function(){
+        this.getToken()
         this.allProduct()
+        this.getUserOnline()
+        this.getCheckOutList()
     },
     methods :{
+        getUserOnline : function(){
+            let token = localStorage.getItem('token')
+            if(token){
+                axios({
+                    method : 'GET',
+                    url : 'http://localhost:3000/users/profile',
+                    headers : {
+                        token : localStorage.getItem('token')
+                    }
+                })
+                .then(user => {
+                    // console.log(user)
+                    this.user.name =  user.data.name
+                    this.user.id = user.data._id
+                    this.id = user.data._id
+                    this.user.cart = []
+                    this.user.count = 0
+                    this.user.price_count = 0 
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            }
+            else{
+                console.log(`Please login first`)
+            }
+        },
+        getCheckOutList : function(){
+            axios({
+                method : 'GET',
+                url : `http://localhost:3000/users/checkout`,
+                headers : {
+                    token : localStorage.getItem('token')
+                }
+            })
+            .then(checkout => {
+                console.log(checkout)
+                checkout.data.forEach(list => {
+                    this.checkout.push(list)
+                })
+
+                // console.log(this.checkout)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        },
+        getToken : function(){
+            let token = localStorage.getItem('token')
+            if(token){
+                this.isLogin = true
+            }
+            else{
+                this.isLogin = false
+            }
+        },
         allProduct: function () {
-            // let temp = []
-            // for(let i = 0; i < this.card.length; i++) {
-            //         temp.push(this.card[i])
-            // }
-            // this.card = temp
             axios({
                 method : 'GET',
                 url : 'http://localhost:3000/products/showAll'
             })
             .then(dataProduct => {
                 let products = dataProduct.data.products
-                console.log(products)
+                // console.log(products)
                 products.forEach(list => {
                     this.card.push(list)
                 })
@@ -111,7 +126,7 @@ let app = new Vue({
         category : function(value){
 
             let temp = []
-            console.log('not all')
+            // console.log('not all')
             for(let i = 0; i < this.card.length; i++) {
                 // console.log(this.card[i].catergory)
                 if(this.card[i].catergory == value){
@@ -119,29 +134,6 @@ let app = new Vue({
                 }
             }
             this.card = temp
-        },
-        signup: function(){
-            axios({
-                method : 'POST',
-                url : 'http://localhost:3000/signup',
-                data : {
-                    email : this.register.email,
-                    password : this.register.password,
-                    name : this.register.name,
-                    address : this.register.address,
-                    city : this.register.city,
-                    state : this.register.state,
-                    zip : this.register.zip
-                }
-            })
-            .then(register => {
-                console.log(register)
-
-                this.register
-            })
-            .catch(err => {
-                console.log(err)
-            })
         }
     }
 })

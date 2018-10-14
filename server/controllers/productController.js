@@ -38,9 +38,11 @@ class productController{
         Product.create({
             title : req.body.title,
             price : req.body.price,
-            quantity : req.body.quantity,
+            quantity : req.body.qty,
             img : req.body.img,
             description : req.body.description,
+            total : req.body.total,
+            admin : req.login.id
         })
         .then(product => {
             res.status(200).json({
@@ -57,7 +59,7 @@ class productController{
     }
 
     static showAll(req,res){
-        Product.find()
+        Product.find().populate('admin').exec()
         .then(products => {
             res.status(200).json({products})
         })

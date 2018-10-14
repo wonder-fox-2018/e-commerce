@@ -25,6 +25,13 @@ const productSchema = new Schema({
         type : Number,
         default : 0
     },
+    total : {
+        type : Number
+    },
+    admin :{
+        type : Schema.Types.ObjectId,
+        ref : 'User'
+    },
 }, {
     timestamps : true
 })

@@ -1,225 +1,66 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Shop Homepage</title>
+
+    <!-- Custom styles for this template -->
+    <link href="css/shop-homepage.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <div id="app">
+    <navbar-component :is-login="isLogin" :get-token='getToken' :user="user"></navbar-component><!-- Page Content -->
+    <div class="container">
+      <div class="row" >
+        <sidebar-component :is-login="isLogin" :user="user"></sidebar-component><!-- /.col-lg-3 -->
+        <div class="col-lg-9">
+          <carousel-component></carousel-component>
+          <div class="row">
+            <item-list v-for="list in card" :key="list._id" :list="list" :user="user"></item-list>
+          </div> <!-- /.row -->
+        </div><!-- /.col-lg-9 -->
+      </div><!-- /.row -->
+    </div>
+    <!-- /.container -->
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+      </div>
+      <!-- /.container -->
+    </footer>
   
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link rel="stylesheet" href="./style.css">
-  <title>Otakubeli</title>
-</head>
-
-<body>
-  <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">OTAKUbeli <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Kategori
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
-              <a class="dropdown-item" href="#" v-on:click="category('sd')" >Super Deformed</a>
-              <a class="dropdown-item" href="#" v-on:click="category('hg')" >High Grade</a>
-              <a class="dropdown-item" href="#" v-on:click="category('ng')" >No Grade</a>
-              <a class="dropdown-item" href="#" v-on:click="category('rg')" >Real Grade</a>
-              <a class="dropdown-item" href="#" v-on:click="category('mg')">Master Grade</a>
-              <a class="dropdown-item" href="#" v-on:click="category('pg')">Perfect Grede</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#" v-on:click="category('all')">All</a>
-            </div>
-          </li>
-          <li>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCart">>
-              Notifications <span class="badge badge-light">{{ user.count }}</span>
-            </button>
-          </li>
-        </ul>
-        <form class="form-inline my-5 my-lg-3">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search..." aria-label="Search... with two button addons"
-              aria-describedby="button-addon4">
-            <div class="input-group-append" id="button-addon4">
-              <button class="btn btn-outline-success" type="button">Search</button>
-            </div>
-          </div>
-          <button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#modalRegister" type="button"  style="margin-right:10px; margin-left:10px">Daftar</button>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#modalLogin">Login</button>
-        </form>
-      </div>
-    </nav>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="value in card">
-          <div class="card" style="width : 18rem">
-            <img class="card-img-top" v-bind:src="value.img" alt="card images caps">
-            <div class="card-body">
-              <h5>{{ value.title }}</h5>
-              <p class="card-text">
-                {{ value.description }}
-              </p>
-              <h6>{{ value.price }}</h6>
-              <button class="btn btn-primary" v-on:click="cart(value)">BUY</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
- <!-- Modal cart -->
- <div class="modal fade" id="modalCart" tabindex="-1" role="dialog" aria-labelledby="modalCart" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle">Cart</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <table>
-            <thead style="text-align:center">
-              <th>Nama</th>
-              <th>Jumlah</th>
-              <th>Harga</th>
-              <th>Total Harga</th>
-              <th>Action</th>
-            </thead>
-            <tbody v-for="value in user.cart">
-              <tr>
-                <td><input class="form-control" type="text" v-bind:value="value.title" readonly></td>
-                <td><input class="form-control" type="text" v-bind:value="value.total" readonly style="text-align:center"></td>
-                <td><input class="form-control" type="text" v-bind:value="value.price" readonly style="text-align:right"></td>
-                <td><input class="form-control" type="text" v-bind:value="value.total * value.price" readonly style="text-align:right"></td>
-                <td style="text-align:center"><i class="fas fa-cart-plus"></i></td>
-              </tr>
-            </tbody>
-            <tbody>
-              <tr>
-                <td></td>
-                <td></td>
-                <td> Total Pembelian </td>
-                <td><input class="form-control" type="text" v-bind:value="user.price_count" readonly style="text-align:right"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
+  <!-- modal add product -->
+  <modal-register :register="register"></modal-register>
+  <modal-addproduct :register="register" :refresh="allProduct"></modal-addproduct>
+  <modal-login :login="register" :get-token="getToken" :getuseronline="getUserOnline"></modal-login>
+  <modal-cart :user="user" :getuseronline="getUserOnline"></modal-cart>
+  <modal-checkout :user="user" :checkout="checkout" :getcheckoutlist="getCheckOutList"></modal-checkout>
   </div>
-
-   <!-- Modal Register -->
- <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="modalRegister" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Register</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputEmail4">Email</label>
-              <input type="email" class="form-control" id="inputEmail" v-model="register.email" placeholder="Email">
-            </div>
-            <div class="form-group col-md-6">
-              <label for="inputPassword4">Password</label>
-              <input type="password" class="form-control" id="inputPassword" v-model="register.password" placeholder="Password">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputName">Name</label>
-            <input type="text" class="form-control" id="inputName" v-model="register.name" placeholder="Your Name ... ">
-          </div>
-          <div class="form-group">
-            <label for="inputAddress">Address</label>
-            <input type="text" class="form-control" id="inputAddress" v-model="register.address" placeholder="1234 Main St">
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputCity">City</label>
-              <input type="text" class="form-control" id="inputCity" v-model="register.city">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="inputState">state</label>
-              <input type="text" class="form-control" id="inputState" v-model="register.state">
-            </div>
-            <div class="form-group col-md-2">
-              <label for="inputZip">Zip</label>
-              <input type="text" class="form-control" id="inputZip" v-model="register.zip">
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" v-on:click="signup" data-dismiss="modal">Register</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal LOGIN -->
-<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="modalLogin" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Login</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Sign In</button>
-      </div>
-    </div>
-  </div>
-</div>
-  </div>
-
- 
-
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="./script.js"></script>
+  <!-- Bootstrap core JavaScript -->
+    <script src="./component/modal.js"></script>
+    <script src="./component/item.js"></script>
+    <script src="./script.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
     crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
-</body>
+
+  </body>
 
 </html>
