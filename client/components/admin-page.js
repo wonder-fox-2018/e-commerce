@@ -4,6 +4,17 @@ Vue.component('admin-page', {
     <div class="row" id='ap'>
         <div class="col-11">
             <div class="row">
+                <div class='row border-bottom adminmenugroup'>
+                    <div class="col-12 mb-4">
+                        <h3>Rules for Admins:</h3>
+                        <ul>
+                            <li>You may not add categories and/or products with the same name</li>
+                            <li>Coupons won't apply to you</li>
+                            <li>The product images are expected to be PNGs with transparent background</li>
+                        </ul>
+                        Thanks, please note that these rules may change without any initial notice.
+                    </div>
+                </div>
                 <div class="row border-bottom adminmenugroup">
                     <div class="col-sm-6 col-md-4 text-center adminmenu" @click='addProModal'>
                         <div>
@@ -328,7 +339,7 @@ Vue.component('admin-page', {
                     this.addCatModal()
                 })
                 .catch(err => {
-                    console.log(err)
+                    alert(err.response.data.message)
                 })
             }
         },
@@ -368,14 +379,12 @@ Vue.component('admin-page', {
                         this.addProModal()
                     })
                     .catch(err => {
-                        console.log(err)
+                        alert(err.response.data.message)
                     })
                 })
                 .catch(err => {
                     console.log(JSON.stringify(err))
                 })
-            } else {
-                console.log('GAGAL')
             }
         },
         selectedC() {
@@ -421,7 +430,7 @@ Vue.component('admin-page', {
                     this.editCatModal()
                 })
                 .catch(err => {
-                    console.log(err)
+                    alert(err.response.data.message)
                 })
             }
         },
@@ -448,12 +457,11 @@ Vue.component('admin-page', {
                     }
                 })
                 .then(data => {
-                    console.log('Suceess')
                     this.getProducts(true)
                     this.editProModal()
                 })
                 .catch(err => {
-                    console.log(err)
+                    alert(err.response.data.message)
                 })
             }
         },

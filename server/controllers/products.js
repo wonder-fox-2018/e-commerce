@@ -94,17 +94,32 @@ module.exports = {
         })
         .then(category => {
             if (category) {
-                Product.updateOne({
-                    _id: req.params.id
-                }, {
+                Product.findOne({
                     name: req.body.name,
-                    description: req.body.description,
-                    backtext: req.body.backtext,
-                    price: req.body.price,
-                    category: category._id
+                    _id: {
+                        $ne: req.params.id
+                    }
                 })
-                .then(() => {
-                    res.status(200).json({message: `Product '${req.params.id}' updated.`})
+                .then(data => {
+                    if (data) {
+                        res.status(500).json({message: 'There has been a product with a same name.'})
+                    } else {
+                        Product.updateOne({
+                            _id: req.params.id
+                        }, {
+                            name: req.body.name,
+                            description: req.body.description,
+                            backtext: req.body.backtext,
+                            price: req.body.price,
+                            category: category._id
+                        })
+                        .then(() => {
+                            res.status(200).json({message: `Product '${req.params.id}' updated.`})
+                        })
+                        .catch(err => {
+                            res.status(500).json({error: err})
+                        })
+                    }
                 })
                 .catch(err => {
                     res.status(500).json({error: err})

@@ -206,30 +206,30 @@
                                 total: validTotal[i]
                             })
                         }
+                        
+                        for (let j = 0; j < validCart.length; j++) {
+                            this.itemcount += validCart[j].count
+                        }
 
                         if (localCart && localItems) {
-                            for (let j = 0; j < localItems.length; j++) {
+                            for (let k = 0; k < localItems.length; k++) {
                                 let valid = false
-                                for (let k = 0; k < validItemNames.length; k++) {
-                                    this.itemcount += validCounts[k]
-                                    if (localItems[j] === validItemNames[k]) {
+                                for (let l = 0; l < validItemNames.length; l++) {
+                                    if (localItems[k] === validItemNames[l]) {
                                         valid = true
                                     }
                                 }
                                 if (!valid) {
-                                    validItemNames.push(localItems[j])
-                                    validItemsID.push(localItemsID[j])
-                                    validCart.push(localCart[j])
-                                    validCounts.push(localCart[j].count)
-                                    this.totalsum += localCart[j].total
-                                    this.itemcount += localCart[j].count
+                                    validItemNames.push(localItems[k])
+                                    validItemsID.push(localItemsID[k])
+                                    validCart.push(localCart[k])
+                                    validCounts.push(localCart[k].count)
+                                    this.totalsum += localCart[k].total
+                                    this.itemcount += localCart[k].count
                                 }
                             }
-                        } else {
-                            for (let j = 0; j < validCart.length; j++) {
-                                this.itemcount += validCart[j].count
-                            }
                         }
+
                         this.cart = validCart
                         this.items = validItemNames
                         this.itemsReal = validItemsID

@@ -14,12 +14,24 @@ module.exports = {
     },
 
     add: function (req, res) {
-        Category.create({
-            name: req.body.name,
-            icon: req.body.icon,
+        Category.findOne({
+            name: req.body.name
         })
-        .then(() => {
-            res.status(201).json({message: 'New category added.'})
+        .then(data => {
+            if (data) {
+                res.status(500).json({message: 'The category has been registered before.'})
+            } else {
+                Category.create({
+                    name: req.body.name,
+                    icon: req.body.icon,
+                })
+                .then(() => {
+                    res.status(201).json({message: 'New category added.'})
+                })
+                .catch(err => {
+                    res.status(500).json({error: err})
+                })
+            }
         })
         .catch(err => {
             res.status(500).json({error: err})
@@ -27,14 +39,29 @@ module.exports = {
     },
 
     edit: function (req, res) {
-        Category.updateOne({
-            _id: req.params.id
-        }, {
+        Category.findOne({
             name: req.body.name,
-            icon: req.body.icon,
+            _id: {
+                $ne: req.params.id
+            }
         })
-        .then(() => {
-            res.status(200).json({message: `Category '${req.params.id}' updated.`})
+        .then(data => {
+            if (data) {
+                res.status(500).json({message: 'There has been a category with a same name.'})
+            } else {
+                Category.updateOne({
+                    _id: req.params.id
+                }, {
+                    name: req.body.name,
+                    icon: req.body.icon,
+                })
+                .then(() => {
+                    res.status(200).json({message: `Category '${req.params.id}' updated.`})
+                })
+                .catch(err => {
+                    res.status(500).json({error: err})
+                })
+            }
         })
         .catch(err => {
             res.status(500).json({error: err})
