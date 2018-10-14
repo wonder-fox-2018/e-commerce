@@ -280,6 +280,7 @@
                                     </div>
                                     <button class="btn btn-outline-dark my-2 my-sm-0" data-toggle="modal" data-target="#modal-edit"
                                         v-if="isAdmin" @click="editItem(item)">Edit</button>
+                                    <button class="btn btn-outline-danger my-2 my-sm-0" v-if="isAdmin" @click="deleteItem(item._id)">Delete</button>
                                     <div class="ui vertical animated button" tabindex="0" v-else v-on:click="addToCart(item._id)">
                                         <div class="hidden content">buy</div>
                                         <div class="visible content">
@@ -463,11 +464,11 @@
                     });
                 },
                 fetchItems: function () {
-                    
+
                     axios.get(`${this.port}item`).then((result) => {
-                        
+
                         this.items = result.data;
-                        
+
                     }).catch((err) => {
                         console.log(err);
                     });
@@ -518,7 +519,7 @@
                             'access-token': localStorage.getItem('access-token')
                         }
                     }).then((result) => {
-                        
+
                         this.cart = result.data;
                         this.itemInCart = result.data.list.length;
                         this.groupCartByItems();
@@ -614,14 +615,14 @@
                     this.prevPictureEditItem = this.inputPictureEditItem;
 
                 },
+
                 
-                //TODO FIX REQUIRE REFRESH BUG
                 submitEdit: function () {
-                    
+
                     let skipUpload = this.prevPictureEditItem === this.inputPictureEditItem;
 
                     if (skipUpload) {
-                        
+
                         axios({
                             method: 'PUT',
                             url: this.port + 'item/' + this.inputIdEditItem,
@@ -637,7 +638,7 @@
                         }).then((result) => {
                             this.fetchItems();
                         }).catch((err) => {
-                            
+
                             console.log(err);
                         });
                     } else {
@@ -679,6 +680,17 @@
 
                     this.inputPictureEditItem = link.target.files[0];
 
+                },
+
+                deleteItem(id) {
+                    axios({
+                        method: 'DELETE',
+                        url: this.port + `item/${id}`
+                    }).then((result) => {
+                        this.fetchItems();
+                    }).catch((err) => {
+                        console.log(err);
+                    });
                 }
             },
             watch: {
