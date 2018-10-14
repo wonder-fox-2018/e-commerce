@@ -86,7 +86,7 @@
        <carousel-content :testo='test'></carousel-content>
 
         <div class="container">
-            <main-content :islogin='islogin' :isadmin='isadmin' @carts-data='cartsData' @carts-badge='cartsBadge'></main-content>            
+            <main-content :islogin='islogin' :isadmin='isadmin' @selected-data='selectedData' @carts-data='cartsData' @carts-badge='cartsBadge'></main-content>            
         </div>
 
         <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -132,6 +132,7 @@
                 </div>
             </div>
         </div>
+
 
         <div id="loginModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -197,7 +198,8 @@
             isadmin:false,
             login_email : '',
             login_password : '',
-            failedLogin : false
+            failedLogin : false,
+            selecteddata : ''
         },
         created: function () {
 
@@ -211,6 +213,9 @@
             },
             failedLoginFalse : function(){
                 this.failedLogin = false
+            },
+            selectedData : function(val){
+                this.selecteddata = val
             }
             ,
             signin : function(){
