@@ -171,7 +171,7 @@ Vue.component('navbar-section',{
         //    let self = this
         //    axios({
         //       method: 'GET',
-        //       url: 'http://localhost:3007/users/credentials',
+        //       url: 'https://apiecosmetics.efratsadeli.online/users/credentials',
         //       headers: {
         //          token: self.token 
         //       }  
@@ -199,7 +199,7 @@ Vue.component('navbar-section',{
             let id_token = input
             axios({
                method: 'POST',
-               url: `http://localhost:3007/user/logingoogle`,
+               url: `https://apiecosmetics.efratsadeli.online/user/logingoogle`,
                data:{
                   googletoken: id_token
                } 
@@ -214,7 +214,7 @@ Vue.component('navbar-section',{
                 // self.getCredentials()
                 axios({
                    method: 'GET',
-                   url:'http://localhost:3007/users/credentials',
+                   url:'https://apiecosmetics.efratsadeli.online/users/credentials',
                    headers: {
                       token: self.token 
                    } 
@@ -300,7 +300,7 @@ Vue.component('navbar-section',{
 
             axios({
                method: 'POST',
-               url: 'http://localhost:3007/user/login',
+               url: 'https://apiecosmetics.efratsadeli.online/user/login',
                data: {
                   email: self.useremail,
                   password: self.userpassword 
@@ -314,7 +314,7 @@ Vue.component('navbar-section',{
                 // get credentials
                 axios({
                     method: 'GET',
-                    url: 'http://localhost:3007/users/credentials',
+                    url: 'https://apiecosmetics.efratsadeli.online/users/credentials',
                     headers: {
                        token: self.token 
                     }  
@@ -376,7 +376,7 @@ Vue.component('navbar-section',{
 
             axios({
                method: 'POST',
-               url: 'http://localhost:3007/user/register',
+               url: 'https://apiecosmetics.efratsadeli.online/user/register',
                data: {
                   name: self.username,
                   email: self.useremail,
@@ -391,7 +391,7 @@ Vue.component('navbar-section',{
                 // get credentials
                 axios({
                     method: 'GET',
-                    url: 'http://localhost:3007/users/credentials',
+                    url: 'https://apiecosmetics.efratsadeli.online/users/credentials',
                     headers: {
                        token: self.token 
                     }  
@@ -432,7 +432,7 @@ Vue.component('navbar-section',{
 
             axios({
                method: 'POST',
-               url: 'http://localhost:3007/transactions',
+               url: 'https://apiecosmetics.efratsadeli.online/transactions',
                headers: {
                   token: self.token 
                },

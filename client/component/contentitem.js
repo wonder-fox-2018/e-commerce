@@ -216,7 +216,7 @@ Vue.component('content-item',{
       let upladdata = new FormData()
       upladdata.append('imagefile',this.imageupload)
     //   console.log('Upload access edit----')
-      axios.post('http://localhost:3007/items/uploads', upladdata,
+      axios.post('https://apiecosmetics.efratsadeli.online/items/uploads', upladdata,
         {
           headers: {
            'Content-Type': 'multipart/form-data',
@@ -230,7 +230,7 @@ Vue.component('content-item',{
             // create item
             axios({
                method: 'PUT',
-               url: `http://localhost:3007/items/${self.itemid}`,
+               url: `https://apiecosmetics.efratsadeli.online/items/${self.itemid}`,
                headers:{
                  token: self.gettoken 
                },
@@ -247,7 +247,7 @@ Vue.component('content-item',{
                  // get lists of item
                  axios({
                    method: 'GET',
-                   url: 'http://localhost:3007/items/lists'   
+                   url: 'https://apiecosmetics.efratsadeli.online/items/lists'   
                  })
                   .then(items => {
                      self.listitems = items.data.data 
@@ -303,7 +303,7 @@ Vue.component('content-item',{
        let self = this
        axios({
           method: 'DELETE',
-          url: `http://localhost:3007/items/${self.deleteitemid}`,
+          url: `https://apiecosmetics.efratsadeli.online/items/${self.deleteitemid}`,
           headers: {
              token: self.gettoken 
           } 
@@ -313,7 +313,7 @@ Vue.component('content-item',{
             // get all item 
             axios({
                method: 'GET',
-               url: `http://localhost:3007/items/lists` 
+               url: `https://apiecosmetics.efratsadeli.online/items/lists` 
             })
               .then(lists =>{
                  self.listitems = lists.data.data
@@ -334,7 +334,7 @@ Vue.component('content-item',{
     // get list of items
     axios({
         method: 'GET',
-        url: 'http://localhost:3007/items/lists'    
+        url: 'https://apiecosmetics.efratsadeli.online/items/lists'    
     })
       .then(items =>{
         self.listitems = items.data.data

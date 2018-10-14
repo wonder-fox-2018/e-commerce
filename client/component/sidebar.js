@@ -118,7 +118,7 @@ Vue.component('sidebar-section',{
         let self = this  
         axios({
           method: 'GET',
-          url: 'http://localhost:3007/items/lists'       
+          url: 'https://apiecosmetics.efratsadeli.online/items/lists'       
         })
           .then(items => { 
             self.listitems = items.data.data
@@ -133,7 +133,7 @@ Vue.component('sidebar-section',{
         let categoryid = input  
         axios({
             method: 'GET',
-            url: `http://localhost:3007/categories/${categoryid}`
+            url: `https://apiecosmetics.efratsadeli.online/categories/${categoryid}`
         })
          .then(categories => {
             self.listitems = categories.data.data.listitemcategory
@@ -148,7 +148,7 @@ Vue.component('sidebar-section',{
          let key = this.searchkeyword
          axios({
            method: 'POST',
-           url: 'http://localhost:3007/items/search',
+           url: 'https://apiecosmetics.efratsadeli.online/items/search',
            data: {
               keyword: key    
            }    
@@ -193,7 +193,7 @@ Vue.component('sidebar-section',{
          let upladdata = new FormData()
          upladdata.append('imagefile',this.imageupload)
         //  console.log('Upload access----')
-         axios.post('http://localhost:3007/items/uploads', upladdata,
+         axios.post('https://apiecosmetics.efratsadeli.online/items/uploads', upladdata,
          {
            headers: {
             'Content-Type': 'multipart/form-data',
@@ -207,7 +207,7 @@ Vue.component('sidebar-section',{
                // create item
                axios({
                   method: 'POST',
-                  url: 'http://localhost:3007/items',
+                  url: 'https://apiecosmetics.efratsadeli.online/items',
                   headers:{
                     token: self.token 
                   },
@@ -224,7 +224,7 @@ Vue.component('sidebar-section',{
                     // get lists of item
                     axios({
                       method: 'GET',
-                      url: 'http://localhost:3007/items/lists'   
+                      url: 'https://apiecosmetics.efratsadeli.online/items/lists'   
                     })
                      .then(items => {
                         self.listitems = items.data.data 
@@ -295,7 +295,7 @@ Vue.component('sidebar-section',{
          }
         axios({
            method: 'POST',
-           url: 'http://localhost:3007/categories',
+           url: 'https://apiecosmetics.efratsadeli.online/categories',
            headers: {
              token: self.token  
            },
@@ -307,7 +307,7 @@ Vue.component('sidebar-section',{
              // update all category
              axios({
                 method: 'GET',
-                url: 'http://localhost:3007/categories/lists'  
+                url: 'https://apiecosmetics.efratsadeli.online/categories/lists'  
              })
               .then(categories => {
                 self.listcategories = categories.data.data
@@ -339,7 +339,7 @@ Vue.component('sidebar-section',{
       // get list of categories
       axios({
         method: 'GET',
-        url: 'http://localhost:3007/categories/lists' 
+        url: 'https://apiecosmetics.efratsadeli.online/categories/lists' 
       })
        .then(categories =>{
           self.listcategories = categories.data.data
