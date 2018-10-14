@@ -41,7 +41,10 @@ Vue.component('sidebar-section',{
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Category</label>
-                                    <input type="text" v-model="itemcategory" class="form-control" aria-describedby="emailHelp" placeholder="Enter Category">
+                                    <select v-model="itemcategory">
+                                        <option disabled value="">Please select one</option>
+                                        <option v-for="category in listcategories" v-bind:value = "category._id" >{{ category.name }}</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Image</label>
@@ -132,8 +135,7 @@ Vue.component('sidebar-section',{
       },
       // create new item 
       createitem () {
-         let self = this
-
+         let self = this   
          // upload data to GCP first
          let upladdata = new FormData()
          upladdata.append('imagefile',this.imageupload)
