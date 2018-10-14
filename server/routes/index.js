@@ -48,7 +48,9 @@ router.patch('/cart/:id', Middlewares.isLogin, CartController.removeItem);
 
 
 //admin
-router.post('/item', ItemControler.create); 
+router.post('/item', ItemControler.create);
+
+router.put('/item/:id', ItemControler.update);
 
 router.post('/cart', CartController.create);
 
@@ -62,7 +64,7 @@ router.post('/item/upload',
       link: req.file.cloudStoragePublicUrl
     })
   });
-  
+
   router.delete('/item/:id', ItemControler.delete);
 
 

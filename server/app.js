@@ -11,7 +11,7 @@ var indexRouter = require('./routes/index');
 
 var app = express();
 app.use(cors());
-mongoose.connect(process.env.DATABASE_URL);
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');

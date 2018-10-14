@@ -3,11 +3,13 @@ const ServerResponse = require('../helpers/serverResponse');
 
 module.exports = {
     create: (req, res) => {
-        let {name, price, picture} = req.body;
+        let {name, price, picture, category, stock} = req.body;
         Item.create({
             name,
             price,
-            picture
+            picture,
+            category,
+            stock
         }).then((item) => {
             res.status(200).json(Item);
         }).catch((err) => {
@@ -22,14 +24,17 @@ module.exports = {
         });
     },
     update: (req, res) => {
-        let {name, price, picture, stock} = req.body
+        let {name, price, picture, stock, category} = req.body
         Item.updateOne({_id: req.params.id}, {
             name,
             price,
             picture,
-            stock
+            stock,
+            category
         }).then(() => {
-            res.status(200);
+            res.status(200).json({
+                message: 'item has been updated'
+            })
         }).catch((err) => {
             res.status(500);
         });
