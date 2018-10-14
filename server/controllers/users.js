@@ -1,7 +1,8 @@
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer')
 
 module.exports = {
     
@@ -117,7 +118,43 @@ module.exports = {
                                 password: hashedPassword
                             })
                             .then(data => {
-                                res.status(201).json({message: 'Email registration successful. Please sign in to continue.'})
+                                let text = "";
+                                let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                              
+                                for (var i = 0; i < 10; i++) {
+                                    text += possible.charAt(Math.floor(Math.random() * possible.length));
+                                }
+                                
+                                let transporter = nodemailer.createTransport({
+                                    service: 'gmail',
+                                    auth: {
+                                        user: 'backgroundjobtest@gmail.com',
+                                        pass: process.env.EMAIL_PASSWORD
+                                    }
+                                })
+                                let mailOptions = {
+                                    from: 'Ismail - Hacktiv WonderApps',
+                                    to: data.email,
+                                    subject: 'Welcome!',
+                                    html: 
+                                    `
+                                      <h3>Hi, ${data.name}</h3>
+                                      <p>As a new member of our family, we would like to give you a special discount coupon, please
+                                      note that the coupon below will only apply to the account registered with this email.</p><br>
+                                      <h2 style='text-align: center'>${text}</h2><br>
+                                      <h3>Happy shopping,</h3>
+                                      <h3><b>Shoeka - Cause there's always a better shoes</b></h3>
+                                    `
+                                };
+                          
+                                transporter.sendMail(mailOptions, (error, info) => {
+                                    if (error) {
+                                        return console.log(error);
+                                    } else {
+                                        console.log('Message sent to ', mailOptions.to);
+                                        res.status(201).json({message: 'Email registration successful. Please sign in to continue.'})
+                                    }
+                                });
                             })
                             .catch(err => {
                                 res.status(500).json({message: 'An error occured during the registration process. Please try again later.'})
