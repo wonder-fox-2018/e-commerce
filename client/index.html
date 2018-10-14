@@ -6,7 +6,7 @@
     <title>SHOEKA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,500,900" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
@@ -179,7 +179,7 @@
                                     <img :src="product.image" alt="Shoe" class="product-img">
                                     <div class="product-detail">
                                         <h2>{{ product.name }}</h2>
-                                        <p>{{ product.description }}</p>
+                                        <p>{{ product.description | descSlice }}</p>
                                     </div>
                                     <span class="back-text">
                                         {{ product.backtext }}
@@ -364,10 +364,10 @@
                             Product image (<b>PNG, max. 1MB</b>):<br>
                             <input type="file" id="proImg" accept="image/png" @change='proImgChange'><br><br>
                         </div>
-                        <input type="text" placeholder="Name" v-model='newProName'><br>
-                        <input type="text" placeholder="Description" v-model='newProDesc'><br>
-                        <input type="text" placeholder="Backtext (max. 4 characters)" v-model='newProBT'><br>
-                        <input type="text" placeholder="Price (has to be number)" v-model='newProPrice'><br>
+                        <input type="text" placeholder="Name (max. 13 characters)" v-model='newProName' @keyup='valProName'><br>
+                        <input type="text" placeholder="Description (max. 72 characters)" v-model='newProDesc' @keyup='valProDesc'><br>
+                        <input type="text" placeholder="Backtext (max. 4 characters)" v-model='newProBT' @keyup='valProBT'><br>
+                        <input type="text" placeholder="Price (has to be number, max. 10 characters)" v-model='newProPrice' @keyup='valProPrice'><br>
                         <select v-model="newProCat">
                             <option disabled value="">Please choose a category</option>
                             <option v-for='(category, index) in categories'>{{ category.name }}</option>
@@ -386,10 +386,10 @@
                             <option disabled value="">Please choose a product to be edited</option>
                             <option v-for='product in products'>{{ product.name }}</option>
                         </select><br><br>
-                        <input type="text" placeholder="Name" v-model='newProName'><br>
-                        <input type="text" placeholder="Description" v-model='newProDesc'><br>
-                        <input type="text" placeholder="Backtext" v-model='newProBT'><br>
-                        <input type="text" placeholder="Price (in IDR)" v-model='newProPrice'><br>
+                        <input type="text" placeholder="Name (max. 13 characters)" v-model='newProName' @keyup='valProName'><br>
+                        <input type="text" placeholder="Description (max. 72 characters)" v-model='newProDesc' @keyup='valProDesc'><br>
+                        <input type="text" placeholder="Backtext (max. 4 characters)" v-model='newProBT' @keyup='valProBT'><br>
+                        <input type="text" placeholder="Price (has to be number, max. 10 characters)" v-model='newProPrice' @keyup='valProPrice'><br>
                         <select v-model="newProCat">
                             <option disabled value="">Please choose a category</option>
                             <option v-for='(category, index) in categories'>{{ category.name }}</option>
@@ -1190,10 +1190,25 @@
                 },
                 proImgChange(event) {
                     this.newProImg = event.target.files[0]
+                },
+                valProName() {
+                    this.newProName = this.newProName.slice(0, 13)
+                },
+                valProDesc() {
+                    this.newProDesc = this.newProDesc.slice(0, 72)
+                },
+                valProBT() {
+                    this.newProBT = this.newProBT.slice(0, 4)
+                },
+                valProPrice() {
+                    if (Number(this.newProPrice) != this.newProPrice) {
+                        this.newProPrice = ''
+                    }
+                    this.newProPrice = this.newProPrice.slice(0, 10)
                 }
             },
             filters: {
-                priceSlice: function (value) {
+                priceSlice(value) {
                     let str = String(value)
                     if (str.length > 7) {
                         return str.slice(0, str.length-6) + 'M'
@@ -1203,7 +1218,7 @@
                         return str
                     }
                 },
-                currencySlice: function (value) {
+                currencySlice(value) {
                     let str = String(value)
                     let reversed = str.split('').reverse()
                     let counter = 0
@@ -1221,6 +1236,21 @@
                         }
                     } else {
                         return reversed.reverse().join('')
+                    }
+                },
+                descSlice(value) {
+                    let i = value.length / 24
+                    let j = Math.floor(i)
+                    if (i <= 1) {
+                        return value
+                    } else {
+                        let str = []
+                        let rest = value
+                        for (; j >= 0; j--) {
+                            str.push(rest.slice(0, 24))
+                            rest = rest.slice(24)
+                        }
+                        return str.join(' ')
                     }
                 }
             },

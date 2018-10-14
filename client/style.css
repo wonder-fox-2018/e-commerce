@@ -18,7 +18,7 @@ body {
     user-select: none; /* Standard */
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p, span {
     font-family: 'Roboto', sans-serif !important;
 }
 
@@ -163,6 +163,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .product-detail p {
     font-size: 14px;
+    font-family: 'Roboto Mono', monospace !important;
 }
 
 .back-text {

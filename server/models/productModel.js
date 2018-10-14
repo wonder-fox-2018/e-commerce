@@ -4,11 +4,13 @@ const Schema = mongoose.Schema
 const productSchema = new Schema({
     name: {
       type: String,
-      required: true
+      required: true,
+      maxlength: 13
     },
     description: {
       type: String,
-      required: true
+      required: true,
+      maxlength: 72
     },
     backtext: {
       type: String,
@@ -17,7 +19,8 @@ const productSchema = new Schema({
     },
     price: {
       type: Number,
-      required: true
+      required: true,
+      max: 9999999999
     },
     image: {
       type: String,
