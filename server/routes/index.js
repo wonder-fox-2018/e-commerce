@@ -19,7 +19,7 @@ router.post('/login', UserController.login);
 
 router.post('/register', UserController.register);
 
-router.post('/register-admin', UserController.registerAdmin);
+
 
 router.get('/item', ItemControler.showAll);
 
