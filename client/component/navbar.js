@@ -13,7 +13,7 @@ Vue.component('navbar-section',{
             
             <div class="fontIconMargin">
                 <div class="row">
-                    <div v-if= "token !== '' && token !== null " class="col-md-3 offset-md-3">
+                    <div v-if= "token !== '' && token !== null && usercredentials.role === 'user' " class="col-md-3 offset-md-3">
                         <a href="#">
                             <i class="fas fa-shopping-cart" data-toggle="modal" data-target="#cartModal">Your Cart</i>
                         </a>
