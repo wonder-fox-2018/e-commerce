@@ -127,7 +127,7 @@ Vue.component('sidebar-section',{
       },
       // get image 
       getimage () {
-        console.log('By Ref------', this.$refs.file.files) 
+        // console.log('By Ref------', this.$refs.file.files) 
         this.imageupload = this.$refs.file.files[0] 
       },
       // create new item 
@@ -137,7 +137,7 @@ Vue.component('sidebar-section',{
          // upload data to GCP first
          let upladdata = new FormData()
          upladdata.append('imagefile',this.imageupload)
-         console.log('Upload access----')
+        //  console.log('Upload access----')
          axios.post('http://localhost:3007/items/uploads', upladdata,
          {
            headers: {
@@ -147,7 +147,7 @@ Vue.component('sidebar-section',{
          })
            .then(uploadresult => {
                self.itemurlimage = uploadresult.data.link
-               console.log('Upload Sukses---', uploadresult.data.link) 
+            //    console.log('Upload Sukses---', uploadresult.data.link) 
 
                // create item
                axios({
@@ -164,7 +164,7 @@ Vue.component('sidebar-section',{
                   }
                })
                 .then(item =>{
-                   console.log('Item created-----', item.data.data) 
+                //    console.log('Item created-----', item.data.data) 
 
                     // get lists of item
                     axios({

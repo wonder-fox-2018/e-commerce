@@ -48,7 +48,7 @@ Vue.component('content-item',{
                                         <div class = "card-body">
                                           <button type="button" class="btn btn-info" >Display</button>
                                           <button v-if= "getislogin === true && getcredentials.role === 'admin' " type="button" class="btn btn-warning" v-on:click="setEditData(item)" data-toggle="modal" data-target="#editItem" >Edit</button>
-                                          <button v-if= "getislogin === true && getcredentials.role === 'admin' " type="button" class="btn btn-danger" >Delete</button>
+                                          <button v-if= "getislogin === true && getcredentials.role === 'admin' " type="button" class="btn btn-danger" v-on:click="deleteitem(item._id)" >Delete</button>
                                         </div>
                                         <hr>
                                         <a v-if="getislogin !== true" data-toggle="modal" data-target="#loginMessage" class="btn btn-primary"><font color="white">Order Now</font></a>
@@ -155,7 +155,8 @@ Vue.component('content-item',{
       itemcategory: '',
       itemurlimage: '',
       itemprice: 0,
-      imageupload: ''
+      imageupload: '',
+      deleteitemid: ''
     }
   },
   methods: {
@@ -170,7 +171,7 @@ Vue.component('content-item',{
     },
     // send data to form edit
     setEditData (val){
-       console.log('EDIT DATA-------',val)
+    //    console.log('EDIT DATA-------',val)
        this.itemname = val.itemname
        this.itemcategory = val.itemcategoryid 
        this.itemurlimage = val.itemurlimage
@@ -179,7 +180,7 @@ Vue.component('content-item',{
     },
     // get image 
     getimage () {
-      console.log('By Ref edit------', this.$refs.file.files) 
+    //   console.log('By Ref edit------', this.$refs.file.files) 
       this.imageupload = this.$refs.file.files[0] 
     },
     // edit item 
@@ -189,7 +190,7 @@ Vue.component('content-item',{
       // upload data to GCP first
       let upladdata = new FormData()
       upladdata.append('imagefile',this.imageupload)
-      console.log('Upload access edit----')
+    //   console.log('Upload access edit----')
       axios.post('http://localhost:3007/items/uploads', upladdata,
         {
           headers: {
@@ -199,7 +200,14 @@ Vue.component('content-item',{
         })
         .then(uploadresult => {
             self.itemurlimage = uploadresult.data.link
-            console.log('Upload Sukses Edit---', uploadresult.data.link) 
+            // console.log('Upload Sukses Edit---', uploadresult.data.link) 
+
+            // Data before Edit
+            console.log('EDIT ID -----',self.itemid)
+            console.log('EDIT Name -----',self.itemname)
+            console.log('EDIT Category ID -----',self.itemcategory)
+            console.log('EDIT Name -----',self.itemurlimage)
+            console.log('EDIT Price -----',self.itemprice)
 
             // create item
             axios({
@@ -216,7 +224,7 @@ Vue.component('content-item',{
                }
             })
              .then(item =>{
-                console.log('Item editted-----', item.data.data) 
+                // console.log('Item editted-----', item.data.data) 
 
                  // get lists of item
                  axios({
@@ -248,6 +256,36 @@ Vue.component('content-item',{
           .catch(error =>{
               console.log('ERROR Upload ',error)
           })
+    },
+    // delete item
+    deleteitem (input) {
+       this.deleteitemid = input 
+       let self = this
+       axios({
+          method: 'DELETE',
+          url: `http://localhost:3007/items/${self.deleteitemid}`,
+          headers: {
+             token: self.gettoken 
+          } 
+       })
+         .then(itemdelete =>{
+            
+            // get all item 
+            axios({
+               method: 'GET',
+               url: `http://localhost:3007/items/lists` 
+            })
+              .then(lists =>{
+                 self.listitems = lists.data.data
+                 self.deleteitemid = ''
+              })
+              .catch(error =>{
+                 console.log('ERROR Get List items after delete ',error)
+              })
+         })
+         .catch(error => {
+            console.log('ERROR Delete item ',error)
+         })
     }
   },
   created (){
@@ -281,6 +319,7 @@ Vue.component('content-item',{
     },
     updatetotalamount(val){
         this.totalamount = val
-    }
+    },
+    deleteitemid(val){}
   }  
 })

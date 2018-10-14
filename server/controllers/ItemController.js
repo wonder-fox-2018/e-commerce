@@ -170,11 +170,11 @@ class ItemController{
         })
          .then(item => {
             let deleteditem = item 
-            Category.findOne({
-                _id: item.itemcategoryid
+            Category.findOneAndUpdate({
+                _id: deleteditem.itemcategoryid
             },{
                 $pull: {
-                    listitemcategory: item._id
+                    listitemcategory: deleteditem._id
                 }
             })
               .then(category => {
@@ -184,7 +184,7 @@ class ItemController{
                     .then(itemdeleted=>{
                         res.status(200).json({
                             msg: 'Item has been deleted',
-                            data: deleteditem
+                            data: itemdeleted
                         })
                     })
                     .catch(error =>{
