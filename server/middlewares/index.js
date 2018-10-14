@@ -27,7 +27,7 @@ module.exports = {
     isAdmin: (req, res, next) => {
         
         User.findById(req.decoded.id).then((user) => {
-            console.log('masuk');
+            
             if (user.admin) {
                 next()
             } else {

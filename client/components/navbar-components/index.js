@@ -202,6 +202,10 @@ Vue.component('navbar-components', {
             </div>
         </div>
     </div>
+
+    <div class="background">
+            New arrival
+    </div>
     
     
     </div>
@@ -388,7 +392,7 @@ Vue.component('navbar-components', {
         },
 
         removeItemFromCart(id) {
-            console.log(id);
+            
             axios({
                 method: 'PATCH',
                 url: `${this.port}cart/${id}`,
@@ -396,7 +400,8 @@ Vue.component('navbar-components', {
                     'access-token': localStorage.getItem('access-token')
                 }
             }).then((result) => {
-                this.$emit('update-cart');
+                
+                this.$emit('update-cart', id);
             }).catch((err) => {
                 console.log(err);
             });
