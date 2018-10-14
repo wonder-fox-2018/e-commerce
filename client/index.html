@@ -29,6 +29,7 @@
                 @islogin='updateIsLogin' @isadmin='updateIsAdmin' @emptycart='emptyCart' @togglebackdrop='toggleBackdrop' @updatecart='updateCart'
             ></side-bar>
 
+            <!-- CONTENT -->
             <div class="row">
                 <div class="col-3"></div>
                 <div class="col-9">
@@ -52,7 +53,10 @@
 
                 </div>
             </div>
+
+            <!-- BACKDROP FOR MODALS -->
             <div id="backdrop" v-if='openBackdrop'></div>
+
         </div>
     </div>
     <script src="./components/sidebar.js"></script>
