@@ -17,7 +17,7 @@ Vue.component('main-content', {
                             <b>Administrator Menu</b>
                             <br>
                             <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edits" @click="editing(item._id)"> Edit </button>
-                            <a class="btn btn-sm btn-primary"> Delete </a>
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#deleteModal" @click="editing(item._id)"> Delete </button>
                             </center>
                         </div>
                     </div>
@@ -78,6 +78,28 @@ Vue.component('main-content', {
             </div>
         </div>
     </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Deletion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <center><b><h3>Are you sure you want to delete this item ?</h3></b></center>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click='deleteItem'>Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     </div>
     `,
     data: function () {
@@ -160,7 +182,6 @@ Vue.component('main-content', {
                 url: `http://localhost:3000/items/edit/${id}`
             })
             .then(result => {
-                console.log('search result',result.data)
                 this.selected = result.data
                 this.sId = result.data._id
                 this.sName = result.data.name
@@ -194,13 +215,26 @@ Vue.component('main-content', {
             }
 
             let self = this
-            
-            console.log('data ready',data)
 
             axios({
                 method: 'PUT',
                 url: `http://localhost:3000/items/update/${self.sId}`,
                 data
+            })
+            .then(response => {
+                self.event = response.data
+                console.log(response.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        },
+        deleteItem : function(){
+            let self = this
+
+            axios({
+                method: 'DELETE',
+                url: `http://localhost:3000/items/delete/${self.sId}`
             })
             .then(response => {
                 self.event = response.data
