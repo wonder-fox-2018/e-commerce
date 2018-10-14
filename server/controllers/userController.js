@@ -18,6 +18,7 @@ class Controller {
             return newUser
         })
         .then(function(newUser) {
+
             newUser.save()
             res.status(200).json({
                 message : 'Signup Success'
@@ -36,9 +37,8 @@ class Controller {
         User.findOne({
             email : req.body.email
         })
-        .then(function(dataUser){
-            
-            let decrypt = bcrypt.compareSync(req.body.password, dataUser.password); // true
+        .then(function(dataUser){            
+            let decrypt = bcrypt.compareSync(req.body.password, dataUser.password);          
             if(decrypt == true){
                 let token = jwt.sign({
                     userId : dataUser._id,
@@ -57,7 +57,6 @@ class Controller {
                     message : 'Invalid password'
                 })
             }
-
         })
         .catch(function(){
             res.status(500).json({

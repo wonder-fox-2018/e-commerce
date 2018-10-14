@@ -91,9 +91,16 @@
                                 </button>
                             </div>
                         </div>
-                        <a class="btn btn-success btn-sm ml-3" data-toggle="modal" data-target="#cartModal">
+                        <!-- CART BUTTON -->
+                        <a class="btn btn-success btn-sm ml-3" data-toggle="modal" data-target="#cartModal" v-if='isLogin === true'>
                             <i class="fa fa-shopping-cart"></i> Carts
                             <span class="badge badge-light">{{cBadge}}</span>
+                        </a>
+                        <a class="btn btn-success btn-sm ml-3" data-toggle="modal" data-target="#loginModal" v-if='isLogin === false'>
+                            <i class="fa fa-sign-in-alt"></i> Login / Register
+                        </a>
+                        <a class="btn btn-success btn-sm ml-3" v-if='isLogin === true' v-on:click="signout">
+                            <i class="fa fa-sign-in-alt"></i> Signout
                         </a>
                     </form>
                 </div>
@@ -133,13 +140,12 @@
 
 
         <div class="container">
-            <main-content @carts-data='cartsData' @carts-badge='cartsBadge'></main-content>
-            
+            <main-content @carts-data='cartsData' @carts-badge='cartsBadge'></main-content>            
         </div>
 
         <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
@@ -181,6 +187,57 @@
                 </div>
             </div>
         </div>
+
+        <div id="loginModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Login / Register</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                            <fieldset>
+                                <div id="legend">
+                                    <legend class="">Login</legend>
+                                </div>    
+                                <div class="control-group">
+                                    <!-- Username -->
+                                    <label class="control-label"  for="username">Username</label>
+                                    <div class="controls">
+                                        <input type="text" id="username" name="username" placeholder="" class="input-xlarge">
+                                    </div>
+                                </div>
+            
+                                <div class="control-group">
+                                    <!-- Password-->
+                                    <label class="control-label" for="password">Password</label>
+                                    <div class="controls">
+                                        <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+                                    </div>
+                                </div>
+                            </fieldset>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="signin">Login</button>
+                    </div>
+            </div>
+        </div>
+
+        
+
+
+
+
+
+
+
+
     </div>
 
     <!-- Optional JavaScript -->
@@ -197,7 +254,8 @@
         el: '#app',
         data: {
             carts: [],
-            cBadge : 0
+            cBadge : 0,
+            isLogin : false
         },
         created: function () {
 
@@ -208,6 +266,12 @@
             },
             cartsBadge :function(value) {
                 this.cBadge = value
+            },
+            signin : function(){
+                this.isLogin = true
+            },
+            signout : function(){
+                this.isLogin = false
             }
         }
     })
