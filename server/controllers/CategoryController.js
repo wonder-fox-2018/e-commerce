@@ -23,22 +23,29 @@ class CategoryController{
 
     // edit category ---> only updating name
     static editCategory(req,res){
-        Category.update({
-            _id: req.params.id
-        },{
-            name: req.body.name
-        })
-          .then(category => {
-            res.status(200).json({
-                msg: 'Category has been updated',
-                data: category
+        // validate name
+        if(req.body.name === '' || req.body.name === null){
+            res.status(500).json({
+               msg: 'Name of category should not be empty'
             })
-          })
-          .catch(error => {
-              res.status(500).json({
-                msg: 'ERROR Category update ',error
-              }) 
-          }) 
+        }else{
+            Category.update({
+                _id: req.params.id
+            },{
+                name: req.body.name
+            })
+            .then(category => {
+                res.status(200).json({
+                    msg: 'Category has been updated',
+                    data: category
+                })
+            })
+            .catch(error => {
+                res.status(500).json({
+                    msg: 'ERROR Category update ',error
+                }) 
+            }) 
+        }
     }
 
     // display detail category

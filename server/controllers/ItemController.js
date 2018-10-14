@@ -78,89 +78,101 @@ class ItemController{
 
     // edit item
     static editItem(req,res){
-        Item.findOne({
-            _id: req.params.id
-        })
-          .then(item => {
-            // check if there's any change in category
-            if(item.itemcategoryid == req.body.itemcategoryid){
-                Item.findOneAndUpdate({
-                    _id: req.params.id
-                },{
-                    itemname: req.body.itemname,
-                    itemcategoryid: req.body.itemcategoryid,
-                    itemurlimage: req.body.itemurlimage,
-                    itemprice: req.body.itemprice
-                })
-                  .then(itemupdated =>{
-                    res.status(200).json({
-                        msg: `Item has been updated`,
-                        data: itemupdated
-                    })
-                  })
-                  .catch(error => {
-                     res.status(500).json({
-                        msg: 'ERROR Edit Items ',error
-                      })            
-                  })
-            }else if(item.itemcategoryid != req.body.itemcategoryid){
-                // remove from old category
-                Category.findOneAndUpdate({
-                    _id: item.itemcategoryid
-                },{
-                    $pull: {
-                        listitemcategory: req.params.id
-                    }
-                })
-                  .then(oldcategory=>{
-                    // updating new category
-                    Category.findOneAndUpdate({
-                        _id:req.body.itemcategoryid
+        // validate Name, Category and urlimage
+        if(req.body.itemname === '' || req.body.itemname === null || req.body.itemcategoryid === '' || req.body.itemcategoryid === null || req.body.itemurlimage === '' || req.body.itemurlimage === null){
+            res.status(400).json({
+               msg: 'Name, Category and Url image should not be empty' 
+            })
+        }else{
+            let price = req.body.itemprice
+            if(price<0){
+               price = 0 
+            }
+
+            Item.findOne({
+                _id: req.params.id
+            })
+            .then(item => {
+                // check if there's any change in category
+                if(item.itemcategoryid == req.body.itemcategoryid){
+                    Item.findOneAndUpdate({
+                        _id: req.params.id
                     },{
-                        $push: {
+                        itemname: req.body.itemname,
+                        itemcategoryid: req.body.itemcategoryid,
+                        itemurlimage: req.body.itemurlimage,
+                        itemprice: price
+                    })
+                    .then(itemupdated =>{
+                        res.status(200).json({
+                            msg: `Item has been updated`,
+                            data: itemupdated
+                        })
+                    })
+                    .catch(error => {
+                        res.status(500).json({
+                            msg: 'ERROR Edit Items ',error
+                        })            
+                    })
+                }else if(item.itemcategoryid != req.body.itemcategoryid){
+                    // remove from old category
+                    Category.findOneAndUpdate({
+                        _id: item.itemcategoryid
+                    },{
+                        $pull: {
                             listitemcategory: req.params.id
                         }
                     })
-                      .then(newcategory =>{
-                          // update the item
-                          Item.findOneAndUpdate({
-                            _id: req.params.id
+                    .then(oldcategory=>{
+                        // updating new category
+                        Category.findOneAndUpdate({
+                            _id:req.body.itemcategoryid
                         },{
-                            itemname: req.body.itemname,
-                            itemcategoryid: req.body.itemcategoryid,
-                            itemurlimage: req.body.itemurlimage,
-                            itemprice: req.body.itemprice
+                            $push: {
+                                listitemcategory: req.params.id
+                            }
                         })
-                          .then(itemupdated =>{
-                            res.status(200).json({
-                                msg: `Item has been updated`,
-                                data: itemupdated
+                        .then(newcategory =>{
+                            // update the item
+                            Item.findOneAndUpdate({
+                                _id: req.params.id
+                            },{
+                                itemname: req.body.itemname,
+                                itemcategoryid: req.body.itemcategoryid,
+                                itemurlimage: req.body.itemurlimage,
+                                itemprice: req.body.itemprice
                             })
-                          })
-                          .catch(error => {
-                             res.status(500).json({
-                                msg: 'ERROR Edit Items ',error
-                              })            
-                          })  
-                      })
-                      .catch(error =>{
+                            .then(itemupdated =>{
+                                res.status(200).json({
+                                    msg: `Item has been updated`,
+                                    data: itemupdated
+                                })
+                            })
+                            .catch(error => {
+                                res.status(500).json({
+                                    msg: 'ERROR Edit Items ',error
+                                })            
+                            })  
+                        })
+                        .catch(error =>{
+                            res.status(500).json({
+                            msg: 'ERROR Updating New Category ',error
+                            })  
+                        })
+                    })
+                    .catch(error =>{
                         res.status(500).json({
-                          msg: 'ERROR Updating New Category ',error
-                        })  
-                      })
-                  })
-                  .catch(error =>{
-                      res.status(500).json({
-                        msg: 'ERROR Updating Old Category ',error
-                      })          
-                  })
-            }
+                            msg: 'ERROR Updating Old Category ',error
+                        })          
+                    })
+                }
           })
           .catch(error => {
             res.status(500).json({
               msg: 'ERROR Edit Items ',error
             })
           })
+        }
     }
 
     // delete item
