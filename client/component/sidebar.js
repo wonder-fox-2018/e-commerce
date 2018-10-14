@@ -168,8 +168,9 @@ Vue.component('sidebar-section',{
       // create new item 
       createitem () {
          let self = this   
+         console.log('ITEM PRICE CREATE------', this.itemprice )
          // validate price
-         if(this.itemprice < 0){
+         if(this.itemprice < 0 || this.itemprice === undefined || this.itemprice === null){
              this.itemprice = 0
          }
 

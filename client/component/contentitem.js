@@ -191,8 +191,9 @@ Vue.component('content-item',{
     // edit item 
     edititem () {
       let self = this
+      console.log('ITEM PRICE EDIT------', this.itemprice )
       // validate price
-      if(this.itemprice < 0){
+      if(this.itemprice < 0 || this.itemprice === undefined || this.itemprice === null || this.itemprice === ''){
         this.itemprice = 0
       }
 

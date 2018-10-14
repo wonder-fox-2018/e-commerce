@@ -54,7 +54,7 @@ Vue.component('navbar-section',{
                         <form>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
+                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail6" aria-describedby="emailHelp" placeholder="Email" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
@@ -86,11 +86,11 @@ Vue.component('navbar-section',{
                         <form>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Name</label>
-                                <input type="text" v-model="username" class="form-control" id="exampleInputName2" aria-describedby="emailHelp" placeholder="Enter email" required>
+                                <input type="text" v-model="username" class="form-control" id="exampleInputName2" aria-describedby="emailHelp" placeholder="Name" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email" required>
+                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail4" aria-describedby="emailHelp" placeholder="Email" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
