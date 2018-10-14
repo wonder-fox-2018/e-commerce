@@ -21,11 +21,13 @@ router.post('/register', UserController.register);
 
 router.get('/item', ItemControler.showAll);
 
-router.post('/category', CategortController.create);
+router.get('/category/:name', ItemControler.findBYCategory);
+
+/* router.post('/category', CategortController.create);
 
 router.put('/category/:id', CategortController.addItem);
 
-router.get('/category/:name', CategortController.showCategory);
+router.get('/category/:name', CategortController.showCategory); */
 
 
 //auth
@@ -59,7 +61,9 @@ router.post('/item/upload',
       message: 'Your file is successfully uploaded',
       link: req.file.cloudStoragePublicUrl
     })
-  })
+  });
+  
+  router.delete('/item/:id', ItemControler.delete);
 
 
 
