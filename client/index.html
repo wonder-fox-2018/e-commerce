@@ -22,9 +22,9 @@
         </div>
         <div v-else>
 
+            <!-- SIDEBAR -->
             <side-bar 
-                :categories='categories' :isadmin='isAdmin' :islogin='isLogin' :items='items' :cart='cart' :totalsum='totalsum' :itemcount='itemcount'
-                :itemsreal='itemsReal' :counts='counts'
+                :categories='categories' :isadmin='isAdmin' :islogin='isLogin' :items='items' :cart='cart' :totalsum='totalsum' :itemcount='itemcount' :itemsreal='itemsReal' :counts='counts'
                 @products='updateProducts' @opentab='updateOpenTab' @getproducts='getProducts' @showph='showPH' @authuser='updateAuthUser' @comparecarts='compareCarts'
                 @islogin='updateIsLogin' @isadmin='updateIsAdmin' @emptycart='emptyCart' @togglebackdrop='toggleBackdrop' @updatecart='updateCart'
             ></side-bar>
@@ -32,43 +32,11 @@
             <div class="row">
                 <div class="col-3"></div>
                 <div class="col-9">
-                    <div class="row mt-4" v-if='openTab === "ph"'>
-                        <div class="row col-12 mb-4" v-for='(transaction, index) in transactions.slice().reverse()'>
-                            <div class="col-1"></div>
-                            <div class="card col-10 px-0">
-                                <div class="card-header row mx-0">
-                                    <h5 class="m-0 p-0 col-6 text-left"><b>Transaction {{ transaction._id }}</b></h5>
-                                    <h5 class="m-0 p-0 col-6 text-right">{{ transaction.date.slice(0, 10) }}</h5>
-                                </div>
-                                <div class="card-body pb-0">
-                                    <div>
-                                        <h6 class="card-title mb-4 row" v-for='(item, index2) in transaction.cart.items'>
-                                            <span class="col-4 text-left">{{ item.name }}</span>
-                                            <span class="col-1 text-right">x</span>
-                                            <span class="col-1 text-left">{{ transaction.cart.counts[index2] }}</span>
-                                            <span class="col-3 text-right">Rp{{ transaction.cart.total[index2] | currencySlice }}</span>
-                                            <span class="col-3 text-center" v-if='item.ratedBy.indexOf(authUserId) !== -1'>
-                                                You rated this
-                                                <i class="fa fa-star gold" v-for='i in item.ratings[item.ratedBy.indexOf(authUserId)]'></i>
-                                                <i class="fa fa-star" v-for='i in (5 - item.ratings[item.ratedBy.indexOf(authUserId)])'></i>
-                                            </span>
-                                            <span class="col-3 text-center" v-else>
-                                                <i class="fa fa-star gold" v-for='i in starColors[transactions.length - index - 1][index2]'  @click='starClick(transactions.length - index - 1, index2, i)'></i>
-                                                <i class="fa fa-star" v-for='i in (5 - starColors[transactions.length - index - 1][index2])' @click='starClick(transactions.length - index - 1, index2, i + starColors[transactions.length - index - 1][index2])'></i>
-                                                <button class="btn ml-2 rateBtn px-2 py-1" @click='rate(transactions.length - index - 1, index2, item._id)'>Rate</button>
-                                            </span>
-                                        </h6>
-                                        <hr>
-                                        <h6 class="card-title row">
-                                            <span class="col-6 text-left"><b>Total</b></span>
-                                            <span class="col-6 text-right"><b>Rp{{ transaction.cart.totalsum | currencySlice }}</b></span>
-                                        </h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1"></div>
-                        </div>
-                    </div>
+
+                    <!-- PURCHASE HISTORY -->
+                    <purchase-history v-if='openTab === "ph"'
+                        :authuserid='authUserId'
+                    ></purchase-history>
 
                     <!-- ADMIN PAGE -->
                     <admin-page v-else-if='openTab === "ap"'
@@ -76,60 +44,21 @@
                         @togglebackdrop='toggleBackdrop' @closebackdrop='closeBackdrop' @getproducts='getProducts' @getcategories='getCategories'
                     ></admin-page>
 
-                    <div class="row" id='products' v-else-if='products.length > 0'>
-                        <div class="containerku col-sm-6 col-md-5 col-lg-3" v-for='product in products'>
-                            <div class="cardku">
-                                <div class="card-head">
-                                    <img :src="product.image" alt="Shoe" class="product-img">
-                                    <div class="product-detail">
-                                        <h2>{{ product.name }}</h2>
-                                        <p>{{ product.description | descSlice }}</p>
-                                    </div>
-                                    <span class="back-text">
-                                        {{ product.backtext }}
-                                    </span>
-                                </div>
-                                <div class="card-bodyku">
-                                    <div class="product-desc">
-                                        <span class="product-title">
-                                            <b>{{ product.name }}</b>
-                                        </span>
-                                        <span class="product-caption">
-                                            {{ product.category.name }}
-                                        </span>
-                                        <span class="product-rating">
-                                            <i class="fa fa-star gold" v-for='i in Math.floor(product.rating)'></i>
-                                            <i class="fa fa-star-half gold" v-for='i in Math.round(product.rating - Math.floor(product.rating))'></i>
-                                            <i class="fa fa-star" v-for='i in (5 - (Math.floor(product.rating) + Math.round(product.rating - Math.floor(product.rating))))'></i>
-                                        </span>
-                                    </div><br>
-                                    <div class="product-properties">
-                                        <span class="product-price">
-                                            IDR<b>{{ product.price | priceSlice }}</b>
-                                        </span>
-                                    </div>
-                                    <div class='atclogo' title="Add to Cart">
-                                        <span>
-                                            <i class="fas fa-cart-plus" v-on:click='addToCart(product)'></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else class="row">
-                        <div class="col text-center" style="margin-top: 5vh">
-                            <i class="fas fa-archive mb-4" style="font-size: 200px; height: 200px; width: 200px"></i>
-                            <h3 class="mt-4">Sorry, but we can't find anything like that</h3>
-                        </div>
-                    </div>
+                    <!-- PRODUCT LIST -->
+                    <product-list v-else
+                        :products='products'
+                        @updatecart='updateCart'
+                    ></product-list>
+
                 </div>
             </div>
             <div id="backdrop" v-if='openBackdrop'></div>
         </div>
     </div>
     <script src="./components/sidebar.js"></script>
+    <script src="./components/purchase-history.js"></script>
     <script src="./components/admin-page.js"></script>
+    <script src="./components/product-list.js"></script>
     <script>
         var app = new Vue({
             el: '#app',
@@ -147,9 +76,7 @@
                 isLogin: false,
                 authUserId: '',
                 isAdmin: false,
-                openTab: 'all',
-                transactions: [],
-                starColors: []
+                openTab: 'all'
             },
             methods: {
                 getCategories() {
@@ -205,35 +132,6 @@
                 },
                 closeBackdrop() {
                     this.openBackdrop = false
-                },
-                addToCart(product) {
-                    this.itemcount ++
-                    let i = this.items.indexOf(product.name)
-                    if (i === -1) {
-                        this.items.push(product.name)
-                        this.cart.push({
-                            name: product.name,
-                            price: product.price,
-                            count: 1,
-                            total: product.price
-                        })
-                        this.totalsum += product.price
-
-                        this.itemsReal.push(product._id)
-                        this.counts.push(1)
-                    } else {
-                        this.cart[i].count ++
-                        this.cart[i].total += product.price
-                        this.totalsum += product.price
-                        this.counts[i] ++
-                    }
-                    
-                    localStorage.setItem('items', JSON.stringify(this.items))
-                    localStorage.setItem('itemsID', JSON.stringify(this.itemsReal))
-                    localStorage.setItem('cart', JSON.stringify(this.cart))
-                    localStorage.setItem('totalsum', this.totalsum)
-
-                    this.updateCart()
                 },
                 updateCart() {
                     axios({
@@ -336,6 +234,7 @@
                         this.updateCart()
 
                         localStorage.setItem('items', JSON.stringify(this.items))
+                        localStorage.setItem('itemsID', JSON.stringify(this.itemsReal))
                         localStorage.setItem('cart', JSON.stringify(this.cart))
                         localStorage.setItem('totalsum', this.totalsum)
                     })
@@ -346,11 +245,13 @@
                 getLocalCart() {
                     let localCart = JSON.parse(localStorage.getItem('cart'))
                     let localItems = JSON.parse(localStorage.getItem('items'))
+                    let localItemsID = JSON.parse(localStorage.getItem('itemsID'))
                     let localTotalSum = JSON.parse(localStorage.getItem('totalsum'))
 
-                    if (localCart && localItems && localTotalSum) {
+                    if (localCart && localItems && localItemsID && localTotalSum) {
                         this.cart = localCart
                         this.items = localItems
+                        this.itemsReal = localItemsID
                         this.totalsum = localTotalSum
 
                         for (let i = 0; i < localCart.length; i++) {
@@ -360,95 +261,6 @@
                 },
                 showPH() {
                     this.openTab = 'ph'
-                    axios({
-                        url: 'http://localhost:3000/users/ph',
-                        headers: {
-                            token: localStorage.getItem('token')
-                        }
-                    })
-                    .then(data => {
-                        this.transactions = data.data
-                        let starColors = []
-                        for (let i = 0; i < data.data.length; i++) {
-                            starColors.push([])
-                            for (let j = 0; j < data.data[i].cart.items.length; j++) {
-                                starColors[i].push(0)
-                            }
-                        }
-                        this.starColors = starColors
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-                },
-                starClick(index, index2, clickedStar) {
-                    this.starColors[index].splice(index2, 1, clickedStar)
-                },
-                rate(index, index2, id) {
-                    let rate = this.starColors[index][index2]
-                    axios({
-                        url: `http://localhost:3000/products/rate/${id}`,
-                        method: 'patch',
-                        headers: {
-                            token: localStorage.getItem('token')
-                        },
-                        data: {
-                            rate: rate
-                        }
-                    })
-                    .then(() => {
-                        this.showPH()
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-                }
-            },
-            filters: {
-                priceSlice(value) {
-                    let str = String(value)
-                    if (str.length > 7) {
-                        return str.slice(0, str.length-6) + 'M'
-                    } else if (str.length > 3) {
-                        return str.slice(0, str.length-3) + 'K'
-                    } else {
-                        return str
-                    }
-                },
-                currencySlice(value) {
-                    let str = String(value)
-                    let reversed = str.split('').reverse()
-                    let counter = 0
-                    for (let i = 1; i < reversed.length; i++) {
-                        if (i % 3 === 0 && i + counter < reversed.length) {
-                            reversed.splice(i + counter, 0, '.')
-                            counter ++
-                        }
-                    }
-                    if (reversed.length > 10) {
-                        if (reversed[reversed.length-5] !== '0') {
-                            return reversed.reverse().join('').slice(0, reversed.length-6) + 'M'
-                        } else {
-                            return reversed.reverse().join('').slice(0, reversed.length-8) + 'M'
-                        }
-                    } else {
-                        return reversed.reverse().join('')
-                    }
-                },
-                descSlice(value) {
-                    let i = value.length / 24
-                    let j = Math.floor(i)
-                    if (i <= 1) {
-                        return value
-                    } else {
-                        let str = []
-                        let rest = value
-                        for (; j >= 0; j--) {
-                            str.push(rest.slice(0, 24))
-                            rest = rest.slice(24)
-                        }
-                        return str.join(' ')
-                    }
                 }
             },
             created() {

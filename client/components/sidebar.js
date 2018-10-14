@@ -299,6 +299,7 @@ Vue.component('side-bar', {
                 this.updateCart()
 
                 localStorage.removeItem('items')
+                localStorage.removeItem('itemsID')
                 localStorage.removeItem('cart')
                 localStorage.removeItem('totalsum')
             })
