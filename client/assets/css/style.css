@@ -1,0 +1,31 @@
+.box-product {
+    margin-right: 5%;
+    margin-left: 5%;
+    padding-top: 50px;
+}
+main {
+    min-height: 900px;
+}
+
+#nav {
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+}
+
+.card {
+    padding: 30px;
+}
+
+#footernih {
+    display: flex;
+    justify-content: center;
+}
+
+.card-img-top {
+    height: 300px;
+}
+
+#tengah{
+    min-height: 1024px;
+}
