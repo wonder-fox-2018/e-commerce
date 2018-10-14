@@ -114,10 +114,11 @@ Vue.component('content-item',{
                     </button>
                     </div>
                     <div class="modal-body">
+                        <div id="erredititem"></div>
                         <form>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Name</label>
-                                <input type="text" v-model="itemname" class="form-control" aria-describedby="emailHelp" placeholder="Enter Item Name">
+                                <input type="text" v-model="itemname" class="form-control" aria-describedby="emailHelp" placeholder="Enter Item Name" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Category</label>
@@ -189,6 +190,26 @@ Vue.component('content-item',{
     // edit item 
     edititem () {
       let self = this
+      // validate price
+      if(this.itemprice < 0){
+        this.itemprice = 0
+      }
+
+      // validate name and category
+      if(this.itemname === '' || this.itemcategory === ''){
+        $('#erredititem').empty()
+        $('#erredititem').append(
+             `<div>
+             <button type="button" class="btn btn-danger">
+                ERROR: Name and or Category should not be empty 
+             </button> 
+             </div>`
+        )
+        setTimeout( ()=>{
+             $('#erredititem').empty()   
+        },3000)
+        return
+     }
 
       // upload data to GCP first
       let upladdata = new FormData()
@@ -247,10 +268,32 @@ Vue.component('content-item',{
                })
                .catch(error =>{
                   console.log('ERROR Edit Item  ', error) 
+                  $('#erredititem').empty()
+                  $('#erredititem').append(
+                      `<div>
+                        <button type="button" class="btn btn-danger">
+                           Name should not be empty 
+                        </button> 
+                      </div>`
+                  )
+                  setTimeout( ()=>{
+                      $('#erredititem').empty()   
+                  },3000)
                })
           })
           .catch(error =>{
-              console.log('ERROR Upload ',error)
+            //   console.log('ERROR Upload Edit ',error.error)
+              $('#erredititem').empty()
+              $('#erredititem').append(
+                `<div>
+                   <button type="button" class="btn btn-danger">
+                     Upload file should be in .jpg, .jpeg or .png 
+                   </button> 
+                 </div>`
+               )
+               setTimeout( ()=>{
+                   $('#erredititem').empty()   
+               },3000)
           })
     },
     // delete item

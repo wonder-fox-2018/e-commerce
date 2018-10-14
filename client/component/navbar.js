@@ -45,14 +45,15 @@ Vue.component('navbar-section',{
                     </button>
                     </div>
                     <div class="modal-body">
+                        <div id="errloginmessage"></div>
                         <form>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
-                                <input type="password" v-model="userpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                <input type="password" v-model="userpassword" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
                             </div>
                         </form>
                         <br/>
@@ -76,18 +77,19 @@ Vue.component('navbar-section',{
                     </button>
                     </div>
                     <div class="modal-body">
+                        <div id="errregistermessage"></div>
                         <form>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Name</label>
-                                <input type="text" v-model="username" class="form-control" id="exampleInputName2" aria-describedby="emailHelp" placeholder="Enter email">
+                                <input type="text" v-model="username" class="form-control" id="exampleInputName2" aria-describedby="emailHelp" placeholder="Enter email" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+                                <input type="email" v-model="useremail" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
-                                <input type="password" v-model="userpassword" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                                <input type="password" v-model="userpassword" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
                             </div>
                         </form>
                         <br/>
@@ -170,11 +172,47 @@ Vue.component('navbar-section',{
             rawArr.forEach(item => {
                 filterArr.push(item._id)
             });
-
             return filterArr
+        },
+        isEmail(val){
+           let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
+           return regex.test(val) 
         },
         loginUser(){
             let self = this
+
+            // validate all field should not be empty
+            if(this.useremail === '' || this.userpassword === ''){
+                $('#errloginmessage').empty()
+                $('#errloginmessage').append(
+                    `<div>
+                    <button type="button" class="btn btn-danger">
+                        Email and password should not be empty 
+                    </button> 
+                    </div>`
+                )
+                setTimeout( ()=>{
+                    $('#errloginmessage').empty()   
+                },3000)
+                return 
+            }
+
+            // validate email
+            if(!this.isEmail(this.useremail)){
+                $('#errloginmessage').empty()
+                $('#errloginmessage').append(
+                    `<div>
+                    <button type="button" class="btn btn-danger">
+                        ERROR: Please Check your email 
+                    </button> 
+                    </div>`
+                )
+                setTimeout( ()=>{
+                    $('#errloginmessage').empty()   
+                },3000)
+                return
+            }
+
             axios({
                method: 'POST',
                url: 'http://localhost:3007/user/login',
@@ -218,6 +256,39 @@ Vue.component('navbar-section',{
          },
          registerUser(){
             let self = this
+
+            // validate all field should not be empty
+            if(this.useremail === '' || this.userpassword === '' || this.username === ''){
+                $('#errregistermessage').empty()
+                $('#errregistermessage').append(
+                    `<div>
+                    <button type="button" class="btn btn-danger">
+                        Name, email and or password should not be empty 
+                    </button> 
+                    </div>`
+                )
+                setTimeout( ()=>{
+                    $('#errregistermessage').empty()   
+                },3000)
+                return 
+            }
+
+            // validate email
+            if(!this.isEmail(this.useremail)){
+                $('#errregistermessage').empty()
+                $('#errregistermessage').append(
+                    `<div>
+                    <button type="button" class="btn btn-danger">
+                        ERROR: Please Check your email 
+                    </button> 
+                    </div>`
+                )
+                setTimeout( ()=>{
+                    $('#errregistermessage').empty()   
+                },3000)
+                return
+            }
+
             axios({
                method: 'POST',
                url: 'http://localhost:3007/user/register',

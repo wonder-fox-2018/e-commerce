@@ -34,12 +34,13 @@ Vue.component('sidebar-section',{
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        </div>
+                        </div>    
                         <div class="modal-body">
+                            <div id="errcreateitem"></div>
                             <form>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Name</label>
-                                    <input type="text" v-model="itemname" class="form-control" aria-describedby="emailHelp" placeholder="Enter Item Name">
+                                    <input type="text" v-model="itemname" class="form-control" aria-describedby="emailHelp" placeholder="Enter Item Name" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Category</label>
@@ -78,10 +79,11 @@ Vue.component('sidebar-section',{
                         </button>
                         </div>
                         <div class="modal-body">
+                            <div id="errcreatecategory"></div>
                             <form>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Name</label>
-                                    <input type="text" v-model="categoryname" class="form-control" aria-describedby="emailHelp" placeholder="Enter Item Name">
+                                    <input type="text" v-model="categoryname" class="form-control" aria-describedby="emailHelp" placeholder="Enter Category Name" required>
                                 </div>
                             </form>
                             <br/>
@@ -166,6 +168,27 @@ Vue.component('sidebar-section',{
       // create new item 
       createitem () {
          let self = this   
+         // validate price
+         if(this.itemprice < 0){
+             this.itemprice = 0
+         }
+
+         // validate name and category
+         if(this.itemname === '' || this.itemcategory === ''){
+            $('#errcreateitem').empty()
+            $('#errcreateitem').append(
+                 `<div>
+                 <button type="button" class="btn btn-danger">
+                    ERROR: Name and or Category should not be empty 
+                 </button> 
+                 </div>`
+            )
+            setTimeout( ()=>{
+                 $('#errcreateitem').empty()   
+            },3000)
+            return
+         }
+
          // upload data to GCP first
          let upladdata = new FormData()
          upladdata.append('imagefile',this.imageupload)
@@ -221,16 +244,55 @@ Vue.component('sidebar-section',{
                      })
                 })
                 .catch(error =>{
-                   console.log('ERROR Create Item  ', error) 
+                   console.log('ERROR Create Item  ', error.response)
+                   $('#errcreateitem').empty()
+                   $('#errcreateitem').append(
+                        `<div>
+                        <button type="button" class="btn btn-danger">
+                            Name and or Category should not be empty 
+                        </button> 
+                        </div>`
+                   )
+                   setTimeout( ()=>{
+                        $('#errcreateitem').empty()   
+                   },3000) 
                 })
            })
            .catch(error =>{
-               console.log('ERROR Upload ',error)
+            //    console.log('ERROR Upload Create ',error.response.data)
+               console.log('ERROR Upload Create ',error)
+               $('#errcreateitem').empty()
+               $('#errcreateitem').append(
+                   `<div>
+                   <button type="button" class="btn btn-danger">
+                       Upload file should be in .jpg, .jpeg or .png 
+                   </button> 
+                   </div>`
+               )
+               setTimeout( ()=>{
+                   $('#errcreateitem').empty()   
+               },3000)
            })
       },
       // create category
       createcategory () {
         let self = this
+
+        // validate name 
+        if(this.categoryname === ''){
+            $('#errcreatecategory').empty()
+            $('#errcreatecategory').append(
+                 `<div>
+                 <button type="button" class="btn btn-danger">
+                    ERROR: Name should not be empty 
+                 </button> 
+                 </div>`
+            )
+            setTimeout( ()=>{
+                 $('#errcreatecategory').empty()   
+            },3000)
+            return
+         }
         axios({
            method: 'POST',
            url: 'http://localhost:3007/categories',
@@ -257,6 +319,17 @@ Vue.component('sidebar-section',{
           })
           .catch(error =>{
              console.log('ERROR Create Category ',error)
+             $('#errcreatecategory').empty()
+             $('#errcreatecategory').append(
+                 `<div>
+                   <button type="button" class="btn btn-danger">
+                     Name should not be empty 
+                   </button> 
+                 </div>`
+             )
+             setTimeout( ()=>{
+               $('#errcreatecategory').empty()   
+             },3000)
           })
       }
     },
