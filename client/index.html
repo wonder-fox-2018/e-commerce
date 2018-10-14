@@ -107,6 +107,11 @@
             </div>
         </nav>
 
+        <div class="alert alert-warning" v-if="failedLogin" @click="failedLoginFalse">
+            <strong>Error!</strong> Invalid username / password.
+            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        </div>
+
         <!-- CAROUSEL -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="margin-bottom: 30px">
             <ol class="carousel-indicators">
@@ -134,10 +139,6 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-
-
-        <!-- APP -->
-
 
         <div class="container">
             <main-content @carts-data='cartsData' @carts-badge='cartsBadge'></main-content>            
@@ -169,7 +170,6 @@
                                     <tr v-for="(cart, index) in carts">
 
                                         <td>{{cart.name}}</td>
-
                                         <td>$ {{cart.price}}</td>
                                         <td>{{cart.qty}}</td>
                                         <td>$ {{cart.totalPrice}}</td>
@@ -249,7 +249,8 @@
             isLogin : false,
             isAdmin : false,
             login_email : '',
-            login_password : ''
+            login_password : '',
+            failedLogin : false
         },
         created: function () {
 
@@ -261,6 +262,10 @@
             cartsBadge :function(value) {
                 this.cBadge = value
             },
+            failedLoginFalse : function(){
+                this.failedLogin = false
+            }
+            ,
             signin : function(){
                 let email = this.login_email
                 let password = this.login_password
@@ -278,11 +283,15 @@
                     data
                 })
                 .then(function (response) {
-                    console.log(response.data)
+                    // console.log(response.data)
                     localStorage.setItem('token', response.data.token)
+                    if(response.data.isAdmin === true){
+                        app.isAdmin = true
+                    }
                     app.isLogin = true
                 })
                 .catch(function (err){
+                    app.failedLogin = true
                     console.log(err.response.data.message)
                 })
             },
