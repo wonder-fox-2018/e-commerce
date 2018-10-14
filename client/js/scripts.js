@@ -1,8 +1,9 @@
-//card
+
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
         console.log('User signed out.');
+        localStorage.clear()
     });
 }
 
@@ -43,20 +44,22 @@ $(document).ready(function () {
 
 //when google signin button clicked
 function onSignIn(googleUser) {
-   
+
     var id_token = googleUser.getAuthResponse().id_token
     $.ajax({
-        type: "POST",
-        url: "http://localhost:3000/login/google",
-        data: {data:id_token},
-    })
-    .done((jwtToken)=>{
-        
-        localStorage.setItem('token',jwtToken.token)
-    })
-    .fail((err)=>{
-        console.log(err)
-    })
+            type: "POST",
+            url: "http://localhost:3000/login/google",
+            data: {
+                data: id_token
+            },
+        })
+        .done((jwtToken) => {
+
+            localStorage.setItem('token', jwtToken.token)
+        })
+        .fail((err) => {
+            console.log(err)
+        })
 }
 
 
@@ -78,12 +81,12 @@ $(document).ready(function () {
     // Just for testing, show all items
     $('.continue').click(function () {
         event.preventDefault();
-        location.href='#article';
+        location.href = '#article';
         cartModal.close()
-            
-        
+
+
     })
-    
+
 
 });
 
@@ -91,23 +94,23 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     var $root = $('html, body');
-    $('.linkto').click(function() {
+    $('.linkto').click(function () {
         var href = $.attr(this, 'href');
-    
+
         $root.animate({
             scrollTop: $(href).offset().top
         }, 500, function () {
             window.location.hash = href;
         });
-    
+
         return false;
     });
 
-    $(function() {
+    $(function () {
         var header = $("header");
-        $(window).scroll(function() {    
+        $(window).scroll(function () {
             var scroll = $(window).scrollTop();
-            
+
             if (scroll >= 80) {
                 header.css("background-image", "linear-gradient(-60deg, #141414, rgba(20,20,20,0.5))");
             } else {
@@ -115,7 +118,5 @@ $(document).ready(function () {
             }
         });
     });
-    
+
 });
-
-

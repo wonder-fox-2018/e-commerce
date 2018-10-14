@@ -8,8 +8,11 @@ var ProductSchema = new Schema({
 	'rating' : Number,
 	'category' : {
 	 	type: Schema.Types.ObjectId,
-	 	ref: 'Category'
+		 ref: 'Category',
+		 autopopulate : true
 	}
 });
 
-module.exports = mongoose.model('Product', ProductSchema);
+ProductSchema.plugin(require('mongoose-autopopulate'))
+
+module.exports = mongoose.model('Product', ProductSchema,'products');

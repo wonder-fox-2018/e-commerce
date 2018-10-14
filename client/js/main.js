@@ -1,6 +1,5 @@
 Vue.component('main-component', {
-    template : `
-    <main id="main">
+    template: `<main id="main">
     <div v-for="item in categories.slice(0,6)" :key="item.id" class="grid cs-style-3">
         <div class="mainCard">
             <figure>
@@ -13,31 +12,29 @@ Vue.component('main-component', {
             </figure>
         </div>
     </div>
-</main>
-    `,
-    data : function(){
+</main>`,
+    data: function () {
         return {
-            categories :[]
+            categories: []
         }
     },
     created() {
 
         this.getCategories()
-            
-        
+
     },
-    methods : { 
-        getCategories(){
+    methods: {
+        getCategories() {
             let self = this
-            
+
             axios.get('http://localhost:3000/categories', {})
-            .then(categories => {
-                this.categories = categories.data
-                this.$emit('clicked-show-categories', self.categories)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+                .then(categories => {
+                    this.categories = categories.data
+                    this.$emit('clicked-show-categories', self.categories)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
 
 
         },
@@ -45,6 +42,6 @@ Vue.component('main-component', {
 
         responAdd(val) {
             this.getCategories()
-          }
+        }
     }
 })

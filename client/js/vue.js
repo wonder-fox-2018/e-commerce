@@ -2,13 +2,18 @@
 let vm = new Vue({
     el: '#app',
     data: {
-
-        products: [],
-        user: {},
-        responAdd : ''
-
+        responAdd: ''
     },
     props: {
+        user: {
+            default: function () {
+                return {
+                    username: 'USER',
+                    role : 'customer'
+                }
+            },
+            type: Object
+        },
         categories: {
             default: function () {
                 return [{
@@ -20,33 +25,49 @@ let vm = new Vue({
         cart: {
             default: function () {
                 return {
+
                     message: 'hello'
                 }
             },
             type: Object
+        },
+        products: {
+            default: function () {
+                return [{
+                    message: 'hello'
+                }]
+            },
+            type: Array
         }
     },
     created: function () {
         this.getProducts()
 
+        if(localStorage.getItem('token')){
+            axios.get(`http://localhost:3000/users/${localStorage.getItem('token')}`, {})
+                .then(user => {
+                    this.user = user.data
+                    this.cart = user.data.cart
+                })
+                .catch(err => {
+                    console.log('no signed in user')
+                })
 
-        axios.get(`http://localhost:3000/users/${localStorage.getItem('token')}`, {})
-            .then(user => {
-                this.user = user.data
-                this.cart = user.data.cart
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        }
 
     },
-  
-
+    mounted() {
+       
+    },
     methods: {
         responAddCategory: function (val) {
             this.responAdd = val
             this.categories.push(val)
-          },
+        },
+        responAddProduct: function (val) {
+            this.responAdd = val
+            this.getProducts()
+        },
         getProducts() {
             axios.get('http://localhost:3000/products', {})
                 .then(products => {
@@ -56,13 +77,9 @@ let vm = new Vue({
                     console.log(err)
                 })
         },
-        saveCart: function () {
-
-        },
         showCategories: function (categoriess) {
             this.categories = categoriess
         },
-
         addToCart: function (value) {
 
             let index = this.cart.cartcontent.findIndex(cartObj => {
@@ -82,32 +99,15 @@ let vm = new Vue({
             } else {
                 this.cart.cartcontent[index].qty += 1
             }
-            // this.saveCart()
-        },
 
+        },
         deleteFromCart: function (productId) {
             let index = this.cart.cartcontent.findIndex(cartItem => {
                 return cartItem.Product.id == productId
             })
             this.cart.cartcontent.splice(index, 1)
         },
-        totalCart: function () {
 
-        },
-        totalPrice: function (amount, price) {
-
-        },
-
-        goCheckout: function () {
-
-        }
-    },
-    // watch: {
-
-    //     cart : function(){
-
-    //     }
-
-    // },
+    }
 
 })

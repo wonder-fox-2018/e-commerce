@@ -8,8 +8,11 @@ var UserSchema = new Schema({
 	'role' : String,
 	'cart' : {
 	 	type: Schema.Types.ObjectId,
-	 	ref: 'Cart'
+		 ref: 'Cart',
+		 autopopulate: true
 	}
 });
 
-module.exports = mongoose.model('User', UserSchema);
+UserSchema.plugin(require('mongoose-autopopulate'))
+
+module.exports = mongoose.model('User', UserSchema, 'users');

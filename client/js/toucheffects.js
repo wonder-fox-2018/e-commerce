@@ -1,13 +1,13 @@
 /** Used Only For Touch Devices **/
-( function( window ) {
-	
+(function (window) {
+
 	// for touch devices: add class cs-hover to the figures when touching the items
-	if( Modernizr.touch ) {
+	if (Modernizr.touch) {
 
 		// classie.js https://github.com/desandro/classie/blob/master/classie.js
 		// class helper functions from bonzo https://github.com/ded/bonzo
 
-		function classReg( className ) {
+		function classReg(className) {
 			return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
 		}
 
@@ -15,34 +15,33 @@
 		// altho to be fair, the api sucks because it won't accept multiple classes at once
 		var hasClass, addClass, removeClass;
 
-		if ( 'classList' in document.documentElement ) {
-			hasClass = function( elem, c ) {
-				return elem.classList.contains( c );
+		if ('classList' in document.documentElement) {
+			hasClass = function (elem, c) {
+				return elem.classList.contains(c);
 			};
-			addClass = function( elem, c ) {
-				elem.classList.add( c );
+			addClass = function (elem, c) {
+				elem.classList.add(c);
 			};
-			removeClass = function( elem, c ) {
-				elem.classList.remove( c );
+			removeClass = function (elem, c) {
+				elem.classList.remove(c);
 			};
-		}
-		else {
-			hasClass = function( elem, c ) {
-				return classReg( c ).test( elem.className );
+		} else {
+			hasClass = function (elem, c) {
+				return classReg(c).test(elem.className);
 			};
-			addClass = function( elem, c ) {
-				if ( !hasClass( elem, c ) ) {
-						elem.className = elem.className + ' ' + c;
+			addClass = function (elem, c) {
+				if (!hasClass(elem, c)) {
+					elem.className = elem.className + ' ' + c;
 				}
 			};
-			removeClass = function( elem, c ) {
-				elem.className = elem.className.replace( classReg( c ), ' ' );
+			removeClass = function (elem, c) {
+				elem.className = elem.className.replace(classReg(c), ' ');
 			};
 		}
 
-		function toggleClass( elem, c ) {
-			var fn = hasClass( elem, c ) ? removeClass : addClass;
-			fn( elem, c );
+		function toggleClass(elem, c) {
+			var fn = hasClass(elem, c) ? removeClass : addClass;
+			fn(elem, c);
 		}
 
 		var classie = {
@@ -59,23 +58,23 @@
 		};
 
 		// transport
-		if ( typeof define === 'function' && define.amd ) {
+		if (typeof define === 'function' && define.amd) {
 			// AMD
-			define( classie );
+			define(classie);
 		} else {
 			// browser global
 			window.classie = classie;
 		}
 
-		[].slice.call( document.querySelectorAll( 'ul.grid > li > figure' ) ).forEach( function( el, i ) {
-			el.querySelector( 'figcaption > a' ).addEventListener( 'touchstart', function(e) {
+		[].slice.call(document.querySelectorAll('ul.grid > li > figure')).forEach(function (el, i) {
+			el.querySelector('figcaption > a').addEventListener('touchstart', function (e) {
 				e.stopPropagation();
-			}, false );
-			el.addEventListener( 'touchstart', function(e) {
-				classie.toggle( this, 'cs-hover' );
-			}, false );
-		} );
+			}, false);
+			el.addEventListener('touchstart', function (e) {
+				classie.toggle(this, 'cs-hover');
+			}, false);
+		});
 
 	}
 
-})( window );
+})(window);

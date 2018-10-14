@@ -47,12 +47,13 @@ module.exports = {
      * ProductController.create()
      */
     create: function (req, res) {
+        console.log(req.body)
         var Product = new ProductModel({
 			productName : req.body.productName,
 			productDec : req.body.productDec,
 			price : req.body.price,
-			rating : req.body.rating,
-			category : req.body.category
+			rating : req.body.rating ? req.body.rating : 3,
+			category : req.body.category ? req.body.category : undefined
 
         });
 

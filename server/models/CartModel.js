@@ -1,11 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var deepPopulate = require('mongoose-deep-populate')(mongoose)
 var CartSchema = new Schema({
 	'cartcontent': [{
 		Product: {
-			type: Schema.Types.ObjectId,
-			ref: 'Product'
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Product',
+			autopopulate: true
 		},
 		qty : Number
 	}],
@@ -16,4 +17,6 @@ var CartSchema = new Schema({
 	'status': Boolean
 });
 
-module.exports = mongoose.model('Cart', CartSchema);
+CartSchema.plugin(require('mongoose-autopopulate'))
+
+module.exports = mongoose.model('Cart', CartSchema,'carts');

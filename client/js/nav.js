@@ -12,9 +12,9 @@ Vue.component('nav-component', {
     
     `,
     props : ['categories'],
-    methods : {
-        responAdd(val) {
-            this.categories.push(val)
-          }
-    }
+    // methods : {
+    //     responAdd(val) {
+    //         this.categories.push(val)
+    //       }
+    // }
 })

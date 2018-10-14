@@ -403,8 +403,8 @@ a.remove:hover {
 
 /* TOTAL AND CHECKOUT  */
 .subtotal {
-    float: right;
-    width: 35%;
+    /* float: right; */
+    /* width: 35%; */
 }
 
 .subtotal .totalRow {

@@ -1,7 +1,5 @@
 Vue.component('aside-component', {
-    template : `
-    
-    <aside>
+    template : `<aside>
     <div class="post-module">
         <!-- Thumbnail-->
         <div class="thumbnail">
@@ -22,6 +20,5 @@ Vue.component('aside-component', {
                 <span class="comments"><i class="fa fa-comments"></i><a href="#"> 39 comments</a></span></div>
         </div>
     </div>
-</aside>
-    `
+</aside>`
 })

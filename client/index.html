@@ -32,15 +32,15 @@
         <div id="container">
             <div class="se-pre-con"></div>
 
-            <header-component></header-component>
+            <header-component :user='user'></header-component>
 
-            <section-component @respon-add-category='responAddCategory'></section-component>
+            <section-component :user='user' @respon-add-category='responAddCategory' @respon-add-product='responAddProduct' :responAdd="responAdd"></section-component>
 
             <main-component :categories="categories" @clicked-show-categories='showCategories' :responAdd="responAdd"></main-component>
 
             <nav-component :categories="categories" :responAdd="responAdd"></nav-component>
 
-            <article-component id="article" :cart='cart' @addtocart="addToCart"  ></article-component>
+            <article-component id="article" :cart='cart' :products="products" @addtocart="addToCart" :responAdd="responAdd" ></article-component>
 
             <aside-component></aside-component>
 

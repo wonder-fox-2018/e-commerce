@@ -2,7 +2,7 @@ Vue.component('section-component', {
     template: `<section>
     <img src="https://picsum.photos/1200/400/?random" alt="">
 
-    <div id="admincontainer">
+    <div id="admincontainer" v-if="user.role == 'admin'">
         <div class="admin-box">
             <div>
                 <h1>Add Category</h1>
@@ -31,6 +31,7 @@ Vue.component('section-component', {
     </div>
 
 </section>`,
+    props : ['user'],
     data: function () {
         return {
             categoryName: '',
@@ -48,29 +49,53 @@ Vue.component('section-component', {
     methods: {
         addCategory: function () {
             axios({
-                method: 'post',
-                url: 'http://localhost:3000/categories/',
-                data: {
-                    categoryName: this.categoryName,
-                    description: this.description,
-                    Products: this.products
-                },
-                headers: {
-                    token: localStorage.getItem('token')
-                },
+                    method: 'post',
+                    url: 'http://localhost:3000/categories/',
+                    data: {
+                        categoryName: this.categoryName,
+                        description: this.description,
+                        Products: this.products
+                    },
+                    headers: {
+                        token: localStorage.getItem('token')
+                    },
 
-            })
-            .then((result) => {
-                this.categoryName = '',
-                this.description = '',
-                this.products = '',
-                this.$emit('respon-add-category', result.data)
-            }).catch((err) => {
-                console.log(err)
-            });
+                })
+                .then((result) => {
+                    this.categoryName = '',
+                        this.description = '',
+                        this.products = '',
+                        this.$emit('respon-add-category', result.data)
+                }).catch((err) => {
+                    console.log(err)
+                });
         },
         addProduct: function () {
+            axios({
+                    method: 'post',
+                    url: 'http://localhost:3000/products/',
+                    data: {
+                        productName: this.productName,
+                        productDec: this.productDec,
+                        price: this.price,
+                        rating: this.addProductRating,
+                        category: this.addProductCategory
+                    },
+                    headers: {
+                        token: localStorage.getItem('token')
+                    },
 
+                })
+                .then((result) => {
+                        this.productName ='',
+                        this.productDec='',
+                        this.price='',
+                        this.rating='',
+                        this.category='',
+                        this.$emit('respon-add-product', result.data)
+                }).catch((err) => {
+                    console.log(err)
+                });
         }
     }
 })

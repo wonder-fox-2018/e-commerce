@@ -1,26 +1,52 @@
 Vue.component('signup-component', {
-    template : `
-    <div id="login-box" style="display:none;">
-                <div class="left">
-                    <h1>Sign up</h1>
+    template: `<div id="login-box" style="display:none;">
+    <div class="left">
+        <h1>Sign up</h1>
 
-                    <input type="text" id="registerUsername" name="username" placeholder="Username" />
-                    <input type="text" id="registerEmail" name="email" placeholder="E-mail" />
-                    <input type="password" id="registerPassword" name="password" placeholder="Password" />
-                    <input type="password" name="password2" placeholder="Retype password" />
+        <input type="text" id="registerUsername" v-model="username" placeholder="Username" />
+        <input type="text" id="registerEmail" v-model="email" placeholder="E-mail" />
+        <input type="password" id="registerPassword" v-model="password" placeholder="Password" />
+        <input type="test" id="role" v-model="role" placeholder="Password" />
 
-                    <input type="submit" name="signup_submit" value="Sign me up" />
-                </div>
+        <input type="submit" @click="register" name="registerSubmit" value="Sign Me Up" />
+    </div>
 
-                <div class="right">
-                    <span class="loginwith">Sign in with<br />social network</span>
+    <div class="right">
+        <span class="loginwith">Sign in with<br />social network</span>
+        <button class="social-signin google">Log in with Google+</button>
+    </div>
+    <div class="or">OR</div>
+</div>`,
 
-                    <button class="social-signin facebook">Log in with facebook</button>
-                    <button class="social-signin twitter">Log in with Twitter</button>
-                    <button class="social-signin google">Log in with Google+</button>
-                </div>
-                <div class="or">OR</div>
-            </div>
-    
-    `
+    data: function () {
+        return {
+            username: '',
+            email: '',
+            password: '',
+            role: '',
+        }
+
+    },
+    methods: {
+        register: function () {
+            axios({
+                    method: 'post',
+                    url: 'http://localhost:3000/users/',
+                    data: {
+                        username: this.username,
+                        email: this.email,
+                        password: this.password,
+                        role: this.role ? this.role : 'customer' 
+                    }
+                })
+                .then((jwtToken) => {
+                    console.log(jwtToken)
+                    localStorage.setItem('token', jwtToken.data.token)
+                }).catch((err) => {
+                    console.log(err)
+                });
+        }
+    }
+
+
 })
