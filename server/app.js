@@ -14,19 +14,23 @@ const routes   = require('./routes')
 const userRoutes = require('./routes/users')
 const categoryRoutes = require('./routes/categories')
 const itemRoutes = require('./routes/items')
-app.use('/', routes)
-app.use('/users',userRoutes)
-app.use('/categories',categoryRoutes)
-app.use('/items',itemRoutes)
 
 //DATABASE
 const mongoose = require('mongoose')
-mongoose.connect(process.env.MY_LOCAL_MONGODB, { useNewUrlParser: true });
+// mongoose.connect(process.env.MY_LOCAL_MONGODB, { useNewUrlParser: true });
+mongoose.connect(process.env.MY_MLAB_MONGODB, { 
+    useNewUrlParser: true 
+});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo failed to connect:'));
 db.once('open', function() {
   console.log('mongo connected')
 });
+
+app.use('/', routes)
+app.use('/users',userRoutes)
+app.use('/categories',categoryRoutes)
+app.use('/items',itemRoutes)
 
 //PORT
 const port = 3000

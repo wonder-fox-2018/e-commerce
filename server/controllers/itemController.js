@@ -33,6 +33,10 @@ class Controller {
                 })
             })
     }
+
+    static update(req,res){
+        
+    }
 }
 
 module.exports = Controller;
