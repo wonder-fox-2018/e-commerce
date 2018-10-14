@@ -12,8 +12,8 @@ const TransactionRoutes = require('./routes/TransactionRoutes')
 const CategoryRoutes = require('./routes/CategoryRoutes')
 const app = express()
 
-mongoose.connect('mongodb://localhost:27017/ecosmeticsdb', {useNewUrlParser: true});
-
+// mongoose.connect('mongodb://localhost:27017/ecosmeticsdb', {useNewUrlParser: true});
+mongoose.connect(process.env.MONGO_USER, {useNewUrlParser: true})
 
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
