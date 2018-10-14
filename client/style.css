@@ -173,7 +173,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: -5px;
     opacity: 0.1;
     margin-bottom: 7.5px;
-    align-self:flex-end
+    align-self:flex-end;
+    text-transform: uppercase;
 }
 
 .card-bodyku {
@@ -350,7 +351,7 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Roboto', sans-serif;
     color: rgba(0, 0, 0, 0.5);
 }
-#redhalf #signinform input, #redhalf #signupform #newname {
+#redhalf #signupform #newname {
     color: #fa782e;
 }
 #whitehalf {
@@ -460,9 +461,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .adminmenu {
-    height: 350px !important;
-    max-width: 275px !important;
-    min-width: 275px !important;
+    height: 100px !important;
+    max-width: 400px !important;
+    min-width: 400px !important;
     background: white;
     border: solid 5px;
     border-color: #fa782e;
@@ -472,16 +473,25 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 50px;
     display: flex;
     cursor: pointer;
-    margin-bottom: 100px;
+    margin: 25px 0px;
+}
+
+.adminmenu:hover {
+    color: white;
+    background: #fa782e;
+    background: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
+    border: none;
 }
 
 .adminmenu div {
     margin: auto;
-    font-size: 50px;
+    font-size: 25px;
 }
 
-.adminmenu div h3 {
-    padding-top: 25px;
+.adminmenu div h4 {
+    padding-top: 10px;
 }
 
 .adminpromote {
@@ -507,4 +517,83 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
     height: 50px;
     width: 400px;
+}
+
+.categorymodal, .productmodal {
+    position: fixed;
+    display: flex;
+    width: 30vw;
+    background: white;
+    left: 35vw;
+    z-index: 11000;
+    justify-content: center;
+    border: transparent;
+    border-radius: 2vw 2vw 2vw 2vw;
+}
+
+#addcategorymodal {
+    min-height: 30vh;
+    top: 35vh;
+}
+
+#addproductmodal {
+    min-height: 40vh;
+    top: 30vh;
+}
+
+#editcategorymodal {
+    min-height: 35vh;
+    top: 32.5vh;
+}
+
+#editproductmodal {
+    min-height: 45vh;
+    top: 22.5vh;
+}
+
+#deletecategorymodal {
+    min-height: 15vh;
+    top: 32.5vh;
+}
+
+#deleteproductmodal {
+    min-height: 15vh;
+    top: 32.5vh;
+}
+
+#deletecategoryconfirm {
+    min-height: 25vh;
+    top: 32.5vh;
+}
+
+#deleteproductconfirm {
+    min-height: 25vh;
+    top: 32.5vh;
+}
+
+#addCForm, #editCForm, #deleteCForm, #addPForm, #editPForm, #deletePForm {
+    margin: auto;
+    width: 80%;
+}
+
+#addCForm input, #editCForm input, #addPForm input, #editPForm input {
+    width: 100%;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    border: none;
+    display: block;
+    font-family: 'Roboto', sans-serif;
+}
+
+.adminModalBtn {
+    color: white;
+    background: #fa782e;
+    background: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
+}
+
+#editCForm select, #deleteCForm select, #addPForm select, #editPForm select, #deletePForm select {
+    width: 100%;
 }

@@ -29,7 +29,7 @@
                 </ul>
                 <ul class="mt-4" id='bottommenu'>
                     <li v-if='isAdmin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="showAP()"><i class="fab fa-asymmetrik mx-4"></i><span class="menutext ml-2 mt-1">Admin Page</span></li>
-                    <li v-if='isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="showPH()"><i class="fas fa-history mx-4"></i><span class="menutext ml-2 mt-1">Purchase History</span></li>
+                    <li v-if='isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="showPH()"><i class="fas fa-shoe-prints mx-4"></i><span class="menutext ml-2 mt-1">Purchase History</span></li>
                     <li v-if='!isLogin' v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signModal()"><i class="fas fa-sign-in-alt mx-4"></i><span class="menutext ml-2 mt-1">Sign In / Register</span></li>
                     <li v-else v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="signout()"><i class="fas fa-sign-out-alt mx-4"></i><span class="menutext ml-2 mt-1">Sign Out</span></li>
                     <li v-on:mouseover='menuHover()' v-on:mouseleave='menuLeave()' v-on:click="cartModal()"><i class="fas fa-shopping-cart mx-4"></i><span class="menutext ml-2 mt-1">My Cart ( {{ itemcount }} )</span></li>
@@ -79,29 +79,85 @@
                     </div>
                     <div class="row" id='ap' v-else-if='openTab === "ap"'>
                         <div class="col-11">
-                            <div class="adminmenugroup row">
-                                <div class="col-sm-6 col-md-3 text-center adminmenu">
-                                    <div>
-                                        <i class="fas fa-plus"></i>
-                                        <h3>Add New Product</h3>
+                            <div class="row">
+                                <div class="row border-bottom adminmenugroup">
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu" @click='addProModal'>
+                                        <div>
+                                            <i class="fas fa-plus"></i>
+                                            <h4>Add New Product</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu" @click='editProModal'>
+                                        <div>
+                                            <i class="fas fa-edit"></i>
+                                            <h4>Edit A Product</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu" @click='deleteProModal'>
+                                        <div>
+                                            <i class="fas fa-trash"></i>
+                                            <h4>Delete A Product</h4>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-3 text-center adminmenu">
-                                    <div>
-                                        <i class="fas fa-plus"></i>
-                                        <h3>Add New Category</h3>
+                                <div class="row border-bottom adminmenugroup">
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu" @click='addCatModal'>
+                                        <div>
+                                            <i class="fas fa-plus"></i>
+                                            <h4>Add New Category</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu" @click='editCatModal'>
+                                        <div>
+                                            <i class="fas fa-edit"></i>
+                                            <h4>Edit A Category</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu" @click='deleteCatModal'>
+                                        <div>
+                                            <i class="fas fa-trash"></i>
+                                            <h4>Delete A Category</h4>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-3 text-center adminmenu">
-                                    <div>
-                                        <i class="fas fa-plus"></i>
-                                        <h3>Add New User</h3>
+                                <div class="row border-bottom adminmenugroup">
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu">
+                                        <div>
+                                            <i class="fas fa-plus"></i>
+                                            <h4>Add New User</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu">
+                                        <div>
+                                            <i class="fas fa-edit"></i>
+                                            <h4>Edit A User</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu">
+                                        <div>
+                                            <i class="fas fa-trash"></i>
+                                            <h4>Delete A User</h4>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-3 text-center adminmenu">
-                                    <div>
-                                        <i class="fas fa-plus"></i>
-                                        <h3>Add New Coupon</h3>
+                                <div class="row border-bottom adminmenugroup">
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu">
+                                        <div>
+                                            <i class="fas fa-plus"></i>
+                                            <h4>Add New Promo</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu">
+                                        <div>
+                                            <i class="fas fa-edit"></i>
+                                            <h4>Edit A Promo</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 text-center adminmenu">
+                                        <div>
+                                            <i class="fas fa-trash"></i>
+                                            <h4>Delete A Promo</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -112,6 +168,7 @@
                                     <button class='btn' id='promoteBtn'>Promote</button>
                                 </div>
                             </div>
+
                         </div>
                         <div class="col-1"></div>
                     </div>
@@ -242,6 +299,131 @@
                     </div>
                 </div>
             </div>
+            <div id='categorymodals'>
+                <div class='categorymodal' id='addcategorymodal' v-if='addCategoryModal'>
+                    <div id='addCForm'>
+                        <input type="text" placeholder="Name" v-model='newCatName'><br>
+                        <input type="text" placeholder="Icon class *" v-model='newCatIcon'><br>
+                        <h6><i>* please refer to <a target='_blank' href='https://fontawesome.com'>FontAwesome</a> or <a target="_blank" href="https://gotdibbs.github.io/Font-Awesome-Extended/">FontAwesomeExtended</a></a></i></h6><br>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <button class="btn adminModalBtn col-5 mr-2" @click='addCategory'>Add Category</button>
+                            <button class="btn adminModalBtn col-5 ml-2" @click='addCatModal'><i class="far fa-times-circle"></i></button>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='categorymodal' id='editcategorymodal' v-if='editCategoryModal'>
+                    <div id='editCForm'>
+                        <select v-model="selectedCat" @change='selectedC'>
+                            <option disabled value="">Please choose a category to be edited</option>
+                            <option v-for='(category, index) in categories'>{{ category.name }}</option>
+                        </select><br><br>
+                        <input type="text" placeholder="Name" v-model='newCatName'><br>
+                        <input type="text" placeholder="Icon class *" v-model='newCatIcon'><br>
+                        <h6><i>* please refer to <a target='_blank' href='https://fontawesome.com'>FontAwesome</a> or <a target="_blank" href="https://gotdibbs.github.io/Font-Awesome-Extended/">FontAwesomeExtended</a></a></i></h6><br>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <button class="btn adminModalBtn col-5 mr-2" @click='editCategory'>Edit Category</button>
+                            <button class="btn adminModalBtn col-5 ml-2" @click='editCatModal'><i class="far fa-times-circle"></i></button>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='categorymodal' id='deletecategorymodal' v-if='deleteCategoryModal'>
+                    <div id='deleteCForm'>
+                        <select v-model="selectedCat">
+                            <option disabled value="">Please choose a category to be deleted</option>
+                            <option v-for='(category, index) in categories'>{{ category.name }}</option>
+                        </select><br><br>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <button class="btn adminModalBtn col-5 mr-2" @click='deleteCategory'>Delete Category</button>
+                            <button class="btn adminModalBtn col-5 ml-2" @click='deleteCatModal'><i class="far fa-times-circle"></i></button>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='categorymodal' id='deletecategoryconfirm' v-if='deleteCategoryConfirm'>
+                    <div id='deleteCForm'>
+                        <h3 class="text-center">Are you sure?</h3><br>
+                        <h6 class="text-center">Deleting a category will permanently delete every item inside the category</h6><br>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <button class="btn adminModalBtn col-5 mr-2" @click='deleteCategory'>Delete Category</button>
+                            <button class="btn adminModalBtn col-5 ml-2" @click='deleteCatModal'><i class="far fa-times-circle"></i></button>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id='productmodals'>
+                <div class='productmodal' id='addproductmodal' v-if='addProductModal'>
+                    <div id='addPForm'>
+                        <input type="text" placeholder="Name" v-model='newProName'><br>
+                        <input type="text" placeholder="Description" v-model='newProDesc'><br>
+                        <input type="text" placeholder="Backtext (max. 4 characters)" v-model='newProBT'><br>
+                        <input type="text" placeholder="Price (has to be number)" v-model='newProPrice'><br>
+                        <select v-model="newProCat">
+                            <option disabled value="">Please choose a category</option>
+                            <option v-for='(category, index) in categories'>{{ category.name }}</option>
+                        </select><br><br>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <button class="btn adminModalBtn col-5 mr-2" @click='addProduct'>Add Product</button>
+                            <button class="btn adminModalBtn col-5 ml-2" @click='addProModal'><i class="far fa-times-circle"></i></button>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='productmodal' id='editproductmodal' v-if='editProductModal'>
+                    <div id='editPForm'>
+                        <select v-model="selectedPro" @change='selectedP'>
+                            <option disabled value="">Please choose a product to be edited</option>
+                            <option v-for='product in products'>{{ product.name }}</option>
+                        </select><br><br>
+                        <input type="text" placeholder="Name" v-model='newProName'><br>
+                        <input type="text" placeholder="Description" v-model='newProDesc'><br>
+                        <input type="text" placeholder="Backtext" v-model='newProBT'><br>
+                        <input type="text" placeholder="Price (in IDR)" v-model='newProPrice'><br>
+                        <select v-model="newProCat">
+                            <option disabled value="">Please choose a category</option>
+                            <option v-for='(category, index) in categories'>{{ category.name }}</option>
+                        </select><br><br>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <button class="btn adminModalBtn col-5 mr-2" @click='editProduct'>Edit Product</button>
+                            <button class="btn adminModalBtn col-5 ml-2" @click='editProModal'><i class="far fa-times-circle"></i></button>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='productmodal' id='deleteproductmodal' v-if='deleteProductModal'>
+                    <div id='deletePForm'>
+                        <select v-model="selectedPro">
+                            <option disabled value="">Please choose a product to be deleted</option>
+                            <option v-for='product in products'>{{ product.name }}</option>
+                        </select><br><br>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <button class="btn adminModalBtn col-5 mr-2" @click='deleteProduct'>Delete Product</button>
+                            <button class="btn adminModalBtn col-5 ml-2" @click='deleteProModal'><i class="far fa-times-circle"></i></button>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='productmodal' id='deleteproductconfirm' v-if='deleteProductConfirm'>
+                    <div id='deleteCForm'>
+                        <h3 class="text-center">Are you sure?</h3><br>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <button class="btn adminModalBtn col-5 mr-2" @click='deleteProduct'>Delete Product</button>
+                            <button class="btn adminModalBtn col-5 ml-2" @click='deleteProModal'><i class="far fa-times-circle"></i></button>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
@@ -259,6 +441,14 @@
                 openBackdrop: false,
                 openSignModal: false,
                 openCartModal: false,
+                addCategoryModal: false,
+                editCategoryModal: false,
+                deleteCategoryModal: false,
+                deleteCategoryConfirm: false,
+                addProductModal: false,
+                editProductModal: false,
+                deleteProductModal: false,
+                deleteProductConfirm: false,
                 isSigningIn: true,
                 notice: '',
                 menuhover: false,
@@ -281,7 +471,16 @@
                 keyword: '',
                 openTab: 'all',
                 transactions: [],
-                starColors: []
+                starColors: [],
+                newCatName: '',
+                newCatIcon: '',
+                newProName: '',
+                newProDesc: '',
+                newProBT: '',
+                newProPrice: '',
+                newProCat: '',
+                selectedCat: '',
+                selectedPro: ''
             },
             methods: {
                 getCategory() {
@@ -300,8 +499,8 @@
                         url: 'http://localhost:3000/products'
                     })
                     .then(data => {
+                        this.products = data.data
                         if (!stop) {
-                            this.products = data.data
                             this.openTab = 'all'
                         }
                     })
@@ -494,7 +693,6 @@
                             this.isLogin = true
                             this.authUserId = data.data.id
                             this.isAdmin = data.data.isAdmin
-                            console.log(data.data.isAdmin)
                             this.compareCarts()
                         }
                     })
@@ -725,7 +923,244 @@
                     })
                 },
                 showAP() {
+                    this.getProducts(true)
                     this.openTab = 'ap'
+                },
+                addCatModal() {
+                    this.addCategoryModal = !this.addCategoryModal
+                    this.openBackdrop = !this.openBackdrop
+                    this.newCatName = ''
+                    this.newCatIcon = ''
+                },
+                editCatModal() {
+                    this.editCategoryModal = !this.editCategoryModal
+                    this.openBackdrop = !this.openBackdrop
+                    this.selectedCat = ''
+                    this.newCatName = ''
+                    this.newCatIcon = ''
+                },
+                deleteCatModal() {
+                    if (this.deleteCategoryConfirm) {
+                        this.deleteCategoryConfirm = false
+                        this.deleteCategoryModal = true
+                    } else {
+                        this.deleteCategoryModal = !this.deleteCategoryModal
+                        this.openBackdrop = !this.openBackdrop
+                        this.selectedCat = ''
+                        this.newCatName = ''
+                        this.newCatIcon = ''
+                    }
+                },
+                addProModal() {
+                    this.addProductModal = !this.addProductModal
+                    this.openBackdrop = !this.openBackdrop
+                    this.newProName = ''
+                    this.newProDesc = ''
+                    this.newProBT = ''
+                    this.newProPrice = ''
+                    this.newProCat = ''
+                },
+                editProModal() {
+                    this.editProductModal = !this.editProductModal
+                    this.openBackdrop = !this.openBackdrop
+                    this.selectedPro = ''
+                    this.newProName = ''
+                    this.newProDesc = ''
+                    this.newProBT = ''
+                    this.newProPrice = ''
+                    this.newProCat = ''
+                },
+                deleteProModal() {
+                    if (this.deleteProductConfirm) {
+                        this.deleteProductConfirm = false
+                        this.deleteProductModal = true
+                    } else {
+                        this.deleteProductModal = !this.deleteProductModal
+                        this.openBackdrop = !this.openBackdrop
+                        this.selectedPro = ''
+                        this.newProName = ''
+                    }
+                },
+                addCategory() {
+                    if (this.newCatName && this.newCatIcon) {
+                        axios({
+                            url: 'http://localhost:3000/categories',
+                            method: 'post',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            },
+                            data: {
+                                name: this.newCatName,
+                                icon: this.newCatIcon
+                            }
+                        })
+                        .then(data => {
+                            this.getCategory()
+                            this.addCatModal()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
+                },
+                addProduct() {
+                    if (this.newProName && this.newProDesc && this.newProBT && this.newProPrice && this.newProCat) {
+                        axios({
+                            url: 'http://localhost:3000/products',
+                            method: 'post',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            },
+                            data: {
+                                name: this.newProName,
+                                description: this.newProDesc,
+                                backtext: this.newProBT,
+                                price: this.newProPrice,
+                                category: this.newProCat
+                            }
+                        })
+                        .then(data => {
+                            this.getProducts(true)
+                            this.addProModal()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
+                },
+                selectedC() {
+                    for (let i = 0; i < this.categories.length; i++) {
+                        if (this.categories[i].name === this.selectedCat) {
+                            this.newCatName = this.categories[i].name
+                            this.newCatIcon = this.categories[i].icon
+                        }
+                    }
+                },
+                selectedP() {
+                    for (let i = 0; i < this.products.length; i++) {
+                        if (this.products[i].name === this.selectedPro) {
+                            this.newProName = this.products[i].name
+                            this.newProDesc = this.products[i].description
+                            this.newProBT = this.products[i].backtext
+                            this.newProPrice = this.products[i].price
+                            this.newProCat = this.products[i].category.name
+                        }
+                    }
+                },
+                editCategory() {
+                    if (this.newCatName && this.newCatIcon && this.selectedCat) {
+                        let id = ''
+                        for (let i = 0; i < this.categories.length; i++) {
+                            if (this.categories[i].name === this.selectedCat) {
+                                id = this.categories[i]._id
+                            }
+                        }
+                        axios({
+                            url: `http://localhost:3000/categories/${id}`,
+                            method: 'put',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            },
+                            data: {
+                                name: this.newCatName,
+                                icon: this.newCatIcon
+                            }
+                        })
+                        .then(data => {
+                            this.getCategory()
+                            this.editCatModal()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
+                },
+                editProduct() {
+                    if (this.newProName && this.newProDesc && this.newProBT && this.newProPrice && this.newProCat) {
+                        let id = ''
+                        for (let i = 0; i < this.products.length; i++) {
+                            if (this.products[i].name === this.selectedPro) {
+                                id = this.products[i]._id
+                            }
+                        }
+                        axios({
+                            url: `http://localhost:3000/products/${id}`,
+                            method: 'put',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            },
+                            data: {
+                                name: this.newProName,
+                                description: this.newProDesc,
+                                backtext: this.newProBT,
+                                price: this.newProPrice,
+                                category: this.newProCat
+                            }
+                        })
+                        .then(data => {
+                            this.getProducts(true)
+                            this.editProModal()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
+                },
+                deleteCategory() {
+                    if (this.deleteCategoryConfirm) {
+                        let id = ''
+                        for (let i = 0; i < this.categories.length; i++) {
+                            if (this.categories[i].name === this.selectedCat) {
+                                id = this.categories[i]._id
+                            }
+                        }
+                        axios({
+                            url: `http://localhost:3000/categories/${id}`,
+                            method: 'delete',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            }
+                        })
+                        .then(data => {
+                            this.getCategory()
+                            this.deleteCategoryConfirm = false
+                            this.openBackdrop = false
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    } else {
+                        this.deleteCategoryConfirm = true
+                        this.deleteCategoryModal = false
+                    }
+                },
+                deleteProduct() {
+                    if (this.deleteProductConfirm) {
+                        let id = ''
+                        for (let i = 0; i < this.products.length; i++) {
+                            if (this.products[i].name === this.selectedPro) {
+                                id = this.products[i]._id
+                            }
+                        }
+                        axios({
+                            url: `http://localhost:3000/products/${id}`,
+                            method: 'delete',
+                            headers: {
+                                token: localStorage.getItem('token')
+                            }
+                        })
+                        .then(data => {
+                            this.getProducts(true)
+                            this.deleteProductConfirm = false
+                            this.openBackdrop = false
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    } else {
+                        this.deleteProductConfirm = true
+                        this.deleteProductModal = false
+                    }
                 }
             },
             filters: {
@@ -775,7 +1210,7 @@
                         this.loading = true
                         setTimeout(() => {
                             this.loading = false
-                        }, 10000)
+                        }, 5000)
                     }
                 }
             }
