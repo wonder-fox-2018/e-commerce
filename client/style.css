@@ -602,3 +602,12 @@ h1, h2, h3, h4, h5, h6, p, span {
 #editCForm select, #deleteCForm select, #addPForm select, #editPForm select, #deletePForm select {
     width: 100%;
 }
+
+.discount {
+    color: #0fb84a;
+}
+
+.phTotalSum {
+    color: #de4d2f;
+    font-size: 20px;
+}

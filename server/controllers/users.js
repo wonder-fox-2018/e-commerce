@@ -1,5 +1,6 @@
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
+const Coupon = require('../models/couponModel')
 const { addR } = require('../controllers/coupons')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -223,47 +224,57 @@ module.exports = {
     },
 
     checkout: function (req, res) {
-        User.findById(req.userId)
-        .then(data => {
-            let transaction = data.transaction
-            let boughtProducts = data.boughtProducts
-
-            transaction.push({
-                cart: {
-                    items: data.items,
-                    counts: data.counts,
-                    total: data.total,
-                    totalsum: data.totalsum
-                },
-                date: new Date()
-            })
-
-            for (let i = 0; i < data.items.length; i ++) {
-                if (boughtProducts.indexOf(data.items[i]) === -1) {
-                    boughtProducts.push(data.items[i])
-                } 
+        Coupon.findOne({
+            code: req.body.coupon
+        })
+        .then(coupon => {
+            let discount = 0
+            if (coupon) {
+                discount = coupon.discount
             }
-
-            User.updateOne({
-                _id: req.userId
-            }, {
-                transaction: transaction,
-                items: [],
-                counts: [],
-                total: [],
-                totalsum: 0,
-                boughtProducts: boughtProducts
-            })
-            .then(() => {
-                res.status(200).json({})
+                
+            User.findById(req.userId)
+            .then(data => {
+                let transaction = data.transaction
+                let boughtProducts = data.boughtProducts
+    
+                transaction.push({
+                    cart: {
+                        items: data.items,
+                        counts: data.counts,
+                        total: data.total,
+                        totalsum: data.totalsum * (100 - discount) / 100,
+                        discount: data.totalsum * discount / 100
+                    },
+                    date: new Date()
+                })
+    
+                for (let i = 0; i < data.items.length; i ++) {
+                    if (boughtProducts.indexOf(data.items[i]) === -1) {
+                        boughtProducts.push(data.items[i])
+                    } 
+                }
+    
+                User.updateOne({
+                    _id: req.userId
+                }, {
+                    transaction: transaction,
+                    items: [],
+                    counts: [],
+                    total: [],
+                    totalsum: 0,
+                    boughtProducts: boughtProducts
+                })
+                .then(() => {
+                    res.status(200).json({})
+                })
+                .catch(err => {
+                    res.status(500).json({message: err})
+                })
             })
             .catch(err => {
-                conz
                 res.status(500).json({message: err})
             })
-        })
-        .catch(err => {
-            res.status(500).json({message: err})
         })
     },
 

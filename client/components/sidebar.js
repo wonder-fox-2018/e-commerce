@@ -69,8 +69,11 @@ Vue.component('side-bar', {
                     </div>
                 </div>
                 <div class="row" style="width: 100%" v-if='totalsum > 0 && islogin'>
-                    <div class="col-6 text-left mb-2">Total:</div>
-                    <div class="col-6 text-right mb-2"><strong>Rp{{ totalsum | currencySlice}}</strong></div>
+                    <div class="col-6 text-left mb-4"><strong>Total:</strong></div>
+                    <div class="col-6 text-right mb-4" v-if='discount > 0'><strong><span class='discount' style='padding-right: 10px'>Rp{{ totalsum * (100 - discount) / 100 | currencySlice }}</span><span style='text-decoration: line-through'>Rp{{ totalsum | currencySlice}}</span></strong></div>
+                    <div class="col-6 text-right mb-4" v-else><strong>Rp{{ totalsum | currencySlice}}</strong></div>
+                    <div class="col-6 text-left mb-4 py-1"><strong>Coupon:</strong></div>
+                    <div class="col-6 text-right mb-4"><input type='text' class='px-2 py-1 mr-4 text-right' v-model='coupon' @keyup='checkCoupon'></div>
                     <div class="col-6 text-center">
                         <button v-on:click='cartModal()' class="btn cartBtn">Continue Shopping</button>
                     </div>
@@ -118,6 +121,8 @@ Vue.component('side-bar', {
             notice: '',
             keyword: '',
             afterCheckOut: false,
+            coupon: '',
+            discount: 0
         }   
     },
     methods: {
@@ -290,9 +295,13 @@ Vue.component('side-bar', {
                 method: 'patch',
                 headers: {
                     token: localStorage.getItem('token')
+                },
+                data: {
+                    coupon: this.coupon
                 }
             })
             .then(() => {
+                this.coupon = ''
                 this.$emit('emptycart')
                 this.afterCheckOut = true
 
@@ -343,6 +352,24 @@ Vue.component('side-bar', {
         },
         updateCart() {
             this.$emit('updatecart')
+        },
+        checkCoupon() {
+            axios({
+                url: `http://localhost:3000/coupons/${this.coupon}`,
+                headers: {
+                    token: localStorage.getItem('token')
+                }
+            })
+            .then(data => {
+                if (data.data) {
+                    this.discount = data.data.discount
+                } else {
+                    this.discount = 0
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
         }
     },
     filters: {

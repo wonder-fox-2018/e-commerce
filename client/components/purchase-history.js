@@ -29,8 +29,10 @@ Vue.component('purchase-history', {
                         </h6>
                         <hr>
                         <h6 class="card-title row">
-                            <span class="col-6 text-left"><b>Total</b></span>
-                            <span class="col-6 text-right"><b>Rp{{ transaction.cart.totalsum | currencySlice }}</b></span>
+                            <span class="col-4 text-left"><b>Total</b></span>
+                            <span class="col-4 text-center discount" v-if='transaction.cart.discount > 0'><b>Discount: Rp{{ transaction.cart.discount | currencySlice }}</b></span>
+                            <span class="col-4" v-else></span>
+                            <span class="col-4 text-right phTotalSum"><b>Rp{{ transaction.cart.totalsum | currencySlice }}</b></span>
                         </h6>
                     </div>
                 </div>
