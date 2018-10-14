@@ -19,7 +19,9 @@ Vue.component('sidebar-section',{
             <hr>
             <div class="list-group" v-if="getislogin === true && usercredentials.role === 'admin' ">
               <h3>Admin Section</h3>
-              <button class="btn btn-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#createItem" >Add Item</button>  
+              <button class="btn btn-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#createItem" >Add Item</button>
+              <br>  
+              <button class="btn btn-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#createCategory" >Add Category</button>  
             </div>
 
             <!-- Modal part -->
@@ -64,6 +66,33 @@ Vue.component('sidebar-section',{
                     </div>
                 </div>
             </div>
+
+            <!-- create category modal -->
+            <div class="modal fade" id="createCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create Category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Name</label>
+                                    <input type="text" v-model="categoryname" class="form-control" aria-describedby="emailHelp" placeholder="Enter Item Name">
+                                </div>
+                            </form>
+                            <br/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" v-on:click="createcategory()" >Create Category</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
       `,
     props: ['getcredentials','getislogin','token'],  
@@ -77,7 +106,8 @@ Vue.component('sidebar-section',{
         itemcategory: '',
         itemurlimage: '',
         itemprice: 0,
-        imageupload: ''
+        imageupload: '',
+        categoryname: ''
        } 
     },
     methods: {
@@ -197,6 +227,37 @@ Vue.component('sidebar-section',{
            .catch(error =>{
                console.log('ERROR Upload ',error)
            })
+      },
+      // create category
+      createcategory () {
+        let self = this
+        axios({
+           method: 'POST',
+           url: 'http://localhost:3007/categories',
+           headers: {
+             token: self.token  
+           },
+           data: {
+              name: self.categoryname  
+           } 
+        })
+          .then(category => {
+             // update all category
+             axios({
+                method: 'GET',
+                url: 'http://localhost:3007/categories/lists'  
+             })
+              .then(categories => {
+                self.listcategories = categories.data.data
+                $('#createCategory').modal('hide')
+              })
+              .catch(error =>{
+                console.log('ERROR Get Category after create new category ',error)       
+              })
+          })
+          .catch(error =>{
+             console.log('ERROR Create Category ',error)
+          })
       }
     },
     created () {
@@ -217,6 +278,9 @@ Vue.component('sidebar-section',{
     watch: {
        listitems (val){
           this.$emit('listitems',val)
+       },
+       listcategories (val){
+          this.$emit('listcategories',val)
        },
        getcredentials (val) {
           this.usercredentials = val 

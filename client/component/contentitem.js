@@ -121,7 +121,9 @@ Vue.component('content-item',{
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Category</label>
-                                <input type="text" v-model="itemcategory" class="form-control" aria-describedby="emailHelp" placeholder="Enter Category">
+                                <select v-model="itemcategory">
+                                    <option v-for="category in listcategories" v-bind:value = "category._id" >{{ category.name }}</option>
+                                </select>     
                             </div>
                             <img v-bind:src="itemurlimage" width = "50px">
                             <div class="form-group">
@@ -144,10 +146,11 @@ Vue.component('content-item',{
         </div>
     </div>
     `,
-  props: ['getislogin','getlistitems','updatetemptransaction','updatetotalamount','gettoken','getcredentials'],  
+  props: ['getislogin','getlistitems','getlistcategories','updatetemptransaction','updatetotalamount','gettoken','getcredentials'],  
   data () {
     return {
       listitems: [],
+      listcategories: [],
       temptransaction: [],
       totalamount: 0,
       itemid: '',
@@ -201,13 +204,6 @@ Vue.component('content-item',{
         .then(uploadresult => {
             self.itemurlimage = uploadresult.data.link
             // console.log('Upload Sukses Edit---', uploadresult.data.link) 
-
-            // Data before Edit
-            console.log('EDIT ID -----',self.itemid)
-            console.log('EDIT Name -----',self.itemname)
-            console.log('EDIT Category ID -----',self.itemcategory)
-            console.log('EDIT Name -----',self.itemurlimage)
-            console.log('EDIT Price -----',self.itemprice)
 
             // create item
             axios({
@@ -306,6 +302,9 @@ Vue.component('content-item',{
   watch: {
     getlistitems (val) {
       this.listitems = val 
+    },
+    getlistcategories (val) {
+      this.listcategories = val  
     },
     temptransaction (val){
       this.$emit('temptransaction',val) 
