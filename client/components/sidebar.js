@@ -288,6 +288,8 @@ Vue.component('side-bar', {
             this.openCartModal = !this.openCartModal
             this.$emit('togglebackdrop')
             this.afterCheckOut = false
+            this.coupon = ''
+            this.discount = 0
         },
         checkOut() {
             axios({
@@ -302,6 +304,7 @@ Vue.component('side-bar', {
             })
             .then(() => {
                 this.coupon = ''
+                this.discount = 0
                 this.$emit('emptycart')
                 this.afterCheckOut = true
 

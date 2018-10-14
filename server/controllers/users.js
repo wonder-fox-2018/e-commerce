@@ -266,7 +266,19 @@ module.exports = {
                     boughtProducts: boughtProducts
                 })
                 .then(() => {
-                    res.status(200).json({})
+                    if (coupon) {
+                        Coupon.deleteOne({
+                            code: req.body.coupon
+                        })
+                        .then(() => {
+                            res.status(200).json({})
+                        })
+                        .catch(err => {
+                            res.status(500).json({message: err})
+                        })
+                    } else {
+                        res.status(200).json({})
+                    }
                 })
                 .catch(err => {
                     res.status(500).json({message: err})
