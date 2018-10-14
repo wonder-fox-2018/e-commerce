@@ -49,7 +49,7 @@
                     </li>
 
                     <!-- cart navbar -->
-                    <li class="nav-item dropdown" id="cart" v-if="isLogin">
+                    <li class="nav-item dropdown" id="cart" v-if="isLogin && !isAdmin">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-shopping-cart"><span> ({{itemInCart}})</span></i>
@@ -77,7 +77,7 @@
                     </li>
 
                 </ul>
-                
+
                 <button class="btn btn-outline-dark my-2 my-sm-0" v-if="isLogin" @click="logout">log out</button>
             </div>
         </nav>
@@ -253,7 +253,7 @@
                         <form class="form-inline my-2 my-lg-0">
                             <input class="form-control mr-sm-2" type="search" placeholder="Search for product"
                                 aria-label="Search" v-model="filterProduct">
-                           <!--  <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button> -->
+                            <!--  <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button> -->
                         </form>
                     </li>
                     <li class="list-group-item">Show all</li>
@@ -278,7 +278,9 @@
                                             {{item.price}}
                                         </div>
                                     </div>
-                                    <div class="ui vertical animated button" tabindex="0" v-on:click="addToCart(item._id)">
+                                    <button class="btn btn-outline-dark my-2 my-sm-0" data-toggle="modal" data-target="#modal-edit"
+                                        v-if="isAdmin" @click="editItem(item)">Edit</button>
+                                    <div class="ui vertical animated button" tabindex="0" v-else v-on:click="addToCart(item._id)">
                                         <div class="hidden content">buy</div>
                                         <div class="visible content">
                                             <i class="shop icon"></i>
@@ -286,6 +288,55 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- modal-edit -->
+            <div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit {{inputIdEditItem}}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="item-name">Name</label>
+                                    <input type="text" class="form-control" name="item-name" aria-describedby="item-name"
+                                        placeholder="Item name" v-model="inputNameEditItem">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Price</label>
+                                    <input type="text" class="form-control" name="price" aria-describedby="price"
+                                        placeholder="item price" v-model="inputPriceEditItem">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <input type="text" class="form-control" name="category" aria-describedby="category"
+                                        placeholder="item category" v-model="inputCategoryEditItem">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="picture">Upload picture</label>
+                                    <input type="file" class="form-control" v-on:change="getImage($event)">
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-edit"
+                                v-on:click="submitEdit">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -354,7 +405,7 @@
             data: {
                 port: 'http://localhost:3000/',
 
-
+                isAdmin: true,
                 isLogin: false,
 
                 items: [],
@@ -370,7 +421,14 @@
                 inputEmailRegister: '',
                 inputPasswordRegister: '',
                 inputFirstNameRegister: '',
-                inputLastNameRegister: ''
+                inputLastNameRegister: '',
+
+                inputIdEditItem: '',
+                inputNameEditItem: '',
+                inputPriceEditItem: '',
+                inputPictureEditItem: '',
+                inputCategoryEditItem: '',
+                prevPictureEditItem: ''
             },
             created: function () {
 
@@ -405,10 +463,11 @@
                     });
                 },
                 fetchItems: function () {
+                    
                     axios.get(`${this.port}item`).then((result) => {
-                        result.data.forEach(currentItem => {
-                            this.items.push(currentItem);
-                        });
+                        
+                        this.items = result.data;
+                        
                     }).catch((err) => {
                         console.log(err);
                     });
@@ -459,7 +518,7 @@
                             'access-token': localStorage.getItem('access-token')
                         }
                     }).then((result) => {
-                        console.log(result.data.list);
+                        
                         this.cart = result.data;
                         this.itemInCart = result.data.list.length;
                         this.groupCartByItems();
@@ -543,6 +602,83 @@
                     }).catch((err) => {
                         console.log(err);
                     });
+                },
+
+                editItem: function (item) {
+
+                    this.inputIdEditItem = item._id;
+                    this.inputNameEditItem = item.name;
+                    this.inputPriceEditItem = item.price;
+                    this.inputPictureEditItem = item.picture;
+                    this.inputCategoryEditItem = item.inputCategoryEditItem;
+                    this.prevPictureEditItem = this.inputPictureEditItem;
+
+                },
+                
+                //TODO FIX REQUIRE REFRESH BUG
+                submitEdit: function () {
+                    
+                    let skipUpload = this.prevPictureEditItem === this.inputPictureEditItem;
+
+                    if (skipUpload) {
+                        
+                        axios({
+                            method: 'PUT',
+                            url: this.port + 'item/' + this.inputIdEditItem,
+                            headers: {
+                                'access-token': localStorage.getItem('access-token')
+                            },
+                            data: {
+                                name: this.inputNameEditItem,
+                                price: this.inputPriceEditItem,
+                                category: this.inputCategoryEditItem,
+                                picture: this.inputPictureEditItem
+                            }
+                        }).then((result) => {
+                            this.fetchItems();
+                        }).catch((err) => {
+                            
+                            console.log(err);
+                        });
+                    } else {
+                        let formdata = new FormData()
+
+                        formdata.append('image', this.inputPictureEditItem);
+
+
+                        axios.post(`${this.port}item/upload`, formdata, {
+                            headers: {
+                                'access-token': localStorage.getItem('access-token')
+                            }
+                        }).then((result) => {
+                            axios({
+                                method: 'PUT',
+                                url: this.port + 'item/' + this.inputIdEditItem,
+                                headers: {
+                                    'access-token': localStorage.getItem('access-token')
+                                },
+                                data: {
+                                    name: this.inputNameEditItem,
+                                    price: this.inputPriceEditItem,
+                                    category: this.inputCategoryEditItem,
+                                    picture: result.data.link
+                                }
+                            }).then((result) => {
+                                this.fetchItems()
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+                        }).catch((err) => {
+                            console.log(err);
+                        });
+                    }
+
+                },
+
+                getImage(link) {
+
+                    this.inputPictureEditItem = link.target.files[0];
+
                 }
             },
             watch: {
