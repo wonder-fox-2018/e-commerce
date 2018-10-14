@@ -537,8 +537,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #addproductmodal {
-    min-height: 40vh;
-    top: 30vh;
+    min-height: 45vh;
+    top: 27.5vh;
 }
 
 #editcategorymodal {
@@ -576,7 +576,11 @@ h1, h2, h3, h4, h5, h6 {
     width: 80%;
 }
 
-#addCForm input, #editCForm input, #addPForm input, #editPForm input {
+#proImg {
+    width: 50%;
+}
+
+#addCForm input[type='text'], #editCForm input[type='text'], #addPForm input[type='text'], #editPForm input[type='text'] {
     width: 100%;
     margin: auto;
     background: rgba(0, 0, 0, 0.1);

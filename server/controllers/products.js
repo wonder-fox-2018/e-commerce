@@ -65,6 +65,7 @@ module.exports = {
                             description: req.body.description,
                             backtext: req.body.backtext,
                             price: req.body.price,
+                            image: req.body.image,
                             category: category._id
                         })
                         .then(() => {

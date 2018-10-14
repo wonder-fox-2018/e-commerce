@@ -9,6 +9,7 @@ var cors = require('cors');
 var usersRouter = require('./routes/users');
 var categoriesRouter = require('./routes/categories');
 var productsRouter = require('./routes/products');
+var uploadRouter = require('./routes/upload');
 
 var app = express();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
 app.use('/products', productsRouter);
+app.use('/upload', uploadRouter);
 
 mongoose.connect(`mongodb://localhost:27017/wonder-e-commerce`, { useNewUrlParser: true });
 

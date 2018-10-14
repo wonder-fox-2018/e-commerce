@@ -176,7 +176,7 @@
                         <div class="containerku col-sm-6 col-md-5 col-lg-3" v-for='product in products'>
                             <div class="cardku">
                                 <div class="card-head">
-                                    <img src="shoes.png" alt="Shoe" class="product-img">
+                                    <img :src="product.image" alt="Shoe" class="product-img">
                                     <div class="product-detail">
                                         <h2>{{ product.name }}</h2>
                                         <p>{{ product.description }}</p>
@@ -360,6 +360,10 @@
             <div id='productmodals'>
                 <div class='productmodal' id='addproductmodal' v-if='addProductModal'>
                     <div id='addPForm'>
+                        <div class="text-center">
+                            Product image (<b>PNG, max. 1MB</b>):<br>
+                            <input type="file" id="proImg" accept="image/png" @change='proImgChange'><br><br>
+                        </div>
                         <input type="text" placeholder="Name" v-model='newProName'><br>
                         <input type="text" placeholder="Description" v-model='newProDesc'><br>
                         <input type="text" placeholder="Backtext (max. 4 characters)" v-model='newProBT'><br>
@@ -479,6 +483,7 @@
                 newProBT: '',
                 newProPrice: '',
                 newProCat: '',
+                newProImg: '',
                 selectedCat: '',
                 selectedPro: ''
             },
@@ -982,7 +987,7 @@
                     }
                 },
                 addCategory() {
-                    if (this.newCatName && this.newCatIcon) {
+                    if (this.newCatName.length > 0 && this.newCatIcon.length > 0) {
                         axios({
                             url: 'http://localhost:3000/categories',
                             method: 'post',
@@ -1004,28 +1009,49 @@
                     }
                 },
                 addProduct() {
-                    if (this.newProName && this.newProDesc && this.newProBT && this.newProPrice && this.newProCat) {
+                    if (this.newProName.length > 0 && this.newProDesc.length > 0 && this.newProBT.length > 0 && this.newProPrice.length > 0 && this.newProCat.length > 0 && this.newProImg.length !== '') {
+                        
+                        let formData = new FormData()
+                        formData.append('image', this.newProImg)
+
                         axios({
-                            url: 'http://localhost:3000/products',
+                            url: `http://localhost:3000/upload`,
                             method: 'post',
+                            data: formData,
                             headers: {
+                                'Content-Type': 'multipart/form-data',
                                 token: localStorage.getItem('token')
-                            },
-                            data: {
-                                name: this.newProName,
-                                description: this.newProDesc,
-                                backtext: this.newProBT,
-                                price: this.newProPrice,
-                                category: this.newProCat
                             }
                         })
-                        .then(data => {
-                            this.getProducts(true)
-                            this.addProModal()
+                        .then(image => {
+                            axios({
+                                url: 'http://localhost:3000/products',
+                                method: 'post',
+                                headers: {
+                                    token: localStorage.getItem('token')
+                                },
+                                data: {
+                                    name: this.newProName,
+                                    description: this.newProDesc,
+                                    backtext: this.newProBT,
+                                    price: this.newProPrice,
+                                    image: image.data.link,
+                                    category: this.newProCat,
+                                }
+                            })
+                            .then(data => {
+                                this.getProducts(true)
+                                this.addProModal()
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
                         })
                         .catch(err => {
-                            console.log(err)
+                            console.log(JSON.stringify(err))
                         })
+                    } else {
+                        console.log('GAGAL')
                     }
                 },
                 selectedC() {
@@ -1161,6 +1187,9 @@
                         this.deleteProductConfirm = true
                         this.deleteProductModal = false
                     }
+                },
+                proImgChange(event) {
+                    this.newProImg = event.target.files[0]
                 }
             },
             filters: {
