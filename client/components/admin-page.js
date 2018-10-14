@@ -9,7 +9,6 @@ Vue.component('admin-page', {
                         <h3>Rules for Admins:</h3>
                         <ul>
                             <li>You may not add categories and/or products with the same name</li>
-                            <li>Coupons won't apply to you</li>
                             <li>The product images are expected to be PNGs with transparent background</li>
                         </ul>
                         Thanks, please note that these rules may change without any initial notice.
@@ -72,26 +71,6 @@ Vue.component('admin-page', {
                         <div>
                             <i class="fas fa-trash"></i>
                             <h4>Delete A User</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="row border-bottom adminmenugroup">
-                    <div class="col-sm-6 col-md-4 text-center adminmenu">
-                        <div>
-                            <i class="fas fa-plus"></i>
-                            <h4>Add New Promo</h4>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4 text-center adminmenu">
-                        <div>
-                            <i class="fas fa-edit"></i>
-                            <h4>Edit A Promo</h4>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4 text-center adminmenu">
-                        <div>
-                            <i class="fas fa-trash"></i>
-                            <h4>Delete A Promo</h4>
                         </div>
                     </div>
                 </div>

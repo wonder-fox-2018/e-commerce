@@ -1,5 +1,6 @@
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
+const { addR } = require('../controllers/coupons')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const nodemailer = require('nodemailer')
@@ -124,6 +125,8 @@ module.exports = {
                                 for (var i = 0; i < 10; i++) {
                                     text += possible.charAt(Math.floor(Math.random() * possible.length));
                                 }
+
+                                addR(text, 50, data._id)
                                 
                                 let transporter = nodemailer.createTransport({
                                     service: 'gmail',

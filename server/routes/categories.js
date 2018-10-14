@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const { show, add, edit, remove } = require('../controllers/categories')
 const { isLogin, isAdmin } = require('../middlewares/isAuth')
 

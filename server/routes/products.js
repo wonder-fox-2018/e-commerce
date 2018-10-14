@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const { showAll, showByCategory, search, add, edit, remove, rate } = require('../controllers/products')
 const { isLogin, isAdmin } = require('../middlewares/isAuth')
 
