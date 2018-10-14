@@ -1,7 +1,6 @@
 Vue.component('main-content', {
     template: `
     <div class="row">
-    {{carts}}
         <div class="col-md-4" v-for="(item, index) in items">
             <figure class="card card-product">
                 <div class="img-wrap"><img v-bind:src="item.img"></div>
@@ -9,11 +8,11 @@ Vue.component('main-content', {
                 <figcaption class="info-wrap">
                     <h4 class="title">{{ item.name }}</h4>
                     <p class="desc">{{ item.description }}</p>
-                    <!-- <p class="desc">{{ item.category.name }}</p> -->
-                    <div class="rating-wrap">
+                    <p class="desc"><b>Category :</b> {{ item.category.name }}</p>
+                    <!-- <div class="rating-wrap">
                         <div class="label-rating">132 reviews</div>
                         <div class="label-rating">154 orders </div>
-                    </div> <!-- rating-wrap.// -->
+                    </div> -->
                 </figcaption>
                 <div class="bottom-wrap">
                     <a class="btn btn-sm btn-primary float-right" v-on:click="addItemToCart(index)">Add to Cart</a>
@@ -29,7 +28,8 @@ Vue.component('main-content', {
     data: function () {
         return {
             items: [],
-            carts : []
+            carts : [],
+            cartsBadge : 0
         }
     },
     created: function () {
@@ -50,7 +50,7 @@ Vue.component('main-content', {
                 })
         },
         addItemToCart: function (index) {
-            this.cartBadge = this.cartBadge + 1
+            this.cartsBadge = this.cartsBadge + 1
             let isNew = true
 
             let item = {
@@ -76,6 +76,9 @@ Vue.component('main-content', {
                 this.carts.push(item)
                 this.subTotalPrice += item.totalPrice
             }
+
+            this.$emit('carts-data',this.carts)
+            this.$emit('carts-badge',this.cartsBadge)
         }
     }
 })

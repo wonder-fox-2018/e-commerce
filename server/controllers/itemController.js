@@ -2,13 +2,14 @@ const Item = require('../models/item')
 
 class Controller {
     static create(req, res) {
-        
+
         let newItem = new Item({
             name: req.body.name,
             description: req.body.description,
             price: req.body.price,
             img : req.body.img,
-            category: req.body.categoryId
+            category: req.body.categoryId,
+            stock : req.body.stock
         })
 
         newItem.save()
@@ -26,7 +27,7 @@ class Controller {
 
     static read(req, res) {
         Item.find()
-            // .populate('category')
+            .populate('category')
             .then(function (items) {
                 res.status(200).json({
                     items

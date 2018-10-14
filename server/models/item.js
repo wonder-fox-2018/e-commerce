@@ -14,6 +14,10 @@ const itemSchema = new Schema({
     img : {
         type : String
     },
+    stock : {
+        type : Number
+    }
+    ,
     category : {type: Schema.Types.ObjectId, ref: 'Category' }
 },{
     timestamps : true
