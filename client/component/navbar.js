@@ -157,7 +157,7 @@ Vue.component('navbar-section',{
         window.gapi.load('auth2', () => {
             // Retrieve the singleton for the GoogleAuth library and set up the client.
             const auth2 = window.gapi.auth2.init({
-            client_id: '155964938197-seq6sc4jpq9n8lr211rlglvaqen00836.apps.googleusercontent.com',
+            client_id: '155964938197-ofojs9a3rmk4t7b196815irt5i2ftrgc.apps.googleusercontent.com',
             cookiepolicy: 'single_host_origin'
             // Request scopes in addition to 'profile' and 'email'
             // scope: 'additional_scope'
