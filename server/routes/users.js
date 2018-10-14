@@ -1,9 +1,8 @@
 const router = require('express').Router()
+const userController = require('../controllers/userController')
 
-router.get('/',(req,res)=>{
-    res.status(201).json({
-        message : 'halo dari users yang belum dibuat'
-    })
-})
+//BASIC SIGNUP AND SIGNIN
+router.post('/signup',userController.signup)
+router.post('/signin',userController.signin)
 
-module.exports = router;
+module.exports = router
