@@ -42,23 +42,16 @@
                 <!-- account navbar -->
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" v-if="isLogin">Account <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" v-if="isLogin">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link">Link</a>
-                    </li>
+                    
 
                     <!-- cart navbar -->
-                    <li class="nav-item dropdown" id="cart" v-if="isLogin && !isAdmin">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    <li class="nav-item" id="cart" v-if="isLogin && !isAdmin">
+                        <a class="nav-link" id="navbarDropdown" role="button" data-toggle="modal" data-target="#modal-cart"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-shopping-cart"><span> ({{itemInCart}})</span></i>
                         </a>
-
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item">Checkout</a>
-                            <a class="dropdown-item" data-toggle="modal" data-target="#modal-cart">See cart</a>
-                        </div>
                     </li>
 
                     <!-- category navbar -->
@@ -68,11 +61,11 @@
                             Browse by category
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item">Show all</a>
+                            <a class="dropdown-item" @click="fetchItems">Show all</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item">Tees</a>
+                            <a class="dropdown-item" @click="fetchCategoryTees">Tees</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item">Jacket</a>
+                            <a class="dropdown-item" @click="fetchCategoryJacket">Jacket</a>
                         </div>
                     </li>
 
@@ -139,7 +132,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Welcome back</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"><b>Welcome back </b></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -466,7 +459,7 @@
             data: {
                 port: 'http://localhost:3000/',
 
-                isAdmin: true,
+                isAdmin: false,
                 isLogin: false,
 
                 items: [],
@@ -500,6 +493,10 @@
 
                 this.fetchItems();
 
+                if(localStorage['admin']) {
+                    this.isAdmin = true;
+                }
+
                 if (localStorage['access-token']) {
                     this.isLogin = true;
                     this.fetchCart();
@@ -520,10 +517,17 @@
                             password: this.inputPasswordLogin
                         }
                     }).then((result) => {
-                        localStorage.setItem('access-token', result.data);
+                        localStorage.setItem('access-token', result.data.token);
+
+                        if (result.data.admin) {
+                            this.isAdmin = true;
+                            localStorage.setItem('admin', true);
+                        }
+
                         this.isLogin = true;
                         this.inputEmailLogin = '';
                         this.inputPasswordLogin = '';
+                        this.fetchCart();
                     }).catch((err) => {
                         console.log(err);
                     });
@@ -562,9 +566,35 @@
                     });
                 },
 
+                fetchCategoryJacket: function() {
+                    
+                    axios({
+                        method: 'GET',
+                        url: `${this.port}category/jacket`
+                    }).then((result) => {
+                        this.items = result.data
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                },
+
+                fetchCategoryTees: function() {
+                    
+                    axios({
+                        method: 'GET',
+                        url: `${this.port}category/tees`
+                    }).then((result) => {
+                        this.items = result.data
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                },
+
                 logout: function () {
                     this.isLogin = false;
+                    this.isAdmin = false;
                     localStorage.clear();
+                    this.fetchItems();
                 },
 
                 fetchItemsByName: function (keyWord) {
@@ -751,7 +781,10 @@
                 deleteItem(id) {
                     axios({
                         method: 'DELETE',
-                        url: this.port + `item/${id}`
+                        url: this.port + `item/${id}`,
+                        headers: {
+                            'access-token': localStorage.getItem('access-token')
+                        }
                     }).then((result) => {
                         this.fetchItems();
                     }).catch((err) => {

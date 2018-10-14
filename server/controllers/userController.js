@@ -15,7 +15,7 @@ module.exports = {
         let {email, password, first_name, last_name} = req.body;
 
         User.create({
-            email,password,first_name,last_name
+            email,password,first_name,last_name, admin : false
         }).then((user) => {
             Cart.create({userId: user._id}).then((result) => {
                 res.status(200).json(result);
@@ -26,6 +26,21 @@ module.exports = {
             res.json(err);
         });
 
+    },
+
+    registerAdmin: (req, res) => {
+
+        req.body.password = encryptPassword(req.body.password);
+
+        let {email, password, first_name, last_name} = req.body;
+
+        User.create({
+            email,password,first_name,last_name, admin : true
+        }).then((user) => {
+            res.status(200).json(result);
+        }).catch((err) => {
+            res.json(err);
+        });
     },
 
     login: (req, res) => {
@@ -43,7 +58,10 @@ module.exports = {
             if (user) {
                 let token = Token.sign(user);
 
-                res.status(200).json(token);
+                res.status(200).json({
+                    token: token,
+                    admin: user.admin
+                });
             } else {
 
                 ServerResponse.error(res, 401, {
@@ -58,8 +76,6 @@ module.exports = {
         });
 
     },
-
-
 
     findById: (req, res) => {
         User.findById(req.decoded.id).populate('cart').exec().then((user) => {

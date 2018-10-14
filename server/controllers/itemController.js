@@ -68,7 +68,7 @@ module.exports = {
         });
     },
 
-    findBYCategory: (req, res) => {
+    findByCategory: (req, res) => {
         Item.find({category: req.params.name}).then((result) => {
             res.status(200).json(result);
         }).catch((err) => {
