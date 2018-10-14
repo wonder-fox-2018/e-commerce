@@ -43,13 +43,15 @@ class Controller {
                 let token = jwt.sign({
                     userId : dataUser._id,
                     name : dataUser.name,
-                    email : dataUser.email
+                    email : dataUser.email,
+                    isAdmin : dataUser.isAdmin
                 }, process.env.SECRET_KEY)
 
                 res.status(200).json({
                     userId : dataUser._id,
                     name : dataUser.name,
                     email : dataUser.email,
+                    isAdmin : dataUser.isAdmin,
                     token : token
                 })
             }else{
