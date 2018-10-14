@@ -46,7 +46,6 @@ Vue.component('content-item',{
                                         </div>
                                         <hr>
                                         <div class = "card-body">
-                                          <button type="button" class="btn btn-info" >Display</button>
                                           <button v-if= "getislogin === true && getcredentials.role === 'admin' " type="button" class="btn btn-warning" v-on:click="setEditData(item)" data-toggle="modal" data-target="#editItem" >Edit</button>
                                           <button v-if= "getislogin === true && getcredentials.role === 'admin' " type="button" class="btn btn-danger" v-on:click="deleteitem(item._id)" >Delete</button>
                                         </div>
@@ -54,6 +53,8 @@ Vue.component('content-item',{
                                         <a v-if="getislogin !== true" data-toggle="modal" data-target="#loginMessage" class="btn btn-primary"><font color="white">Order Now</font></a>
                                         <a v-if="getislogin === true && getcredentials.role === 'user' " v-on:click= "gettemptransaction(item,item.itemprice)" class="btn btn-primary"><font color="white">Order Now</font></a>
                                     </div>
+                                    <br>
+                                    <br>
                                 </div>
                             </div>    
                             <div class="col-md-1">

@@ -19,6 +19,11 @@ Vue.component('navbar-section',{
                         </a>
                     </div>
                     <hr>
+                    <div id="gSignInWrapper" v-if= "token === '' || token === null " data-width="300" data-height="200" data-longtitle="true">
+                        <button id="google-signin-button" class="customGPlusSignIn">
+                            Google Sign In
+                        </button>
+                    </div>
                     <div v-if= "token === '' || token === null " class="col-md-3">
                         <button type="button" data-toggle="modal" data-target="#loginUser">Login</button>
                     </div>
@@ -144,6 +149,22 @@ Vue.component('navbar-section',{
         totalamount: 0
       }
     },
+    mounted (){
+       /**
+         * client_id: '742869772361-8bsmdes62f97gruqqiomk0qvjrlsdmdn.apps.googleusercontent.com',
+         * cookiepolicy: 'single_host_origin'
+         */
+        window.gapi.load('auth2', () => {
+            // Retrieve the singleton for the GoogleAuth library and set up the client.
+            const auth2 = window.gapi.auth2.init({
+            client_id: '155964938197-seq6sc4jpq9n8lr211rlglvaqen00836.apps.googleusercontent.com',
+            cookiepolicy: 'single_host_origin'
+            // Request scopes in addition to 'profile' and 'email'
+            // scope: 'additional_scope'
+            })
+            this.attachSignin(auth2, document.getElementById('google-signin-button'))
+        }) 
+    },
     methods: {
         // getCredentials(){
         //    console.log('credentials -----', this.usercredentials) 
@@ -166,6 +187,70 @@ Vue.component('navbar-section',{
         //          })
         //      })
         // },
+        logoutgoogle () {
+            // immediately signout from google
+            let auth2 = window.gapi.auth2.getAuthInstance()
+            auth2.signOut().then(function () {
+            //   console.log('User signed out.')
+            })
+          },
+        loginViaGoogle(input){
+            let self = this
+            let id_token = input
+            axios({
+               method: 'POST',
+               url: `http://localhost:3007/user/logingoogle`,
+               data:{
+                  googletoken: id_token
+               } 
+            })
+              .then(user =>{
+                let successToken = user.data
+                let jwtToken = successToken.token
+                // console.log('Get user jwt token-------', jwtToken)
+                self.token = jwtToken
+                localStorage.setItem('token',self.token)
+                self.islogin = true
+                // self.getCredentials()
+                axios({
+                   method: 'GET',
+                   url:'http://localhost:3007/users/credentials',
+                   headers: {
+                      token: self.token 
+                   } 
+                })
+                 .then(user=>{
+                    self.usercredentials = user.data.data
+                    self.useremail = ''
+                    self.userpassword = ''
+                    this.$emit('usercredentials',self.usercredentials)
+                    this.$emit('islogin',self.islogin)
+                    self.logoutgoogle()
+                 })
+                 .catch(error=>{
+                    res.status(500).json({
+                        msg: 'ERROR Get Credentials ',error 
+                     })
+                 })
+              })
+              .catch(error =>{
+                  console.log('ERROR Google Login-----',error)
+              })
+        },
+        attachSignin (auth2Instance, element) {
+            let self = this
+            auth2Instance.attachClickHandler(element, {},
+              function (googleUser) {
+                const profile = googleUser.getBasicProfile()
+                const id_token = googleUser.getAuthResponse().id_token;
+                // console.log('GOOGLE - TOKEN---------', id_token)
+                // console.log('Email: ' + profile.getEmail()) // This is null if the 'email' scope is not present.
+                self.loginViaGoogle(id_token)
+                // self.logoutgoogle()
+              }, function (error) {
+                alert(JSON.stringify(error, undefined, 2))
+              })
+          },
         filterArray(val){
             let rawArr = val
             let filterArr = []
