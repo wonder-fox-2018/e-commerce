@@ -2,6 +2,9 @@ Vue.component('main-content', {
     props : ['islogin','isadmin'],
     template: `
     <div>
+    <center><button v-if="isadmin === true" type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#addNew"> Add New Item </button></center>
+    <br>
+    <br>
     <div class="row">
         <div class="col-md-4" v-for="(item, index) in items">
             <figure class="card card-product">
@@ -16,8 +19,8 @@ Vue.component('main-content', {
                             <center>
                             <b>Administrator Menu</b>
                             <br>
-                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edits" @click="editing(item._id)"> Edit </button>
-                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#deleteModal" @click="editing(item._id)"> Delete </button>
+                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#edits" @click="editing(item._id)"> Edit </button>
+                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" @click="editing(item._id)"> Delete </button>
                             </center>
                         </div>
                     </div>
@@ -99,6 +102,51 @@ Vue.component('main-content', {
         </div>
     </div>
 
+    <div class="modal" tabindex="-1" role="dialog" id="addNew">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="inputdefault">Name</label>
+                            <input class="form-control" type="text" v-model='newName'>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputlg">Description</label>
+                            <input class="form-control input-lg" id="inputlg" type="text" v-model='newDescription'>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputdefault">Price</label>
+                            <input class="form-control" id="inputdefault" type="number" v-model='newPrice'>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputdefault">Image</label>
+                            <input class="form-control" id="inputdefault" type="text" v-model='newImage'>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputdefault">Stock</label>
+                            <input class="form-control" id="inputdefault" type="number" v-model='newStock'>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputdefault">Category</label>
+                            <input class="form-control" id="inputdefault" type="text" v-model='newCategory'>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click='addItem'>Add</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     </div>
     `,
@@ -117,7 +165,14 @@ Vue.component('main-content', {
             sPrice : '',
             sImage : '',
             sStock : '',
-            sCategory : ''
+            sCategory : '',
+
+            newName : '',
+            newDescription : '',
+            newPrice : '',
+            newImage : '',
+            newStock : '',
+            newCategory : ''
         }
     },
     created: function () {
@@ -158,16 +213,15 @@ Vue.component('main-content', {
                 qty : 1,
                 totalPrice : Number(this.items[index].price)
             }
-            //check if item already exist in cart
+
             for(let i = 0; i < this.carts.length; i++){
                 if(this.carts[i].itemId == item.itemId){
-                    //if exist add one to qty and sum totalPrice
                     this.carts[i].qty += 1
                     this.carts[i].totalPrice += item.totalPrice
                     isNew = false  
                 }
             }
-            //add item to cart
+
             if(isNew){
                 this.carts.push(item)
                 this.subTotalPrice += item.totalPrice
@@ -203,7 +257,7 @@ Vue.component('main-content', {
             let price = this.sPrice
             let img = this.sImage
             let stock = this.sStock
-            let category = this.sCategory
+            let categoryId = this.sCategory
 
             let data = {
                 name,
@@ -211,7 +265,7 @@ Vue.component('main-content', {
                 price,
                 img,
                 stock,
-                category
+                categoryId
             }
 
             let self = this
@@ -243,6 +297,49 @@ Vue.component('main-content', {
             .catch(err => {
                 console.log(err)
             })
+        },
+        addItem : function(){
+
+            console.log('masuk ke add Item')
+            let name = this.newName
+            let description = this.newDescription
+            let price = this.newPrice
+            let img = this.newImage
+            let stock = this.newStock
+            let categoryId = this.newCategory
+
+            let data = {
+                name,
+                description,
+                price,
+                img,
+                stock,
+                categoryId
+            }
+            console.log('data yang dikirim',data)
+
+            let self = this
+
+            axios({
+                method: 'POST',
+                url: `http://localhost:3000/items/create`,
+                data
+            })
+            .then(response => {
+                self.newName = ''
+                self.newDescription = ''
+                self.newPrice = ''
+                self.newImage = ''
+                self.newStock = ''
+                self.newCategory = ''
+
+                console.log(response.data)
+                self.event = response.data
+            })
+            .catch(err => {
+                console.log(err)
+            })
+            
         }
     }
 })
