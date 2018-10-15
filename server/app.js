@@ -25,7 +25,7 @@ app.use('/products', productsRouter);
 app.use('/coupons', couponsRouter);
 app.use('/upload', uploadRouter);
 
-mongoose.connect(`mongodb://localhost:27017/wonder-e-commerce`, { useNewUrlParser: true });
+mongoose.connect(`${process.env.ATLAS}`, { useNewUrlParser: true });
 
 // // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
