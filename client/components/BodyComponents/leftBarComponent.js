@@ -46,7 +46,7 @@ Vue.component("leftbar-component", {
       showallproduct: 0,
       name: localStorage.getItem("name"),
       email: localStorage.getItem("email"),
-      myurl: "http://localhost:3000"
+      myurl: "https://ecommerceserver.harlesbayuanggara.tech"
     };
   },
   created() {

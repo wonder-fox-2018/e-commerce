@@ -53,9 +53,9 @@ const allProduct = {
     return {
       products: [],
       carts: [],
-      myurl: "http://localhost:3000"
-      // totalProduct: 0,
+      myurl: "https://ecommerceserver.harlesbayuanggara.tech"
     };
+    // totalProduct: 0,
   },
   created() {
     this.getAllProduct();

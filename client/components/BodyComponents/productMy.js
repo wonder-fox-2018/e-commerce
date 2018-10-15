@@ -279,7 +279,7 @@ const myProduct = {
       errorCreateProduct: false,
       errorMsgCreateProduct: "",
 
-      myurl: "http://localhost:3000"
+      myurl: "https://ecommerceserver.harlesbayuanggara.tech/"
     };
   },
   created() {},

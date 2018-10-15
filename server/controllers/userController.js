@@ -28,7 +28,7 @@ module.exports = {
     let user = null;
 
     User.findOne({
-      $or: [{ email: req.body.email }, { username: req.body.username }]
+      email: req.body.email
     })
       .then(function(dataUser) {
         if (dataUser) {
