@@ -37,6 +37,7 @@
                     <!-- PURCHASE HISTORY -->
                     <purchase-history v-if='openTab === "ph"'
                         :authuserid='authUserId'
+                        @getproducts='getProducts'
                     ></purchase-history>
 
                     <!-- ADMIN PAGE -->
@@ -48,7 +49,7 @@
                     <!-- PRODUCT LIST -->
                     <product-list v-else
                         :products='products'
-                        @updatecart='updateCart'
+                        @updatecart='updateCart' @getproducts='getProducts'
                     ></product-list>
 
                 </div>
@@ -113,6 +114,7 @@
                 },
                 updateOpenTab(value) {
                     this.openTab = value
+                    localStorage.setItem('ot', value)
                 },
                 updateAuthUser(value) {
                     this.authUserId = value
@@ -277,7 +279,7 @@
                     if (this.products.length > 0) {
                         setTimeout(() => {
                             this.loading = false
-                        }, 2000)
+                        }, 1000)
                     } else if (this.keyword === '') {
                         this.loading = true
                         setTimeout(() => {

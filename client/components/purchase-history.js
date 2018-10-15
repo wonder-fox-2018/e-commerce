@@ -39,6 +39,11 @@ Vue.component('purchase-history', {
             </div>
             <div class="col-1"></div>
         </div>
+        <div v-if='transactions.length === 0' class='col-12 text-center' style='margin-top: 10vh'>
+            <i class="fas fa-shoe-prints nores mb-4" style="font-size: 200px; height: 200px; width: 200px"></i>
+            <h4 class='mt-4'>It seems that you haven't made any purchases,</h4>
+            <button @click='getProducts' class='gp-btn btn mt-4'>Let's start making it!</button>
+        </div>
     </div>
     `,
     props: ['authuserid'],
@@ -49,6 +54,9 @@ Vue.component('purchase-history', {
         }
     },
     methods: {
+        getProducts() {
+            this.$emit('getproducts')
+        },
         getTransactions() {
             axios({
                 url: 'http://localhost:3000/users/ph',

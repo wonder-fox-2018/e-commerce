@@ -396,5 +396,21 @@ Vue.component('side-bar', {
                 return reversed.reverse().join('')
             }
         }
+    },
+    created() {
+        let ot = 'all'
+        if (localStorage.getItem('ot')) {
+            ot = localStorage.getItem('ot')
+        }
+
+        if (ot === 'all') {
+            this.getProducts()
+        } else if (ot === 'ph') {
+            this.showPH()
+        } else if (ot === 'ap')  {
+            this.showAP()
+        } else {
+            this.showByC(ot)
+        }
     }
 })

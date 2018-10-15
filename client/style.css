@@ -611,3 +611,16 @@ h1, h2, h3, h4, h5, h6, p, span {
     color: #de4d2f;
     font-size: 20px;
 }
+
+.gp-btn {
+    color: white;
+    background: #fa782e;
+    background: -moz-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
+    background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
+    padding: 10px 20px;
+}
+
+.nores {
+    color: #de4d2f;
+}

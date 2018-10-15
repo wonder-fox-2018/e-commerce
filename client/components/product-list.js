@@ -44,15 +44,19 @@ Vue.component('product-list', {
             </div>
         </div>
         <div v-else class="row">
-            <div class="col text-center" style="margin-top: 5vh">
-                <i class="fas fa-archive mb-4" style="font-size: 200px; height: 200px; width: 200px"></i>
+            <div class="col text-center" style="margin-top: 10vh">
+                <i class="fas fa-archive nores mb-4" style="font-size: 200px; height: 200px; width: 200px"></i>
                 <h3 class="mt-4">Sorry, but we can't find anything like that</h3>
+                <button @click='getProducts' class='gp-btn btn mt-4'>Let me see the other great stuff!</button>
             </div>
         </div>
     </div>
     `,
     props: ['products'],
     methods: {
+        getProducts() {
+            this.$emit('getproducts')
+        },
         addToCart(product) {
             app.itemcount ++
             let i = app.items.indexOf(product.name)
