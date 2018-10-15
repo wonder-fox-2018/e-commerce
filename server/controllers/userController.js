@@ -18,9 +18,11 @@ class Controller {
             return newUser
         })
         .then(function(newUser) {
+            // console.log(newUser)
 
             newUser.save()
             res.status(200).json({
+                user : newUser,
                 message : 'Signup Success'
             })
 

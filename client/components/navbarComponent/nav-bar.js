@@ -6,7 +6,14 @@ Vue.component('nav-bar',{
             islogin : false,
             login_email : '',
             login_password : '',
-            failedLogin : false
+
+            failedLogin : false,
+            failedRegister : false,
+
+            register_name : '',
+            register_email : '',
+            register_password : ''
+            
         }
     },
     methods : {
@@ -51,6 +58,37 @@ Vue.component('nav-bar',{
         },
         failedLoginFalse : function(){
             this.failedLogin = false
+        },
+        failedRegisterFalse : function(){
+            this.failedRegister = false
+        },
+        signup : function(){
+            let name = this.register_name
+            let email = this.register_email
+            let password = this.register_password
+
+            let data = {
+                name,
+                email,
+                password
+            }
+
+            let self = this
+
+            axios({
+                method: "POST",
+                url: 'http://localhost:3000/users/signup',
+                data
+            })
+            .then(function (response) {
+                console.log(response.data)
+                console.log('sign up berhasil')
+                
+            })
+            .catch(function (err){
+                self.failedRegister = true
+                console.log(err)
+            })
         }
     },
     template : `
@@ -71,12 +109,6 @@ Vue.component('nav-bar',{
                     <li class="nav-item">
                         <a class="nav-link">Category</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link">Product</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">Contact</a>
-                    </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <div class="input-group input-group-sm">
@@ -91,10 +123,13 @@ Vue.component('nav-bar',{
                     <!-- CART BUTTON -->
                     <a class="btn btn-success btn-sm ml-3" data-toggle="modal" data-target="#cartModal" v-if='islogin === true && isadmin === false'>
                         <i class="fa fa-shopping-cart"></i> Carts
-                        <span class="badge badge-light">{{cBadge}}</span>
+                        <span class="badge badge-light">{{cbadge}}</span>
                     </a>
                     <a class="btn btn-success btn-sm ml-3" data-toggle="modal" data-target="#loginModal" v-if='islogin === false'>
-                        <i class="fa fa-sign-in-alt"></i> Login / Register
+                        <i class="fa fa-sign-in-alt"></i> Login
+                    </a>
+                    <a class="btn btn-success btn-sm ml-3" data-toggle="modal" data-target="#registModal" v-if='islogin === false'>
+                        <i class="fa fa-sign-in-alt"></i> Register
                     </a>
                     <a class="btn btn-success btn-sm ml-3" data-toggle="modal" data-target="#loginModal" v-if='isadmin === true'>
                         <i class="fa fa-sign-in-alt"></i> Add New Item
@@ -107,6 +142,10 @@ Vue.component('nav-bar',{
         </div>
     </nav>
     <div class="alert alert-warning" v-if="failedLogin" @click="failedLoginFalse">
+        <strong>Error!</strong> Invalid username / password.
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    </div>
+    <div class="alert alert-warning" v-if="failedRegister" @click="failedRegisterFalse">
         <strong>Error!</strong> Invalid username / password.
         <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
     </div>
@@ -155,13 +194,46 @@ Vue.component('nav-bar',{
             </div>
         </div>
 
+        <div class="modal" tabindex="-1" role="dialog" id="registModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="inputdefault">Name</label>
+                                <input class="form-control" id="inputdefault" type="text" v-model='register_name'>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputlg">Email</label>
+                                <input class="form-control input-lg" id="inputlg" type="text" v-model='register_email'>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputdefault">Password</label>
+                                <input class="form-control" id="inputdefault" type="text" v-model='register_password'>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click='signup'>Register</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div id="loginModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-sm">
               <div class="modal-content">
 
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Login / Register</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -169,14 +241,11 @@ Vue.component('nav-bar',{
 
                     <div class="modal-body">
                             <fieldset>
-                                <div id="legend">
-                                    <legend class="">Login</legend>
-                                </div>    
                                 <div class="control-group">
                                     <!-- Username -->
                                     <label class="control-label" for="username">Email</label>
                                     <div class="controls">
-                                        <input type="text" v-model="login_email" id="username" name="username" placeholder="" class="input-xlarge">
+                                        <input type="text" v-model="login_email" class="input-xlarge">
                                     </div>
                                 </div>
             
@@ -184,7 +253,7 @@ Vue.component('nav-bar',{
                                     <!-- Password-->
                                     <label class="control-label" for="password">Password</label>
                                     <div class="controls">
-                                        <input type="password" v-model="login_password" id="password" name="password" placeholder="" class="input-xlarge">
+                                        <input type="password" v-model="login_password" class="input-xlarge">
                                     </div>
                                 </div>
                             </fieldset>
