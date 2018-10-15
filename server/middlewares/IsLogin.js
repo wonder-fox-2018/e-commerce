@@ -18,7 +18,7 @@ function IsLogin(req,res,next) {
                 let idCheck = ObjectId(decoded.user_id)
                 ModelUser.findOne({ _id : idCheck,email : decoded.email })
                     .then(result =>{
-
+                        console.log(result)
                         if(result){
                             req.currentUser=result
                             req.id = result._id,

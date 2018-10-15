@@ -34,12 +34,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 var usersRouter = require('./routes/userRouter');
 var categoryRouter = require('./routes/categoryRouter');
 var itemRouter = require('./routes/itemRouter');
+var cartRouter= require('./routes/cartRouter')
+var transactionRouter = require('./routes/transactionRouter');
 
 app.use('/users', usersRouter);
 app.use('/categories', categoryRouter)
 app.use('/items', itemRouter)
-
-
+app.use('/carts', cartRouter)
+app.use('/transaction', transactionRouter)
 app.use(function(req, res, next) {
   next(createError(404));
 });

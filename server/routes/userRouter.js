@@ -8,13 +8,16 @@ const IsAdmin = require('../middlewares/IsAdmin');
 const UserController = require('../controllers/userController');
 
 
+
 router.post('/register', UserController.registerUser)
 
 router.post('/login', UserController.loginUser)
 
-router.get('/lists', IsLogin,IsAdmin,UserController.getAllUsers)
+router.post('/adminlogin', UserController.loginAdmin)
 
+router.get('/', IsLogin,IsAdmin,UserController.getAllUsers)
 
+router.post('/tokenadmin', IsLogin,IsAdmin,UserController.checkAdmin)
 
 
 module.exports = router

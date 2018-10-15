@@ -9,26 +9,18 @@ const IsAdmin = require('../middlewares/IsAdmin');
 
 
 // get 
-router.get('/',(req,res)=>{
-    ItemController.getListItems(req,res);
-})
+router.get('/',ItemController.getListItems)
+ 
 //get by category
-router.post('/category',(req,res)=>{
-    ItemController.getListItemsbyCategory(req,res);
-})
+router.post('/category',ItemController.getListItemsbyCategory)
+    
 // add 
-router.post('/',IsLogin,IsAdmin,(req,res)=>{
-    ItemController.createItem(req,res);
-})
+router.post('/',IsLogin,IsAdmin,ItemController.createItem)
 
 // edit 
-router.put('/:id',IsLogin,IsAdmin,(req,res)=>{
-    ItemController.editItem(req,res);
-})
+router.put('/',IsLogin,IsAdmin,ItemController.editItem)
 
 // delete
-router.delete('/:id',IsLogin,IsAdmin,(req,res)=>{
-    ItemController.deleteItem(req,res);
-})
+router.delete('/',IsLogin,IsAdmin,ItemController.deleteItem)
 
 module.exports = router

@@ -2,20 +2,18 @@
 
 const express = require('express');
 const router = express.Router();
-const CartController = require('../controllers/cartController');
+const TransController = require('../controllers/transactionController');
 const isLogin = require('../middlewares/IsLogin');
 
 
 
 // get 
-router.get('/',isLogin,CartController.getCarts)
-
-//router.post('/length',IsLogin,CartController.getLengthCart)
+router.get('/',isLogin,TransController.getTransaction)
 
 // add 
-router.post('/',isLogin,CartController.createCart)
+router.post('/',isLogin,TransController.createTransaction)
 
-router.post('/deletebyitem',isLogin,CartController.deleteCartItem)
+//router.post('/deletebyitem',isLogin,CartController.deleteCartItem)
 
 // // edit 
 // router.put('/:id',IsLogin,CartController.editCart)

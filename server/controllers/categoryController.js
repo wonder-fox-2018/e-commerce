@@ -4,10 +4,8 @@ const ModelCategory = require('../models/categoryModel');
 const ModelItem = require('../models/itemModel');
 
 class CategoryController {
-    static createCategory(req,res){
-        console.log('Add categiry')
-        console.log(req.body.category)
-        ModelCategory.create({name : req.body.name})
+    static getCategory(req,res){
+        ModelCategory.find({})
         .then(result =>{
             res.status(200).json({data:result});
         })
@@ -15,17 +13,23 @@ class CategoryController {
             res.status(500).json({ msg : err });
         })
     }
-
-    static getAllCategory(req,res){ //get category dan list item pada category pertama
+    static createCategory(req,res){
+        ModelCategory.create({name : req.body.name})
+        .then(result =>{
+            CategoryController.getCategory(req,res)
+            //res.status(200).json({ msg : 'Category updated'});
+        })
+        .catch(err =>{
+            res.status(500).json({ msg : err });
+        })
+    }  
+    static getCategoryAndFirstItemCategory(req,res){ //get category dan list item pada category pertama
         console.log('get category')
-        //ModelCategory.find({}).populate('itemlist')
         ModelCategory.find({})
         .then(dataCategory =>{
             if(dataCategory){
-                console.log(dataCategory[0]._id)
                 ModelItem.find({category:dataCategory[0]._id})
                 .then(dataItem=>{
-                    console.log(dataItem)
                     res.status(200).json({ 
                         data:dataCategory,
                         item:dataItem
@@ -36,60 +40,52 @@ class CategoryController {
                     res.status(500).json({ msg : err })
                 })
             }else
-            {
-                res.status(200).json({ 
-                    data:null
-                })
-            }
-           
+                res.status(200).json({ data:null})
+                   
         })
         .catch(err =>{
             console.log(err)
-            res.status(500).json({
-                msg : err
-            })
+            res.status(500).json({ msg : err })
         })
     }
-
     static getCategoryByName(req,res){
-        ModelCategory.findOne({
-            name : req.body.name
-        }).populate('itemlist')
-            .then(result =>{
-                res.status(200).json({ 
-                    data : result
-                })
+        ModelCategory.findOne({name : req.body.name})
+        .then(result =>{
+            res.status(200).json({ 
+                data : result
             })
-            .catch(err =>{
-                res.status(500).json({
-                    msg : err
-                })
-            })
-    }
-
-
-    static editCategory(req,res){
-        ModelCategory.findOneAndUpdate({_id : req.params.id},{
-            name : req.body.name,
-            groupItem : req.body['groupItem']
         })
-        .then(row =>{
-            res.status(200).json({ msg : 'Category updated'});
+        .catch(err =>{
+            res.status(500).json({ msg : err })
+        })
+    }
+    static editCategory(req,res){
+        console.log(req.body.id);
+        console.log(req.body.name);
+        ModelCategory.findOneAndUpdate({_id : req.body.id},{
+            name : req.body.name,
+        })
+        .then(result =>{
+            if(result)
+                res.status(201).json({ msg : 'Category updated'});
+            else
+                res.status(201).json({ msg : 'Category not found'});
         })
         .catch(err =>{
             res.status(500).json({ msg : err});
         })
     }
-
-
     static deleteCategory(req,res){
-        ModelCategory.deleteOne({ _id : req.params.id})
-            .then(row =>{
-                res.status(200).json({ msg : 'Category deleted'});
-            })
-            .catch(err =>{
-                res.status(500).json({ msg : err})
-            })
+        ModelCategory.deleteOne({ _id : req.body.id})
+        .then(result =>{
+            if(result)
+                res.status(201).json({ msg : 'Category deleted'});
+            else
+                res.status(201).json({ msg : 'Category not found'});
+        })
+        .catch(err =>{
+            res.status(500).json({ msg : err})
+        })
     }
 }
 
