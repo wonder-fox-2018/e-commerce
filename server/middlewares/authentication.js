@@ -5,11 +5,12 @@ class Middleware {
         if(req.headers.token) {
             let decoded = jwt.verify(req.headers.token, process.env.jwtToken, function(err, decoded) {
             if (err) {
-                console.log('SALAHHHH'); 
+                console.log('User does not exist in database.'); 
+                res.status('User does not exist in database')
             }
             else {
                 req.data = decoded
-                req.decoded = decoded.role
+                req.role = decoded.role
                 next()
                 console.log(decoded.role);
             }
@@ -17,7 +18,7 @@ class Middleware {
         }
     }
     static authorize(req, res, next) {
-        if(req.decoded === 'admin') {
+        if(req.role === 'admin') {
             console.log(req.data);
             
             next()
