@@ -3,6 +3,7 @@ var router = express.Router();
 const userRouter = require('./users')
 const productRouter = require('./product')
 const userController = require('../controllers/userController')
+const images = require('../helpers/images')
 
 
 /* GET home page. */
@@ -15,5 +16,17 @@ router.post('/signin', userController.signin)
 
 router.use('/users', userRouter)
 router.use('/products', productRouter)
+
+router.post('/upload',
+  images.multer.single('image'), 
+  images.sendUploadToGCS,
+  (req, res) => {
+    res.send({
+      status: 200,
+      message: 'Your file is successfully uploaded',
+      link: req.file.cloudStoragePublicUrl
+    })
+  })
+
 
 module.exports = router;

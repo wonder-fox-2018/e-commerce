@@ -37,6 +37,10 @@ const userSchema = new Schema({
         type : String,
         required : [true, 'Zip code must be filled']
     },
+    role : {
+        type : String,
+        default : 'user'
+    },
     transaction : [{
         type : Schema.Types.ObjectId,
         ref: 'Transaction'

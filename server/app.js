@@ -11,7 +11,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 app.use(cors())
-mongoose.connect('mongodb://localhost/ecommerce', {useNewUrlParser : true})
+mongoose.connect('mongodb://localhost/tokogundam', {useNewUrlParser : true})
 
 app.use(logger('dev'));
 app.use(express.json());

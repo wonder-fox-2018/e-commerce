@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const productController = require('../controllers/productController')
 const midleware = require('../midleware/auth')
+const images = require('../helpers/images')
 
 router.get('/', (req, res) => {
     res.send('ini dari product')
@@ -15,5 +16,8 @@ router.put('/edit/:id', productController.updateProduct)
 router.put('/edit/category/:id', productController.updateCategory)
 router.delete('/delete/:id', productController.deleteProduct)
 router.delete('/delete/category/:id', productController.deleteCategory)
+
+router.post('/upload',midleware.isLogin ,images.multer.single('image'), images.sendUploadToGCS, productController.upload)
+
 
 module.exports = router
