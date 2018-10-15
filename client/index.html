@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    
+    <meta name="google-signin-client_id" content="155964938197-ofojs9a3rmk4t7b196815irt5i2ftrgc.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <link rel="stylesheet" type="text/css" href="./assets/css/custom.css">
+    <link href="https://fonts.googleapis.com/css?family=K2D" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amiri|Arvo" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <script src = "./component/footer.js"></script>
+    <script src = "./component/navbar.js"></script>
+    <script src ="./component/contentitem.js"></script>
+    <script src = "./component/sidebar.js"></script>
+    <title>E-Cosmetics</title>
+</head>
+<body>
+    <div id="app">
+        <!-- Navbar section-->
+        <navbar-section @usercredentials = "getusercredentials" @islogin= "getislogin" :gettemptransaction="temptransaction" :gettotalamount="totalamount" @updatedtemptransaction="updatedtemptransaction" @updatedtotalamount="updatedtotalamount">
+        </navbar-section>
+
+        <div class="container-fluid border">
+            <div class="row">
+                <div class = "col-md-3 border">
+                    <sidebar-section @listitems= "getitems" @listcategories="getcategories" :getcredentials="usercredentials" :getislogin = "islogin" :token="token">                        
+                    </sidebar-section>
+                </div>
+                <div class= "col-md-9 border">
+                    <content-item :getislogin = "islogin" :getlistitems="listitems" :getlistcategories="listcategories" @temptransaction="gettemptransaction" @totalamount="gettotalamount" :updatetemptransaction="temptransaction" :updatetotalamount="totalamount" :gettoken="token" :getcredentials="usercredentials">
+                    </content-item>
+                </div>
+            </div>
+        </div>
+        <footer-comp></footer-comp>
+    </div>
+    <script>
+        let app = new Vue({
+          el: '#app',
+          data: {
+             listitems: [],
+             listcategories: [],
+             usercredentials: {},
+             temptransaction: [],
+             totalamount: 0,
+             islogin: false,
+             token: ''
+          },
+          methods:{
+            getusercredentials(val){
+               this.usercredentials = val 
+            },
+            getislogin(val){
+               this.islogin = val
+               if(this.islogin === true){
+                  this.token = localStorage.getItem('token')
+               }else{
+                  this.token = ''
+               }
+            },
+            getitems(val){
+               this.listitems = val 
+            },
+            getcategories(val){
+                this.listcategories = val 
+            },
+            gettemptransaction(val){
+               this.temptransaction = val
+            },
+            gettotalamount(val){
+               this.totalamount = val
+            },
+            updatedtemptransaction(val){
+                this.temptransaction = val
+            },
+            updatedtotalamount(val){
+                this.totalamount = val
+            }
+          }
+        })
+    </script>
+    <!-- Bootstrap Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
