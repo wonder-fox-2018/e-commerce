@@ -3,6 +3,7 @@ let app = new Vue({
     el:'#app',
     data:{
         isLogin : '',
+        role : '',
         register : {
             name : '',
             email : '',
@@ -40,41 +41,50 @@ let app = new Vue({
                     }
                 })
                 .then(user => {
-                    // console.log(user)
+                    console.log(user)
                     this.user.name =  user.data.name
                     this.user.id = user.data._id
                     this.id = user.data._id
+                    if(user.data.role === 'admin'){
+                        this.role = true
+                    }
+                    else{
+                        this.role = false
+                    }
                     this.user.cart = []
                     this.user.count = 0
                     this.user.price_count = 0 
+                    this.checkout = []
+                    this.getCheckOutList()
                 })
                 .catch(err => {
                     console.log(err)
                 })
             }
-            else{
-                console.log(`Please login first`)
-            }
         },
         getCheckOutList : function(){
-            axios({
-                method : 'GET',
-                url : `http://localhost:3000/users/checkout`,
-                headers : {
-                    token : localStorage.getItem('token')
-                }
-            })
-            .then(checkout => {
-                console.log(checkout)
-                checkout.data.forEach(list => {
-                    this.checkout.push(list)
+            let token = localStorage.getItem('token')
+            if(token){
+                axios({
+                    method : 'GET',
+                    url : `http://localhost:3000/users/checkout`,
+                    headers : {
+                        token : localStorage.getItem('token')
+                    }
                 })
-
-                // console.log(this.checkout)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+                .then(checkout => {
+                    console.log(checkout)
+                    checkout.data.forEach(list => {
+                        this.checkout.push(list)
+                    })
+    
+                    // console.log(this.checkout)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            }
+            
         },
         getToken : function(){
             let token = localStorage.getItem('token')
@@ -91,6 +101,7 @@ let app = new Vue({
                 url : 'http://localhost:3000/products/showAll'
             })
             .then(dataProduct => {
+                this.card = []
                 let products = dataProduct.data.products
                 // console.log(products)
                 products.forEach(list => {

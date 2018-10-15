@@ -22,14 +22,14 @@
 
     <!-- Navigation -->
     <div id="app">
-    <navbar-component :is-login="isLogin" :get-token='getToken' :user="user"></navbar-component><!-- Page Content -->
+    <navbar-component :is-login="isLogin" :getuseronline="getUserOnline" :refresh="allProduct" :get-token='getToken' :user="user"></navbar-component><!-- Page Content -->
     <div class="container">
       <div class="row" >
-        <sidebar-component :is-login="isLogin" :user="user"></sidebar-component><!-- /.col-lg-3 -->
+        <sidebar-component :is-login="isLogin" :role="role" :user="user"></sidebar-component><!-- /.col-lg-3 -->
         <div class="col-lg-9">
           <carousel-component></carousel-component>
           <div class="row">
-            <item-list v-for="list in card" :key="list._id" :list="list" :user="user"></item-list>
+            <item-list v-for="list in card" :key="list._id" :list="list" :role="role" :user="user"></item-list>
           </div> <!-- /.row -->
         </div><!-- /.col-lg-9 -->
       </div><!-- /.row -->
@@ -45,9 +45,9 @@
   
   <!-- modal add product -->
   <modal-register :register="register"></modal-register>
-  <modal-addproduct :register="register" :refresh="allProduct"></modal-addproduct>
+  <modal-addproduct :refresh="allProduct"></modal-addproduct>
   <modal-login :login="register" :get-token="getToken" :getuseronline="getUserOnline"></modal-login>
-  <modal-cart :user="user" :getuseronline="getUserOnline"></modal-cart>
+  <modal-cart :user="user" :getcheckoutlist="getCheckOutList" :getuseronline="getUserOnline"></modal-cart>
   <modal-checkout :user="user" :checkout="checkout" :getcheckoutlist="getCheckOutList"></modal-checkout>
   </div>
   <!-- Bootstrap core JavaScript -->

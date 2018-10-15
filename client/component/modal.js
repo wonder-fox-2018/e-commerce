@@ -86,7 +86,7 @@ Vue.component('modal-register', {
 })
 
 Vue.component('modal-addproduct', {
-    props : ['register', 'refresh'],
+    props : ['refresh'],
     data : function(){
         return {
             title : '',
@@ -95,34 +95,57 @@ Vue.component('modal-addproduct', {
             img : '',
             description : '',
             category : '',
-            qty : ''
+            qty : '',
         }
     },
     methods : {
+        getMemeImg(link) {
+          this.image = link.target.files[0]
+          console.log("ini image", this.image);
+        },
         addProduct : function(){
+
+          let formdata = new FormData()
+          formdata.append('image', this.image)
+
+          axios.post('http://localhost:3000/upload', formdata)
+          .then((image) => {
+            let url = image.data.link
+            
+            console.log(url)
             axios({
-                method : 'POST',
-                url : 'http://localhost:3000/products/add',
-                headers : {
-                    token : localStorage.getItem('token')
-                },
-                data : {
-                    title : this.title,
-                    price : this.price,
-                    total : 1,
-                    img : this.img,
-                    description : this.description,
-                    category : this.category,
-                    qty : this.qty
-                }
+              method : 'POST',
+              url : 'http://localhost:3000/products/add',
+              headers : {
+                  token : localStorage.getItem('token')
+              },
+              data : {
+                  title : this.title,
+                  price : this.price,
+                  total : 1,
+                  img : url,
+                  description : this.description,
+                  category : this.category,
+                  qty : this.qty
+              }
             })
             .then(response => {
                 console.log(response)
+                this.title = ''
+                this.price = ''
+                this.img = ''
+                this.description = ''
+                this.category = ''
+                this.qty = ''
                 this.refresh()
             })
-            .catch(err => {
-                console.log(err)
-            })
+          })
+          .catch((err) => {
+              console.log(err);
+              
+          });
+          
+            
         }
     },
     template: `
@@ -149,7 +172,7 @@ Vue.component('modal-addproduct', {
             </div>
             <div class="form-group">
               <label for="inputImage">img</label>
-              <input type="text" class="form-control" v-model="img" placeholder="Image link ...">
+              <input type="file" class="form-control" id="inputPassword3" placeholder="image" v-on:change="getMemeImg($event)">
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
@@ -240,7 +263,7 @@ Vue.component('modal-login',{
 })
 
 Vue.component('modal-cart',{
-    props :  ['user', 'getuseronline'],
+    props :  ['user', 'getcheckoutlist', 'getuseronline'],
     methods : {
         checkout : function(){
             // this.getuseronline()
@@ -261,6 +284,7 @@ Vue.component('modal-cart',{
                 console.log('test')
                 // console.log(response)
                 this.getuseronline()
+                this.getcheckoutlist()
             })
             .catch(err => {
                 console.log(err)
@@ -359,7 +383,6 @@ Vue.component('modal-checkout',{
            </div>
            <div class="modal-footer">
              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button type="button" class="btn btn-primary" data-dismiss='modal'>Save changes</button>
            </div>
          </div>
        </div>

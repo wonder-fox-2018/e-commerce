@@ -1,9 +1,12 @@
 Vue.component('navbar-component',{
-    props : ['is-login','get-token', 'user' ],
+    props : ['is-login','get-token', 'user', 'getuseronline','refresh' ],
     methods : {
         signout : function(){
             localStorage.removeItem('token')
             this.getToken()
+            this.refresh()
+            this.getuseronline()
+            
         }
     },
     template : `
@@ -15,6 +18,7 @@ Vue.component('navbar-component',{
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
+            
             <li class="nav-item" v-if=!isLogin>
                 <a class="nav-link" href="#" data-toggle="modal" data-target="#modalRegister">Register</a>
             </li>
@@ -28,7 +32,7 @@ Vue.component('navbar-component',{
             </li>
             <li class="nav-item" v-if=isLogin>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCheckout">
-                checkout <span class="badge badge-light">{{user.count}}</span>
+                checkout
             </button>
             </li>
             <li class="nav-item" v-if="isLogin">
@@ -41,15 +45,42 @@ Vue.component('navbar-component',{
     `
 })
 Vue.component('sidebar-component',{
-    props : ['is-login', 'user'],
+    props : ['is-login', 'user', 'role', 'search'],
+    data : function(){
+        return {
+            keyword : ''
+        }
+    },
+    methods : {
+        searchproduct : function(){
+            console.log(this.keyword)
+            axios({
+                method : 'GET',
+                url : `http://localhost:3000/products/search/${this.keyword}`,
+                headers : {
+                    access_token : localStorage.getItem('token')
+                }
+            })
+            .then(user => {
+                this.user.cart = user.data
+                console.log(user)
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+    },
     template : `
     <div class="col-lg-3">
         <div class="list-group" v-if=isLogin>
             <h4 class="my-4">{{user.name}}</h4>
-            <a href="#" class="list-group-item" data-toggle='modal' data-target='#modalAddProduct'>add Product</a>
-            <a href="#" class="list-group-item">Category 1</a>
-            <a href="#" class="list-group-item">Category 2</a>
-            <a href="#" class="list-group-item">Category 3</a>
+            <a href="#" class="list-group-item" v-if=role data-toggle='modal' data-target='#modalAddProduct'>add Product</a>
+            <input type="text" class="form-control" v-model="this.keyword">
+            <button type="button" @click="searchproduct" class="btn btn-primary">
+            search</button>
+        </div>
+        <div class="list-group">
         </div>
     </div>
     `
@@ -86,7 +117,7 @@ Vue.component('carousel-component',{
     `
 })
 Vue.component('item-list', {
-    props : ['list', 'user'],
+    props : ['list', 'user', 'role'],
     methods : {
         toCart : function(list){
             this.user.price_count = this.user.price_count + list.price
@@ -109,6 +140,9 @@ Vue.component('item-list', {
             if(status==0){
                 this.user.cart.push(list)
             }
+        },
+        edit :function(list){
+            console.log(list)
         }
     },
     template : `
@@ -124,6 +158,7 @@ Vue.component('item-list', {
                 </div>
                 <div class="card-footer">
                     <button @click="toCart(list)">BUY</button>
+                    <button v-if=role @click="edit(list)">edit</button>
                 </div>
             </div>
         </div>
