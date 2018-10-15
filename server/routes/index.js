@@ -11,7 +11,7 @@ router.get('/',(req, res)=>{res.send('')})
 router.use('/customers', routeCustomers );
 router.use('/items', routeItems );
 router.use('/carts', routeCarts );
-router.use('/categories', routeCategory)
+router.use('/categories', routeCategory);
 
 
 module.exports = router;

@@ -1,7 +1,9 @@
 body .ui {
   background-color: rgb(44, 40, 40);
 }
-
+.cart {
+  background-color: whitesmoke;
+}
 
 .logo {
   max-height: 60px ;

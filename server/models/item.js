@@ -21,7 +21,8 @@ var ItemSchema = new Schema({
     required: true
   },
   image_url: {
-    type: String
+    type: String,
+    default: 'https://birkeland.h.uib.no/wp-content/themes/bcss/images/no.png'
   }
 }, {
   timestamps: true
@@ -33,23 +34,23 @@ var Item = mongoose.model('Item', ItemSchema);
 
 module.exports = Item
 
-let dummyItems = [
-  {
-    name: 'kamera 1',
-    category: 'kamera',
-    quantity: 5,
-    price: 7000000
-  },
-  {
-    name: 'kamera 2',
-    category: 'kamera',
-    quantity: 10,
-    price: 100000000
-  },
-  {
-    name: 'buku 3',
-    category: 'buku',
-    quantity: 1,
-    price: 50000
-  }
-]
+// let dummyItems = [
+//   {
+//     name: 'kamera 1',
+//     category: 'kamera',
+//     quantity: 5,
+//     price: 7000000
+//   },
+//   {
+//     name: 'kamera 2',
+//     category: 'kamera',
+//     quantity: 10,
+//     price: 100000000
+//   },
+//   {
+//     name: 'buku 3',
+//     category: 'buku',
+//     quantity: 1,
+//     price: 50000
+//   }
+// ]

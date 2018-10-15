@@ -1,7 +1,7 @@
 const Cart = require('../models/cart')
 
 module.exports = {
-  create : function(req,res){                 
+  create : function(req,res){               
     let itemId = []
     req.body.carts.forEach(item => {
       itemId.push(item._id)
@@ -11,7 +11,7 @@ module.exports = {
       items: itemId,
       total : req.body.totalTransaction
     })
-    .then(newCart =>{                                            
+    .then(newCart =>{                                           
       res.status(200).json({
         Cart : newCart,
         msg : 'success add a new Cart'                    
@@ -38,6 +38,8 @@ module.exports = {
   },
   read : function(req,res){
     Cart.find({})
+    .populate('items')
+    .populate('customer')
     .then(Carts =>{
       res.status(200).json(Carts)
     })

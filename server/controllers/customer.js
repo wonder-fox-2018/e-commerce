@@ -15,7 +15,8 @@ module.exports = {
     Customer.create({
       name: req.body.name,
       email: req.body.email,
-      password: Crypt.hash(req.body.password)
+      password: Crypt.hash(req.body.password),
+      role: req.body.role
     })
     .then((result) => {
       res.status(200).json(result)

@@ -13,47 +13,199 @@
   crossorigin="anonymous"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-    crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-    crossorigin="anonymous"></script>
+  crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <title>TokoLapak</title>
+  <title> TokoLapak</i></title>
 </head>
 
 <body>
   <div id="app">
     <header class="ui">
+      <!-- register form -->
+        <div class="ui inverted segment" v-if='showRegForm'>
+            <div class="ui inverted form">
+              <div class="three fields">
+                <div class="required field">
+                  <label>Name</label>
+                  <input placeholder="Name" type="text" v-model='name'>
+                </div>
+                <div class="required field">
+                  <label>Email</label>
+                  <input placeholder="Email" type="email" v-model='email'>
+                </div>
+                <div class="required field">
+                  <label>Password</label>
+                  <input placeholder="Password" type="password" v-model='password'>
+                </div>
+              </div>
+              <div class="required inline field">
+                <div class="ui checkbox ">
+                  <input type="checkbox" tabindex="0" class="">
+                  <label>I agree to the terms and conditions</label>
+                </div>
+              </div>
+              <div class="ui submit button" @click='register'>Register</div>
+              <div class="ui submit button" @click='showRegForm=false'>Cancel</div>
+            </div>
+          </div>
+      <!-- Login -->
+      <div class="ui inverted segment" v-if='showLoginForm'>
+        <div class="ui inverted form">
+          <div class="two fields">
+            <div class="required field">
+              <label>Email</label>
+              <input placeholder="Email" type="email" v-model='email'>
+            </div>
+            <div class="required field">
+              <label>Password</label>
+              <input placeholder="Password" type="password" v-model='password'>
+            </div>
+          </div>
+          <div class="required inline field">
+          </div>
+          <div class="ui submit button" @click='login'>Login</div>
+          <div class="ui submit button" @click='showLoginForm=false'>Cancel</div>
+        </div>
+      </div>
+      <!-- CART -->
+      <div class="cart" v-if='showCart'>
+          <div class="header">
+              Order Summary
+            </div>
+            <div id="payment">
+              <h5 class="text-dark">Order Summary</h5><br>
+              <ul>
+                <div class="row justify-content-between" v-for="cart in carts">
+                  <li class="text-dark" style="list-style-type: none;">
+                      {{cart.name}} ({{cart.category}})
+                  </li>
+                  <h6 class="text-dark">{{moneyFormat(cart.price)}}</h6>
+                </div>
+              </ul>
+              <h5 class="text-dark">Payment Information</h5><br>
+              <ul>
+                <div class="justify-content-between">
+                  <h6 class="text-dark">Total Price : {{paymentDetail}}</h6>
+                </div>
+              </ul>
+              <button class="btn btn-success" type="button" @click="checkout(carts,paymentDetail)">Checkout</button>
+              <button class="btn btn-danger" @click='showCart=false'>Close</button>
+            </div>
+      </div>
       <nav class="navbar navbar-light" style="background-color: rgb(69, 73, 73); color: whitesmoke">
         <!-- <img src="./img/tokolapak.png" alt="#" class="logo"> -->
         <h1><span style="color:rgb(20, 160, 20)">Toko</span><i class="fab fa-opencart"></i><span style="color:rgb(194, 27, 27)">Lapak</span></h1>
         <div class="ui buttons">
-          <button class="ui teal button" id="register">Register</button>
+          <button class="ui teal button" id="register" @click='showRegForm=true'>Register</button>
           <div class="or"></div>
-          <button class="ui blue button" id="login">login</button>
+          <button class="ui blue button" id="login" @click='showLoginForm=true'>login</button>
         </div>
-        <div class="ui compact menu" id="cart">
+        <div class="ui compact menu" id="cart" @click='showCart=true'>
           <a class="item">
             <i class="icon cart"></i> Cart
             <div class="floating ui teal label">{{totalItems}}</div>
           </a>
         </div>
-        <form class="form-inline mt-2 mt-md-0">
-          <h3><a type="button" class="nav-link" @click='logout' style="color: rgb(10, 0, 0)">logout</a></h3>
-        </form>
+        <div class="logout-button" v-if='isLogin'>
+          <button class="ui button" ><a class="nav-link" @click='logout' style="color: rgb(10, 0, 0)">logout</a></button>
+        </div>
       </nav>
     </header>
+    <!-- admin World -->
+    <div class="container" v-if='isAdmin'>
+    <div class="row"  style="margin: auto">
+      <h3>add, edit, delete:</h3>
+      <div class="col-md-3">
+        <button class="btn" @click='adminItem=true'>Items</button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn" @click='adminCart'>Cart</button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn" @click='adminCustomer'>Customers</button>
+      </div>
+    </div>
+    <div class="row" v-if='adminItem'>
+      <h3>Add new Item</h3><br>
+      <label for="name">Name</label>
+      <input type="text"  v-model='itemName'>
+      <label for="category">Category</label>
+      <input type="text"  v-model='itemCategory'>
+      <label for="price">Price</label>
+      <input type="text"  v-model='itemPrice'>
+      <label for="quantity">Quantity</label>
+      <input type="text"  v-model='itemQuantity'>
+      <label for="image_url">Image Url</label>
+      <input type="file"  v-model='itemImageUrl'><br>
+      <button class='btn' @click='createItem'>Add</button> or 
+      <button class='btn' @click='editItem(itemId)'>Edit</button>
+    </div>
+    <div class="row" v-if='adminItem' style="margin: auto">
+      <div class="adminItem">
+        <table class="ui table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for='item in items'>
+              <td>{{ item.name }}</td>
+              <td>{{ item.category }}</td>
+              <td>{{ item.price }}</td>
+              <td>{{ item.quantity }}</td>
+              <td><span style="color:blue" @click='showEditItem(item._id, item.name, item.category, item.price, item.quantity, item.image_url)'>Edit</span> || <span style="color:blue" @click='deleteItem(item._id)'>Delete</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row" v-if='adminCustomer' style="margin: auto">
+      <div class="adminCustomer">
+        <table class="ui table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for='customer in customers'>
+              <td>{{ customer.name }}</td>
+              <td>{{ customer.email }}</td>
+              <td><span style="color:blue" @click='editCustomerForm(customer._id)'>Edit</span> || <span style="color:blue" @click='deleteCustomerForm(customer._id)'>Delete</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- end of Admin -->
+
+<!-- Main Content -->
     <main>
       <div class="ui" style="padding:50px 0px;">
         <div class="ui grid">
           <div class="offset-sm-0.5"></div>
           <div class="ui vertical menu" style="background-color: rgb(77, 84, 90);">
-            <a class="item" v-for='category in categories'>
+            <a class="item" v-for='category in categories' @click='findItem(category)' >
               <div class="ui small teal label">666</div>
               {{category}}
             </a>
+            <a class="item" @click='showItems' >
+              Show All Categories
+              </a>
             <div class="item">
               <div class="ui icon input">
-                <input type="text" placeholder="Search item" v-model='itemFound' @keyup='findItem' >
+                <input type="text" placeholder="Search item" v-model='itemFound' @keyup='findItem("search")' >
                 <i class="search icon"></i>
               </div>
             </div>
@@ -78,10 +230,11 @@
                           </div>
                         </div>
                       </div>
-                      <img src="./img/1.jpg">
+                      <img :src="item.image_url">
                     </div>
                     <div class="content">
                       <a class="header">{{ item.name }}</a>
+                      <p>( {{ item.category }} )</p>
                       <div class="meta">
                         <span class="date">Rp {{ moneyFormat(item.price) }}</span>
                       </div>
@@ -100,82 +253,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <!-- Login Modal -->
-      <div class="ui modal login">
-        <i class="close icon"></i>
-        <div class="header">
-          Login Form
-        </div>
-          <div class="description">
-            <form action="" method="post">
-              <label for="email">Email:</label><br>
-              <input type="email" name="email" placeholder="Enter Email" v-model='email'><br><br>
-              <label for="password">Password:</label><br>
-              <input type="password" name="password" placeholder="Enter Password" v-model='password'><br><br>
-            </form>
-        </div>
-        <div class="actions">
-          <div class="ui red deny button">
-            Cancel
-          </div>
-          <div class="ui positive right labeled icon button" @click='login'>
-            Login
-            <i class="checkmark icon"></i>
-          </div>
-        </div>
-      </div>
-      <!-- Register Modal -->
-      <div class="ui modal register">
-        <i class="close icon"></i>
-        <div class="header">
-          Register Form
-        </div>
-          <div class="description">
-            <form action="" method="post">
-              <label for="name">Name:</label><br>
-              <input type="text" name="name" placeholder="Enter Name" v-model='name'><br><br>
-              <label for="email">Email:</label><br>
-              <input type="email" name="email" placeholder="Enter Email" v-model='email'><br><br>
-              <label for="password">Password:</label><br>
-              <input type="password" name="password" placeholder="Enter Password" v-model='password'><br><br>
-            </form>
-        </div>
-        <div class="actions">
-          <div class="ui red deny button">
-            Cancel
-          </div>
-          <div class="ui positive right labeled icon button" @click='register'>
-            Register
-            <i class="checkmark icon"></i>
-          </div>
-        </div>
-      </div>
-      <!-- CART MODAL -->
-      <div class="ui modal cart">
-        <i class="close icon"></i>
-        <div class="header">
-          Order Summary
-        </div>
-        <div id="payment">
-          <h5 class="text-dark">Order Summary</h5><br>
-          <ul>
-            <div class="row justify-content-between" v-for="cart in carts">
-              <li class="text-dark" style="list-style-type: none;">
-                  {{cart.name}} ({{cart.category}})
-              </li>
-              <h6 class="text-dark">{{moneyFormat(cart.price)}}</h6>
-            </div>
-          </ul>
-          <h5 class="text-dark">Payment Information</h5><br>
-          <ul>
-            <div class="justify-content-between">
-              <h6 class="text-dark">Total Price : {{paymentDetail}}</h6>
-            </div>
-          </ul>
-          <button type="button" data-dismiss="modal" @click="checkout(carts,paymentDetail)">Checkout</button>
-        </div>
-      </div>
+      </div>  
+    </main>
       <!-- footer -->
       <footer>
         <div class="container-footer text-center static-bottom" style="">
@@ -192,12 +271,14 @@
             </div>
           </div>
         </div>
-    </main>
     </footer>
     <!-- akhir footer -->
   </div>
   <!-- scripts -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+ 
   <script>
     
     let app = new Vue({
@@ -206,11 +287,11 @@
         name: '',
         email: '',
         password: '',
-        isLogin: false,
+        isLogin: true,
         item_id: '',
         itemFound: '',
         items: [],
-        categories: ['Buku','Kamera','Sepatu'],
+        categories: ['buku','kamera','sepatu'],
         itemsInCart: [],
         totalItems: 0,
         carts: [],
@@ -219,11 +300,33 @@
         success: false,
         error: false,
         errorMessage: '',
-        successMessage: ''
+        successMessage: '',
+        showLoginForm: false,
+        showRegForm: false,
+        showCart: false,
+        isAdmin: false,
+        adminItem: false,
+        adminCustomer: false,
+        adminCart: false,
+        showEditItemForm: false,
+        itemId: '',
+        itemName: '',
+        itemCategory: '',
+        itemPrice: '',
+        itemQuantity: '',
+        itemImageUrl: '',
+        showEditCustomer: false,
+        showEditCart: false
       },
       created() {
         this.showItems()
         this.showCategories()
+        if(localStorage.admin) {
+          this.isAdmin = true
+        }
+      },
+      watcher: {
+
       },
       computed: {
         paymentDetail() {
@@ -245,20 +348,26 @@
       },
       methods: {
         login() {
-          // console.log('melogin')
-          let self = this
           axios.post('http://localhost:3000/customers/login', {
-              email: self.email,
-              password: self.password
+              email: app.email,
+              password: app.password
           })
           .then((response) => {
-            console.log(response)
+            // console.log(response.data)
+            if( response.data.result.role === 'admin') {
+              app.isAdmin = true
+              localStorage.setItem('admin', true)
+            }
             localStorage.setItem('token',response.data.token)
             localStorage.setItem('id', response.data.result._id)
-            self.successMessage = 'Login Success'
-            self.isLogin = true
+            app.successMessage = 'Login Success'
+            app.password=''
+            app.success = true
+            app.isLogin = true
+            app.showLoginForm = false
           }).catch((err) => {
-            self.errorMessage = `Error: ${err.Error}`
+            app.errorMessage = `Error: ${err.Error}`
+            app.error = true
           });
         },
         logout() {
@@ -267,27 +376,32 @@
           this.password = ''
           localStorage.removeItem('token')
           localStorage.removeItem('id')
+          localStorage.removeItem('admin')
           this.isLogin = false
+          // console.log(app.isLogin)
         },
         register() {
-          let self = this
           axios.post('http://localhost:3000/customers/register', {
-              name: self.name,
-              email: self.email,
-              password: self.password
+              name: app.name,
+              email: app.email,
+              password: app.password
           })
           .then((response) => {
-            console.log(response)
-            self.successMessage = 'Registration Success'
+            // console.log(response)
+            app.showRegForm = false
+            app.successMessage = 'Registration Success'
+            app.success = true
+            app.password=''
           }).catch((err) => {
-            self.errorMessage = `Error: ${err.Error}`
+            app.errorMessage = `Error: ${err.Error}`
+            app.error = true
           })
         },
         showItems() {
-          let self = this
           axios.get('http://localhost:3000/items')
           .then(function (response) {
-            self.items = response.data.items
+            app.items = response.data.items
+            // console.log(app.items)
           })
           .catch(function (error) {
             console.log(error);
@@ -296,27 +410,36 @@
         showCategories(){
           axios.get('http://localhost:3000/categories')
           .then(function (response) {
-            console.log('cat:', response)
+            // console.log('cat:', response)
             // app.categories = response.data.items
           })
           .catch(function (error) {
             console.log(error);
           });
         },
-        findItem() {
-          let self = this
+        findItem(category) {
+          // console.log(category, '--', this.itemFound)
           let arr = []
-          if (this.itemFound === '') {
+          if (this.itemFound === '' && category == 'search') {
             this.showItems()
           } else {
+            console.log('masuk sini')
             axios.get('http://localhost:3000/items')
             .then(function (response) {
-              response.data.items.forEach(item=>{
-                if (item.name.indexOf(self.itemFound) !== -1) {
-                  arr.push(item)
-                }
-              })
-              self.items = arr;
+              if(category !== 'search') {
+                response.data.items.forEach(item=>{
+                  if(item.category.indexOf(category) !== -1) {
+                    arr.push(item)
+                  }
+                })
+              } else {
+                response.data.items.forEach(item=>{
+                  if (item.name.indexOf(app.itemFound) !== -1) {
+                    arr.push(item)
+                  }
+                })
+              }
+              app.items = arr;
             })
             .catch(function (error) {
               console.log(error);
@@ -327,14 +450,14 @@
           this.carts.push(selectedItem)
           this.totalItems++
         },
-        checkout(carts, paymentDetail) {
+        checkout(cartItems, paymentDetail) {
           this.carts = []
           let id = localStorage.getItem('id')
           let token = localStorage.getItem('token')
           let totalTransaction = paymentDetail
           this.totalItems = 0
           let data = {
-            carts,
+            carcartItems,
             id,
             totalTransaction
           }
@@ -350,7 +473,25 @@
               console.log(err);
           })
         },
-        moneyFormat(amount, decimalCount = 2, decimal = ",", thousands = ".") {
+        getTransaction() {
+          let id = localStorage.getItem('id')
+          let token = localStorage.getItem('token')
+          axios({
+                methods: 'GET',
+                url: `http://localhost:3000/cart/${id}`,
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+              })
+              .then(response => {
+                console.log(response);
+                this.transaction = response.data.Cart
+              })
+              .catch(err => {
+                console.log(err);
+              })
+      },
+        moneyFormat(amount, decimalCount = 0, decimal = ",", thousands = ".") {
           try {
             decimalCount = Math.abs(decimalCount);
             decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
@@ -364,26 +505,78 @@
           } catch (e) {
             console.log(e)
           }
+        },
+        showEditItem(id, name, category, price, quantity, itemImageUrl) {
+          app.showEditItemForm = true
+          app.itemId = id,
+          app.itemName = name,
+          app.itemCategory = category,
+          app.itemPrice = price,
+          app.itemQuantity = quantity
+          app.itemImageUrl = itemImageUrl
+        },
+        createItem() {
+          let token = localStorage.getItem('token')
+          axios.post(`http://localhost:3000/items`, {
+            name: app.itemName,
+            category: app.itemCategory,
+            price: app.itemPrice,
+            quantity: app.itemQuantity,
+            image_url: app.itemImageUrl
+          }, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+          })
+          .then((result) => {
+            console.log(result)
+          }).catch((err) => {
+            console.log(err)
+          });
+          
+        },
+        editItem(id) {
+          let token = localStorage.getItem('token')
+          axios.put(`http://localhost:3000/items/${id}`,{
+            name: app.itemName,
+            category: app.itemCategory,
+            price: app.itemPrice,
+            quantity: app.itemQuantity,
+            image_url: app.itemImageUrl
+          }, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+          })
+          .then((result) => {
+            console.log(result)
+
+          }).catch((err) => {
+            console.log(err)
+          });
+        },
+        deleteItem(id) {
+          let token = localStorage.getItem('token')
+          axios.delete(`http://localhost:3000/items/${id}`, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+          })
+          .then((result) => {
+            console.log(result)
+            app.adminItem = false
+            setTimeout(()=>{
+              app.adminItem = true
+            }, 300)
+          }).catch((err) => {
+            console.log(err)
+          });
         }
       }
     })
   </script>
   
-  <script>
-    $('.special.cards .image').dimmer({
-      on: 'hover'
-    });
-
-    $('#login').on('click',(e)=>{
-      $('.ui.modal.login').modal('show');
-    } )
-    $('#register').on('click',(e)=>{
-      $('.ui.modal.register').modal('show');
-    } )
-    $('#cart').on('click',(e)=>{
-      $('.ui.modal.cart').modal('show');
-    } )
-  </script>
+  
 </body>
 
 </html>

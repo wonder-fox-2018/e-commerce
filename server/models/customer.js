@@ -15,6 +15,10 @@ var CustSchema = new Schema({
   password: {
     type: String,
     required: true
+  },
+  role : {
+    type: String, 
+    default : "customer"
   }
 }, {
   timestamps: true
