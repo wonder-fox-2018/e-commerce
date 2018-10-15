@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.js"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link href="style.css" rel="stylesheet">
+  <!-- <meta name="google-signin-client_id" content="944393342423-g098v0uhgc4u9q49gpcdkjndkbhgnf45.apps.googleusercontent.com"> -->
+</head>
+
+<body>
+
+  <div id="app">
+    
+      <user-cart :totalan="totalPrice" :usercart="cartContent" :toggle="cartModal" @checkoutevent="checkouts" @atcart="addToCart" @mincart="minCart" @tc="cancelCart"></user-cart>
+
+      <history-form @vl="val($event)" :th="transhistory" :ht="historytrans" :st="singletrans" :total="totalHistory" :dl="deleted_transaction" @del="deleteTrans($event)"></history-form>
+      
+  <login-form @login=signin :status='signinfail' :toggle='signinModal'></login-form>
+  <register-form @register=register :status='registerfail' :toggle='signupModal'></register-form>
+      
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img src="/img/bukapedia.png" width="130" height="85" class="d-inline-block align-top" alt="">
+      </a>
+      <!-- <div class="g-signin2" data-onsuccess="onSignIn" v-if=!token></div> -->
+      <div class="ui buttons">
+        <button v-if=!token class="ui button" data-toggle="modal" data-target="#myModal" v-on:click="toggleSignin">Signin</button>
+        <div v-if=!token class="or"></div>
+        <button v-if=!token class="ui positive button" v-on:click="toggleSignup">Register</button>
+        <button class="ui positive button" v-if=token @click="logout()">Logout</button>
+      </div>
+      <div id=history v-if="token&&!isAdmin">
+          <button class="ui positive button" v-if=token @click="toggleHistory">Transaction History</button>
+          <a class="ui yellow circular label">{{transhistory.length}}</a>
+      </div>
+      <div id=cart v-if="token&&!isAdmin">
+        <a class="ui yellow circular label">{{cartLength}}</a>
+        <i v-on:click="toggleCart" class="fa fa-shopping-cart" style="font-size:48px;color:green"></i>
+      </div>
+      <div class="ui loading search">
+        <div class="ui icon input">
+          <input class="prompt" type="text" placeholder="Search..." v-model="word" @keyup="search"> 
+          <i class="search icon"></i>
+        </div>
+        <div class="results"></div>
+      </div>
+    </nav>
+    <br><br>
+
+
+    <div class="ui grid">
+      <div class="ui four wide column" style="padding: 20px;">
+        <div class="column">
+          <h3 class="ui center aligned icon header" v-if=token>
+            <i class="circular users icon"></i>
+            Welcome to Bukapedia <br>
+          {{profile}}<br>
+          {{eprofile}}<br>
+          admin : {{isAdmin}}
+          </h3>
+              <div style="padding-left  : 20px;" v-for="data in categoryList" v-on:click="getCategory(data._id)" class="ui green segment">{{data.name}}</div>
+        </div>
+        
+        <div class="form-group" v-if="isAdmin">
+          <br><br>
+          <h4>Category Submitter : </h4>
+            <div class="field">
+              <input type="text" name="category" placeholder="category" v-model="category">
+            </div>
+            <div class="field">
+              <input type="text" name="description" placeholder="description" v-model="categorydesc">
+            </div>
+            <button @click="catNew" class="ui button" type="submit">Add New Category</button>
+        </div>
+      </div>
+      
+        <cart-form :admin="isAdmin" @kirimdata="delproduct" @kirimid="addToCart" @dataid="populateData" @dis="isDisabled=false" :datacard="data_barang" :token="token"></cart-form>
+      </div>
+     
+      <div class="col-lg-6">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 mb-12 form-horizontal" >
+              <div class="form-group">
+                <button class="btn-primary" @click='toggleform' v-if="isAdmin">Product Editor</button>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <!-- FORM -->
+            <div class='content-wrapper' v-if='showCreateForm'>
+              <div class='meme' id='capture'>       
+                <div class='content'>
+                  <img v-bind:src='image' v-if='image'>
+                  <img src="https://placeimg.com/640/480/tech" v-else>
+                </div>
+              </div>
+                <p>From URL</p>
+                <input id="imgURL" class="block" v-model='image' type="text" placeholder="Link to image" :disabled="isDisabled"/>
+                <p>From Local Disk</p>
+                <input type="file" placeholder="image" v-on:change="getImage($event)">
+                <div class="ui form">
+                    <div class="fields">
+                      <div class="field">
+                        <label>Product Name</label>
+                        <input type="text" placeholder="Product name" v-model="name">
+                      </div>
+                      <div class="field">
+                        <label>Product Description</label>
+                        <input type="text" placeholder="Description" v-model="description">
+                      </div>
+                    </div>
+                    <div class="equal width fields">
+                      <div class="field">
+                        <label>Stock</label>
+                        <input type="text" placeholder="Stock" v-model="stock">
+                      </div>
+                      <div class="field">
+                        <label>Price</label>
+                        <input type="text" placeholder="Price" v-model="price">
+                      </div>
+                    </div>
+                  </div>
+                  <select class="ui dropdown" @click="selectcat" id="select_cat">  
+                      <option :value="data._id" v-for="(data,index) in categoryList">{{data.name}}</option>
+                  </select>
+                  <br>
+                  <br>  
+                    <div class="extra content">
+                      <button v-if=token class="ui toggle mini button active" @click="createproduct">Save To New</button>
+                    </div>
+                    <br>
+                    <div class="extra content">
+                        <button v-if=token class="ui toggle mini button active" @click="uploader">Edit Product</button>
+                    </div>
+            </div>
+
+  
+    </div>
+
+    <hr>
+    <footbar-form></footbar-form> 
+     
+  </div>
+
+    
+
+</div>
+
+
+
+    <!-- Footer -->
+  
+  
+  <script src="./script/footbar.js"></script>
+  <script src="./script/login.js"></script>
+  <script src="./script/register.js"></script>
+  <script src="./script/cart.js"></script>
+  <script src="./script/usercart.js"></script>
+  <script src="./script/history.js"></script>
+  <script>
+    const baseUrl = `http://localhost:3000`;
+    var app = new Vue({
+      el: '#app',
+      data: {
+        category:'',word:'',
+        categorydesc:'',
+        showCreateForm:false,
+        image:'',
+        registerfail:false,
+        signinfail:false,
+        message: 'Hello Vue!',
+        data_barang: [],
+        checkout: 0,
+        name:'',
+        file:'',
+        description:'',
+        stock:'',
+        price:'',
+        activeId:'',
+        signinModal:false,
+        signupModal:false,
+        cartModal:false,
+        cartContent:[],
+        categoryList:[],
+        token:'',
+        transhistory:[],
+        profile:'',
+        eprofile:'',
+        isAdmin:false,
+        singletrans:[],
+        id:'',result:'',cat:'',
+        isDisabled:false,
+        historytrans:false,
+        deleted_transaction:false
+      },
+      created() {
+        this.showItem()
+        this.getUserCart()
+        this.fetchCategory()
+        this.token=localStorage.getItem('token')
+        this.profiles()
+        this.gethistory()  
+      },
+      methods: {
+        toggleform(){
+            this.showCreateForm=!this.showCreateForm
+        },
+        delproduct(id){
+            alert(id)
+            axios.delete(`${baseUrl}/product/${id}`)
+            .then(function (response) {
+              swal("Selamat!", "Sukses Menghapus Data Product!", "success");
+                  app.showItem()
+                  app.getUserCart()
+                  app.fetchCategory()
+                  app.profiles()
+                  app.gethistory()
+            }).catch(function (err) {
+                console.log(err)
+            })
+        },
+        createproduct(){
+          if(typeof this.result=="object")
+            {
+                let formdata = new FormData()
+                formdata.append('image', this.result)
+
+                axios.post(`${baseUrl}/upload`, formdata)
+                .then((image) => {
+                      axios.post(`${baseUrl}/product`,{
+                          name: app.name,
+                          description: app.description,
+                          imgUrl:image.data.link,
+                          stock:app.stock,
+                          price:app.price,
+                          category:app.cat
+                      })
+                      .then(function (response) {
+                          swal("Selamat!", "Data Product Telah Ditambahkan!", "success");
+                          app.showItem()
+                          app.getUserCart()
+                          app.fetchCategory()
+                          app.profiles()
+                          app.gethistory()
+                      }).catch(function (err) {
+                          console.log(err)
+                      })
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            }
+            else{
+               axios.post(`${baseUrl}/product`,{
+                  name: app.name,
+                  description: app.description,
+                  imgUrl:app.image,
+                  stock:app.stock,
+                  price:app.price,
+                  category:app.cat
+               })
+              .then(function (response) 
+               {
+                    swal("Selamat!", "Data Product Telah Ditambahkan!", "success");
+                    app.showItem()
+                    app.getUserCart()
+                    app.fetchCategory()
+                    app.profiles()
+                    app.gethistory()
+               }).catch(function (err) 
+                {
+                      console.log(err)
+                })
+             }
+        },
+        toggleSignin(){
+          this.signinModal=!this.signinModal
+          this.signupModal=false
+          this.cartModal=false
+          this.historytrans=false
+        },
+        toggleSignup(){
+          this.signupModal=!this.signupModal
+          this.signinModal=false
+          this.cartModal=false
+          this.historytrans=false
+        },
+        toggleCart(){
+          this.signinModal=false
+          this.signupModal=false
+          this.cartModal=!this.cartModal
+          this.historytrans=false
+        },toggleHistory(){
+          this.signinModal=false
+          this.signupModal=false
+          this.cartModal=false
+          this.historytrans=!this.historytrans
+        },
+        getImage(link){
+            this.isDisabled=true
+          
+            this.file=link.target.files[0]
+            this.result=link.target.files[0]
+            let reader  = new FileReader();
+
+            reader.addEventListener('load', function () {
+              this.image = reader.result;
+            }.bind(this), false);
+
+            if( this.file ){
+               if ( /\.(jpe?g|png|gif)$/i.test( this.file.name ) ) {
+                  reader.readAsDataURL( this.file );
+               }
+            }
+            
+        },
+        uploader() {
+            
+            if(typeof this.result=="object")
+            {
+                let formdata = new FormData()
+                formdata.append('image', this.result)
+
+                axios.post(`${baseUrl}/upload`, formdata)
+                .then((image) => {
+                      axios.put(`${baseUrl}/product/${app.activeId}`,{
+                          name: app.name,
+                          description: app.description,
+                          imgUrl:image.data.link,
+                          stock:app.stock,
+                          price:app.price,
+                          category:app.cat
+                      })
+                      .then(function (response) {
+                        swal("Selamat!", "Data Product Telah Diubah!", "success");
+                        app.showItem()
+                        app.getUserCart()
+                        app.fetchCategory()
+                        app.profiles()
+                        app.gethistory()
+                      }).catch(function (err) {
+                        console.log(err)
+                      })
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            }
+            else{
+               axios.put(`${baseUrl}/product/${app.activeId}`,{
+                  name: app.name,
+                  description: app.description,
+                  imgUrl:app.image,
+                  stock:app.stock,
+                  price:app.price,
+                  category:app.cat
+                })
+                .then(function (response) {
+                      swal("Selamat!", "Data Product Telah Diubah!", "success");
+                      app.showItem()
+                      app.getUserCart()
+                      app.fetchCategory()
+                      app.profiles()
+                      app.gethistory()
+                }).catch(function (err) {
+                    console.log(err)
+                })
+             }
+        },
+        selectcat(){
+          let id = document.getElementById("select_cat").value;
+          this.cat=id
+        },
+        val(id){
+             
+             app.deleted_transaction=false
+                
+             this.id=id
+            if(this.id!=''){
+                axios(`${baseUrl}/cart/transaction/${this.id}`,{
+                headers:{
+                  token:localStorage.getItem('token')
+                }
+              })
+              .then(function (response) {
+                app.singletrans=response.data
+
+                for(var i=0;i<app.singletrans.product.length;i++){
+                  app.singletrans.product[i].quantity=response.data.quantity[i]
+                }
+              }).catch(function (err) {
+                console.log(err)
+              })
+            }
+            
+        },
+        populateData(id){
+            
+            axios.get(`${baseUrl}/product/item/${id}`) 
+              .then(function (response) {
+                  let result=response.data[0]
+                  
+                  app.image=result.imgUrl
+                  app.name=result.name
+                  app.description=result.description,
+                  app.price=result.price,
+                  app.stock=result.stock,
+                  app.activeId=result._id
+
+                  
+              }).catch(function (err) {
+                  console.log(err)
+              })
+        },
+        catNew(){
+          
+          axios.post(`${baseUrl}/category`,{
+            name:app.category,
+            description:app.categorydesc
+          }
+            )
+            .then(function (response) {
+              console.log(response)
+              app.fetchCategory()
+            }).catch(function (err) {
+              console.log(err)
+            })
+        },
+        showItem() {
+          axios({
+              url: `${baseUrl}/product`
+            })
+            .then(function (response) {
+              app.data_barang = response.data
+            }).catch(function (err) {
+              console.log(err)
+            })
+        },
+        getUserCart(){
+          if(localStorage.getItem('token')){
+            axios.get(`${baseUrl}/cart`,{
+              headers:{
+                token:localStorage.getItem('token')
+              }
+            }) 
+              .then(function (response) {
+                  app.cartContent=response.data
+              }).catch(function (err) {
+                  console.log(err)
+              })
+          }
+        },
+        addToCart(id){  
+            axios.post(`${baseUrl}/cart/${id}`,{},{
+              headers:{
+                token:localStorage.getItem('token')
+              }
+            })
+            .then(function (response) {
+                 app.getUserCart()
+            }).catch(function (err) {
+              console.log(err)
+            })
+        },
+        minCart(id){
+          axios.post(`${baseUrl}/cart/min/${id}`,{},{
+              headers:{
+                token:localStorage.getItem('token')
+              }
+            })
+            .then(function (response) {
+                 app.getUserCart()
+            }).catch(function (err) {
+              console.log(err)
+            })
+        },
+        cancelCart(id){
+          axios.delete(`${baseUrl}/cart/${id}`,{
+              headers:{
+                token:localStorage.getItem('token')
+              }
+            })
+            .then(function (response) {
+                 app.getUserCart()
+            }).catch(function (err) {
+              console.log(err)
+            })
+        },
+        checkouts(){
+            axios.delete(`${baseUrl}/cart/transaction/checkout`,{
+              headers:{
+                token:localStorage.getItem('token')
+              }
+            })
+              .then(function (response) {
+                  app.cartContent=''
+                  app.cartModal=false
+                  app.gethistory()
+              }).catch(function (err) {
+                console.log(err)        
+              })
+        },
+        fetchCategory(){
+            axios.get(`${baseUrl}/category`)
+              .then(function (response) {
+                  app.categoryList=response.data
+              }).catch(function (err) {
+                  console.log(err)
+              })
+        },
+        getCategory(id){
+          axios.get(`${baseUrl}/product/${id}`)
+            .then(function (response) {
+              app.data_barang = response.data
+            }).catch(function (err) {
+              console.log(err)
+            })
+        }
+        ,register(data){
+           axios({
+             method: 'post',
+             url: `${baseUrl}/user`,
+             data: {
+                name: data.name,
+                email:data.email,
+                password:data.password
+             }})
+            .then(function (response) {
+                 app.registerfail=false
+                 swal("Selamat!", "Data Telah Teregistrasi!", "success");
+
+            }).catch(function (err) {
+              app.registerfail=true
+              console.log(err)
+            })
+        },
+        search(){
+          if(app.word!=''){
+            axios.get(`${baseUrl}/product/search/${app.word}`)
+              .then(result=>{
+                   app.data_barang=result.data
+               })
+               .catch(err=>{
+                    console.log(err)
+              })
+          }
+          else{
+              app.showItem()
+          }
+        },
+        signin(data){
+         
+          axios({
+             method: 'post',
+             url: `${baseUrl}/user/login`,
+             data: {
+                email:data.email,
+                password:data.password
+             }})
+            .then(function (response) {
+                 app.signinfail=false
+                 localStorage.setItem('token',response.data)
+                 app.token=localStorage.getItem('token')
+                 app.toggleSignin()
+                 app.showItem()
+                 app.getUserCart()
+                 app.fetchCategory()
+                 app.profiles()
+                 app.gethistory()
+            }).catch(function (err) {
+              app.signinfail=true
+              console.log(err)
+            })
+        },
+        gethistory(){
+          if(localStorage.getItem('token')){
+            axios.get(`${baseUrl}/cart/transaction`,{
+              headers:{
+                token:localStorage.getItem('token')
+              }
+            })
+              .then(function (response) {
+                  app.transhistory=response.data
+                  console.log(app.transhistory)
+              }).catch(function (err) {
+                console.log(err)
+              })
+          }
+        },
+        logout(){
+          localStorage.removeItem('token')
+          app.token=''
+        },
+        profiles(){
+          if(localStorage.getItem('token')){
+            axios.get(`${baseUrl}/user/profile`,{
+                headers:{
+                   token:localStorage.getItem('token')
+                }
+            })
+              .then(function (response) {
+                  app.profile=response.data.name
+                  app.eprofile=response.data.emailt
+                  console.log(response.data.role)
+                  if(response.data.role==='admin'){
+                      app.isAdmin=true
+                  }
+              }).catch(function (err) {
+                console.log(err)
+              })
+          }
+        },
+        deleteTrans(id){
+          this.val(id)
+          axios.delete(`${baseUrl}/cart/transactions/${app.id}`)
+            .then(function (response) {
+                app.gethistory()
+                app.toggleHistory()
+                app.deleted_transaction=true
+                       
+            }).catch(function (err) {
+              console.log(err)
+            })
+        }
+      }
+      ,computed: {
+            cartLength: function () {
+                let sum=0;
+                for(let i=0;i<this.cartContent.length;i++)
+                {
+                    sum=sum+this.cartContent[i].quantity
+                }
+              return sum
+            },
+            totalPrice: function(){
+              let sum=0;
+                for(let i=0;i<this.cartContent.length;i++)
+                {
+                    sum=sum+(this.cartContent[i].quantity*this.cartContent[i].product.price)
+                }
+              return sum              
+            },
+            totalHistory: function(){
+                
+                    if (undefined !== this.singletrans.product && this.singletrans.product.length) {
+                      let sum=0;
+                      for(let i=0;i<this.singletrans.product.length;i++)
+                      {
+                        sum=sum+(this.singletrans.product[i].quantity*this.singletrans.product[i].price)
+                      }
+                      return sum
+                    } else {
+                      return 0
+                    }
+                    
+               
+            }
+            ,link : function(){
+          return this.image
+        }
+      }
+    })
+    
+  </script>
+ 
+</body>
+
+</html>
