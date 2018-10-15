@@ -137,7 +137,7 @@ Vue.component('side-bar', {
         },
         search() {
             axios({
-                url: `http://localhost:3000/products/search?keyword=${this.keyword}`
+                url: `http://shoeka-server.ismailnagib.xyz/products/search?keyword=${this.keyword}`
             })
             .then(data => {
                 this.$emit('products', data.data)
@@ -149,7 +149,7 @@ Vue.component('side-bar', {
         },
         showByC(category) {
             axios({
-                url: `http://localhost:3000/products/${category}`
+                url: `http://shoeka-server.ismailnagib.xyz/products/${category}`
             })
             .then(data => {
                 this.$emit('products', data.data)
@@ -190,7 +190,7 @@ Vue.component('side-bar', {
                 this.notice = ''
             } else {
                 axios({
-                    url: 'http://localhost:3000/users/login',
+                    url: 'http://shoeka-server.ismailnagib.xyz/users/login',
                     method: 'post',
                     data: {
                         email: this.email,
@@ -232,7 +232,7 @@ Vue.component('side-bar', {
                 this.notice = ''
             } else {
                 axios({
-                    url: 'http://localhost:3000/users/register',
+                    url: 'http://shoeka-server.ismailnagib.xyz/users/register',
                     method: 'post',
                     data: {
                         name: this.newname,
@@ -293,7 +293,7 @@ Vue.component('side-bar', {
         },
         checkOut() {
             axios({
-                url: 'http://localhost:3000/users/checkout',
+                url: 'http://shoeka-server.ismailnagib.xyz/users/checkout',
                 method: 'patch',
                 headers: {
                     token: localStorage.getItem('token')
@@ -358,7 +358,7 @@ Vue.component('side-bar', {
         },
         checkCoupon() {
             axios({
-                url: `http://localhost:3000/coupons/${this.coupon}`,
+                url: `http://shoeka-server.ismailnagib.xyz/coupons/${this.coupon}`,
                 headers: {
                     token: localStorage.getItem('token')
                 }
