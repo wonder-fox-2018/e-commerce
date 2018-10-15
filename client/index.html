@@ -86,7 +86,7 @@
             methods: {
                 getCategories() {
                     axios({
-                        url: 'http://shoeka-server.ismailnagib.xyz/categories'
+                        url: 'https://shoeka-server.ismailnagib.xyz/categories'
                     })
                     .then(data => {
                         this.categories = data.data
@@ -97,7 +97,7 @@
                 },
                 getProducts(stop) {
                     axios({
-                        url: 'http://shoeka-server.ismailnagib.xyz/products'
+                        url: 'https://shoeka-server.ismailnagib.xyz/products'
                     })
                     .then(data => {
                         this.products = data.data
@@ -141,7 +141,7 @@
                 },
                 updateCart() {
                     axios({
-                        url: 'http://shoeka-server.ismailnagib.xyz/users/cart',
+                        url: 'https://shoeka-server.ismailnagib.xyz/users/cart',
                         method: 'patch',
                         headers: {
                             token: localStorage.getItem('token')
@@ -158,7 +158,7 @@
                 },
                 checkLogin() {
                     axios({
-                        url: 'http://shoeka-server.ismailnagib.xyz/users/check',
+                        url: 'https://shoeka-server.ismailnagib.xyz/users/check',
                         headers: {
                             token: localStorage.getItem('token')
                         }
@@ -178,7 +178,7 @@
                 },
                 compareCarts() {
                     axios({
-                        url: 'http://shoeka-server.ismailnagib.xyz/users/cart',
+                        url: 'https://shoeka-server.ismailnagib.xyz/users/cart',
                         headers: {
                             token: localStorage.getItem('token')
                         }

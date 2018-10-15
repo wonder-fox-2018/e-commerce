@@ -59,7 +59,7 @@ Vue.component('purchase-history', {
         },
         getTransactions() {
             axios({
-                url: 'http://shoeka-server.ismailnagib.xyz/users/ph',
+                url: 'https://shoeka-server.ismailnagib.xyz/users/ph',
                 headers: {
                     token: localStorage.getItem('token')
                 }
@@ -85,7 +85,7 @@ Vue.component('purchase-history', {
         rate(index, index2, id) {
             let rate = this.starColors[index][index2]
             axios({
-                url: `http://shoeka-server.ismailnagib.xyz/products/rate/${id}`,
+                url: `https://shoeka-server.ismailnagib.xyz/products/rate/${id}`,
                 method: 'patch',
                 headers: {
                     token: localStorage.getItem('token')

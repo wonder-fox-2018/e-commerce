@@ -307,7 +307,7 @@ Vue.component('admin-page', {
         addCategory() {
             if (this.newCatName.length > 0 && this.newCatIcon.length > 0) {
                 axios({
-                    url: 'http://shoeka-server.ismailnagib.xyz/categories',
+                    url: 'https://shoeka-server.ismailnagib.xyz/categories',
                     method: 'post',
                     headers: {
                         token: localStorage.getItem('token')
@@ -333,7 +333,7 @@ Vue.component('admin-page', {
                 formData.append('image', this.newProImg)
 
                 axios({
-                    url: `http://shoeka-server.ismailnagib.xyz/upload`,
+                    url: `https://shoeka-server.ismailnagib.xyz/upload`,
                     method: 'post',
                     data: formData,
                     headers: {
@@ -343,7 +343,7 @@ Vue.component('admin-page', {
                 })
                 .then(image => {
                     axios({
-                        url: 'http://shoeka-server.ismailnagib.xyz/products',
+                        url: 'https://shoeka-server.ismailnagib.xyz/products',
                         method: 'post',
                         headers: {
                             token: localStorage.getItem('token')
@@ -398,7 +398,7 @@ Vue.component('admin-page', {
                     }
                 }
                 axios({
-                    url: `http://shoeka-server.ismailnagib.xyz/categories/${id}`,
+                    url: `https://shoeka-server.ismailnagib.xyz/categories/${id}`,
                     method: 'put',
                     headers: {
                         token: localStorage.getItem('token')
@@ -426,7 +426,7 @@ Vue.component('admin-page', {
                     }
                 }
                 axios({
-                    url: `http://shoeka-server.ismailnagib.xyz/products/${id}`,
+                    url: `https://shoeka-server.ismailnagib.xyz/products/${id}`,
                     method: 'put',
                     headers: {
                         token: localStorage.getItem('token')
@@ -457,7 +457,7 @@ Vue.component('admin-page', {
                     }
                 }
                 axios({
-                    url: `http://shoeka-server.ismailnagib.xyz/categories/${id}`,
+                    url: `https://shoeka-server.ismailnagib.xyz/categories/${id}`,
                     method: 'delete',
                     headers: {
                         token: localStorage.getItem('token')
@@ -485,7 +485,7 @@ Vue.component('admin-page', {
                     }
                 }
                 axios({
-                    url: `http://shoeka-server.ismailnagib.xyz/products/${id}`,
+                    url: `https://shoeka-server.ismailnagib.xyz/products/${id}`,
                     method: 'delete',
                     headers: {
                         token: localStorage.getItem('token')
@@ -524,7 +524,7 @@ Vue.component('admin-page', {
         },
         promote() {
             axios({
-                url: 'http://shoeka-server.ismailnagib.xyz/users/promote',
+                url: 'https://shoeka-server.ismailnagib.xyz/users/promote',
                 method: 'patch',
                 headers: {
                     token: localStorage.getItem('token')
