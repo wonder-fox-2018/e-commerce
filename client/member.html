@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <style>
+    .card{
+          min-width: 15rem;
+          max-width: 16rem;
+          min-height: 16rem;
+          max-height: 18rem;
+          margin: 8px 5px;
+      }
+    </style>
+  <title>Ecommerce</title>
+</head>
+
+<body>
+  <div class="container">
+    <div id="app">
+      <!-- start nav bar  -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Ecommerce</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Category</a>
+              <div class="dropdown-menu" >
+                <span v-for="category in categories">
+                  <a class="dropdown-item" href="#" v-on:click="listItemByCategory(category._id)">{{ category.name }}</a>
+                </span>
+                <div class="dropdown-divider"></div>
+              </div>
+            </li>
+          </ul>
+          <div class="form-inline my-2 my-lg-0">
+            <span v-if="isLogin" class="login">
+              <button @click=refreshCart type="button" class="btn btn-outline-primary mr-2 shop"  data-toggle="modal" data-target="#cartModal" >
+                <i class="fas fa-shopping-cart" style="font-size:20px"></i>
+                <span class="badge badge-light" style="font-size:12px" >{{ countCart }}</span>
+              </button>
+              <button @click=refreshTransaction type="button" class="btn btn-outline-primary mr-2 transaction" data-toggle="modal" data-target="#transactionModal" >
+                  <i class="fas fa-handshake menu-horizontal" style="font-size:20px"></i>
+                </button>             
+              <button type="button" class="btn btn-outline-primary mr-2 circle">
+                <i class="fas fa-user-circle" style="font-size:20px"></i>
+              </button>
+              <button class="btn btn-outline-primary logout" type="button" v-on:click="doLogout">Logout</button>
+            </span>
+            <span v-if="!isLogin" class="notlogin">
+              <button class="btn btn-outline-primary mr-2 login" data-toggle="modal" data-target="#loginModal" type="button" >Login</button>
+              <button class="btn btn-outline-primary mr-2 register" data-toggle="modal" data-target="#registerModal" type="button">Register</button>
+            </span>
+          </div>
+        </div>
+      </nav>
+      <!-- end nav bar -->
+      <!-- modal login -->
+      <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Login</h5>
+            </div>
+            <div class="modal-body">
+              <div v-if="loginAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>Wrong username / password</strong>
+                  <button type="button" class="close" @click=closeAlert()><span aria-hidden="true">&times;</span></button>
+              </div>
+              <form>
+                <div class="form-group">               
+                  <label>Email address</label>
+                  <input v-model="loginInputEmail" type="email" class="form-control" id="loginInputEmail"  placeholder="Enter email">
+                  <small style="color: red">{{ MsgEmailLogin }}</small>
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input v-model="loginInputPassword" type="password" class="form-control" placeholder="Password">
+                  <small style="color: red">{{ MsgPasswordLogin }}</small>
+                </div>
+                <button type="button" class="btn btn-primary" v-on:click="doLogin" style="margin-right: 10px" >Login</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+       <!-- end modal login -->
+      <!-- modal register -->
+      <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Register</h5>
+              <button type="button" class="close" data-dismiss="modal" >
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div v-if="regAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Register fail, email already exist</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form>
+                <div class="form-group">
+                  <label>Name </label>
+                  <input v-model="regInputName" type="email" class="form-control" id="regInputName" placeholder="Enter Name">
+                </div>
+                <div class="form-group">
+                  <label>Email address</label>
+                  <input v-model="regInputEmail" type="email" class="form-control" id="regInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input v-model="regInputPassword" type="password" class="form-control" id="regInputPassword" placeholder="Password">
+                </div>
+                <button type="button" class="btn btn-primary" v-on:click="doRegister">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end register -->
+      <!-- Modal Shoping Cart -->
+      <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content" style="width:700px">
+            <div class="modal-header">
+              <h5 class="modal-title">Cart</h5>
+              <button type="button" class="close" data-dismiss="modal" >
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div>
+                <div class="form-group">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>                      
+                        <th scope="col">#</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>                   
+                      <tr :mycart="cart" v-for="(cart, index) in carts" :key="index">
+                        <td>{{ index+1 }}</td>
+                        <td><img class="card-image" v-bind:src="cart.iditem.picture" alt="Card image" width="80px" height="80px"></td>
+                        <td>{{cart.iditem.name}}</td> 
+                        <td><input v-model="cart.qty" width="50px"  /> </td>
+                        <td>{{ formatPrice(cart.price) }}</td>
+                        <td>{{ formatPrice(cart.price * cart.qty) }}</td>
+                        <td><button @click=doDeleteCartItem(cart.iditem._id) >Delete</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <button type="button" class="btn btn-primary float-left"  v-on:click="doSaveCart">Save </button>
+                <button type="button" class="btn btn-primary float-right"  v-on:click="doCheckout" data-dismiss="modal">Checkout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end Modal cart-->
+       <!-- Modal Transaction -->
+       <div class="modal fade" id="transactionModal" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content" style="width:700px">
+            <div class="modal-header">
+              <h5 class="modal-title">Transaction</h5>
+              <button type="button" class="close" data-dismiss="modal" >
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div>
+                <div class="form-group">
+                  <table class="table table-bordered" v-for="(transaction) in transactions">
+                    <thead>
+                      <tr>
+                        <td colspan=6>Date: {{ formatDate(transaction.date) }}</td>
+                      </tr>
+                      <tr>                      
+                        <th scope="col">#</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Subtotal</th>
+                      </tr>
+                    </thead>                    
+                      <tr v-for="(item, index) in transaction.itemlist" :key="index">
+                        <td >{{ index+1 }}</td>
+                        <td><img class="card-image" v-bind:src="item.iditem.picture" width="80px" height="80px"></td>
+                        <td>{{item.iditem.name}}</td> 
+                        <td>{{item.qty}}</td>
+                        <td>{{ formatPrice(item.price) }}</td>
+                        <td>{{ formatPrice(item.price * item.qty) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <button type="button" class="btn btn-primary"  data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end Modal transaction-->
+      <div id="wrapper">
+        <div class="container-fluid" style="height:54em;">
+          <div class="card-deck">
+            <div class="card" v-for="item in items">
+              <img class="card-img-top" v-bind:src="item.picture" alt="Card image" width="200px" height="160px">
+              <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <div style="text-align: right">
+                  <a class="ui teal tag label" marked="1">{{ formatPrice(item.price) }}</a>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="text-center">
+                  <button type="button" class="btn btn-primary" v-on:click="onBuy(item._id,item.price)">Buy</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- end class="container-fluid" -->
+      </div>
+      <!-- end class="wrapper" -->
+      <!-- <nav style="margin-top: 20px">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">First</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Last</a></li>
+        </ul>
+      </nav> -->
+    </div>
+  </div>
+  <footer class="panel-footer" style="background-color: #e3f2fd;">
+    <div class="container">
+      <p class="m-0 text-center">Copyright &copy;2018 . Design by Rudy.</p>
+    </div>
+  </footer>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data: {
+        isLogin: false,
+        regInputName: '',
+        regInputEmail: '',
+        regInputPassword: '',
+        regAlert: false,
+        loginAlert:false,
+        loginInputEmail: '',
+        loginInputPassword: '',
+        categories: '',
+        items: '',
+        countCart:'',
+        MsgEmailLogin:'',
+        MsgPasswordLogin:'',
+        carts:null,
+        cart:null,
+        transactions:null
+      },
+      methods: {
+        clearToken(){
+          console.log('Probelem with Token')
+          localStorage.removeItem('token')
+          isLogin=false;
+        },
+        formatDate(d) {
+          datetime=new Date(d)
+          let date = `${datetime.getDate()}/${datetime.getMonth() + 1}/${datetime.getFullYear()} ${datetime.getHours()}:${datetime.getMinutes()}:${datetime.getSeconds()} `
+          return date
+        },
+        formatPrice(value) {
+          let val = (value/1).toFixed(2).replace('.', ',')
+          return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        },
+        closeAlert(){
+          this.loginAlert = false;
+        },
+        refreshCart(){
+          console.log('refresh data cart')
+          let token= localStorage.getItem('token')
+          if (token) {
+              axios({
+                    url: 'http://localhost:3000/carts',
+                    method: 'GET',
+                    headers: {
+                      token: token
+                    }
+                  })
+              .then(response => {
+                console.log(response.data.data)
+                if (response.data.data.itemlist) {
+                    this.countCart=response.data.data.itemlist.length
+                    this.carts=response.data.data.itemlist
+                }
+                else
+                {   
+                  console.log('hapus cart')
+                    this.countCart=0
+                    this.carts=null
+                }
+              })
+              .catch((err) => {
+                  console.log(JSON.stringify(err))
+              })
+          }
+          else{
+             this.clearToken()
+          }
+        },
+        doDeleteCartItem(idCart){
+          let token= localStorage.getItem('token')
+          if (token) {
+            axios({
+                url: 'http://localhost:3000/carts/deletebyitem',
+                method: 'POST',
+                data: {
+                  id: idCart,
+                },
+                headers: {
+                  token: token
+                }
+              })
+              .then(response => {
+                if (response.data.data.itemlist) {
+                   this.countCart=response.data.data.itemlist.length
+                   this.carts=response.data.data.itemlist
+                }
+                console.log(JSON.stringify(response.data))
+              })
+              .catch((err) => {
+                if (err.response.data.msg == 'Token not found')
+                  this.clearToken()
+                console.log(JSON.stringify(err))
+              })
+          }
+          else{
+             this.clearToken()
+          }
+        },
+        doSaveCart(){
+          let token= localStorage.getItem('token')
+          if (token) {
+            axios({
+                url: 'http://localhost:3000/carts/all',
+                method: 'POST',
+                data: {
+                  dataCart: this.carts,
+                },
+                headers: {
+                  token: token
+                }
+              })
+              .then(response => {
+                if (response.data.data) {
+                   this.countCart=response.data.data.itemlist.length
+                   this.carts=response.data.data.itemlist
+                }
+                console.log(JSON.stringify(response.data))
+              })
+              .catch((err) => {
+                if (err.response.data.msg == 'Token not found')
+                  this.clearToken()
+                console.log(JSON.stringify(err))
+              })
+          }
+          else{
+             this.clearToken()
+          }
+        },
+        doCheckout(){
+          let token= localStorage.getItem('token')
+          if (token) {
+              axios({
+                    url: 'http://localhost:3000/transaction',
+                    method: 'POST',
+                    headers: {
+                      token: token
+                    }
+                  })
+              .then(response => {
+                if (response.data.data) {
+                    this.countCart=0
+                    this.carts=null
+                    this.transactions=response.data.data
+                }
+              })
+              .catch((err) => {
+                  console.log(JSON.stringify(err))
+              })
+          }
+          else{
+             this.clearToken()
+          }
+        },       
+        onBuy(idItem,price) {
+          let token = localStorage.getItem('token')
+          if (!token) {
+            $('#loginModal').modal('show');
+          } else {
+            axios({
+                url: 'http://localhost:3000/carts',
+                method: 'POST',
+                data: {
+                  id: idItem,
+                  price:price
+                },
+                headers: {
+                  token: token
+                }
+              })
+              .then(response => {
+                if (response.data.data) {
+                   this.countCart=response.data.data.itemlist.length
+                   this.carts=response.data.data.itemlist
+                  //this.items = response.data.data;
+                }
+                console.log(JSON.stringify(response.data))
+              })
+              .catch((err) => {
+                if (err.response.data.msg == 'Token not found')
+                  this.clearToken()
+                console.log(JSON.stringify(err))
+              })
+          }
+        },
+        refreshTransaction(){
+          console.log('transaction')
+          let token= localStorage.getItem('token')
+          if (token) {
+              axios({
+                    url: 'http://localhost:3000/transaction',
+                    method: 'GET',
+                    headers: {
+                      token: token
+                    }
+                  })
+              .then(response => {
+                if (response.data.data) {
+                    this.transactions=response.data.data
+                }
+              })
+              .catch((err) => {
+                  console.log(JSON.stringify(err))
+              })
+          }
+          else{
+            this.clearToken()
+          }
+        },
+        clearLogin(){
+          this.loginInputEmail = ''
+          this.loginInputPassword = ''
+          this.MsgEmailLogin=''
+          this.MsgPasswordLogin=''
+        },
+        doLogin() {
+          let r = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          let result = r.test(this.loginInputEmail)
+          if(!result)
+             this.MsgEmailLogin='Email address is not valid'            
+          if(this.loginInputPassword.length<6)
+             this.MsgPasswordLogin='Password is not valid, minimum 6 length'                         
+          if(!result || this.loginInputPassword.length<6 )
+            return;
+          axios({
+              url: 'http://localhost:3000/users/login',
+              method: 'POST',
+              data: {
+                email: this.loginInputEmail,
+                password: this.loginInputPassword
+              }
+            })
+            .then(response => {
+              console.log(response.data)
+              if (response.data.token) {
+                localStorage.setItem('token', response.data.token)
+                if(response.data.dataCart){
+                  this.countCart=response.data.dataCart.itemlist.length
+                  this.carts=response.data.dataCart.itemlist
+                }                 
+                else
+                  this.countCart=0
+                $('#loginModal').modal('hide');
+                this.clearLogin()
+                this.isLogin = true
+              }
+              else{
+                this.clearLogin()
+                this.loginAlert = true;
+              }
+            })
+            .catch((err) => {
+              console.log(JSON.stringify(err))
+              this.clearLogin()
+              this.loginAlert = true;
+            })
+        },
+        doLogout() {
+          console.log('logout')
+          this.isLogin = false;
+          localStorage.removeItem('token')
+        },
+        doRegister() {
+          this.regAlert = false;
+          console.log('register')
+          axios({
+              url: 'http://localhost:3000/users/register',
+              method: 'POST',
+              data: {
+                name: this.regInputName,
+                email: this.regInputEmail,
+                password: this.regInputPassword
+              }
+            })
+            .then(response => {
+              console.log(JSON.stringify(result))
+              $('#registerModal').modal('hide');
+              this.regInputName = '',
+                this.regInputEmail = '',
+                this.regInputPassword = ''
+            })
+            .catch((err) => {
+              console.log(JSON.stringify(err))
+              this.regAlert = true;
+            })
+        },
+        listItemByCategory(idCategory) {
+          console.log(idCategory)
+          axios({
+              url: 'http://localhost:3000/items/category',
+              method: 'POST',
+              data: {
+                id: idCategory
+              }
+            })
+            .then(response => {
+              console.table(response.data.data)
+              if (response.data.data.length > 0) {
+                this.items = response.data.data;
+              }
+              // console.log(JSON.stringify(response.data.data))
+            })
+            .catch(err => {
+              console.log(JSON.stringify(err))
+            })
+        }
+
+      },
+      created() {
+        
+        axios({
+            url: 'http://localhost:3000/categories/lists',
+            method: 'GET'
+          })
+          .then(response => {
+            console.log(JSON.stringify(response.data.data))
+            this.categories = response.data.data
+            this.items = response.data.item;
+
+          })
+          .catch((err) => {
+            console.log(JSON.stringify(err))
+
+          })
+      },
+      watch :{
+        cart: 
+        {
+          handler: function(newValue) {
+              console.log("cart:" + JSON.stringify(newValue) + " modified")
+          },
+          deep: true
+        }
+      }
+    })
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
