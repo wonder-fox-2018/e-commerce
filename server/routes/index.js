@@ -12,6 +12,7 @@ router.get('/', function(req, res, next) {
 });
 router.post('/signin/google', userController.googleSignin)
 router.post('/signup', userController.register)
+router.post('/signup/as/admin', userController.registerAdmin)
 router.post('/signin', userController.signin)
 
 router.use('/users', userRouter)
