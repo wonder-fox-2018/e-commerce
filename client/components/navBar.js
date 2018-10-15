@@ -32,7 +32,7 @@ Vue.component('nav-bar', {
       search: '',
       isSearch: false,
       cats: [],
-      baseUrl: "http://localhost:3000"
+      baseUrl: "https://ecommerce-server.hanabc.xyz"
     }
   },
   methods: {

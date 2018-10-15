@@ -36,7 +36,7 @@ Vue.component('modal-register', {
       regemail : '',
       regpassword : '',
       notif : '',
-      baseUrl: "http://localhost:3000"
+      baseUrl: "https://ecommerce-server.hanabc.xyz"
     }
   },
   methods: {

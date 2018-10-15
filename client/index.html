@@ -56,12 +56,12 @@
             <strong style="display: flex; justify-content: center; color: orange; font-weight: bold">Manage Item</strong>
           </h5>
           <ul class="itempermit">
-            <li @mouseover="addItPermit">
+            <li @click="addItPermit">
               <a>ADD ITEM</a>
               <form v-if="addItForm" @submit.prevent>
                 <span><p>Name</p><input v-model="addname" type="text" class="form-control"></span>
                 <span><p>Desc</p><input v-model="adddesc" type="text" class="form-control"></span>
-                <span><p>Link</p><input type="file" class="form-control" v-on:change="getAddImg($event)"></span>
+                <span><p>Link</p><input type="file" class="form-control" @change="getAddImg($event)"></span>
                 <span><p>Price</p><input v-model="addprice" type="text" class="form-control"></span>
                 <span><p>Stock</p><input v-model="addstock" type="text" class="form-control"></span>
                 <span><p>Category</p>
@@ -74,7 +74,7 @@
                 <button class="add-btn" type="button" style="margin: 0 25px;" @click="registerItem">Add</button></span>
               </form>
             </li>
-            <li @mouseover="edItPermit">
+            <li @click="edItPermit">
               <a>UPDATE ITEM</a>
               <form v-if="edItForm" @submit.prevent>
                 <button @click="toggleShowItem" class="anchor anchor-item">Select Item</button>
@@ -83,7 +83,7 @@
                 </div>
                 <span><p>Name</p><input v-model="upname" type="text" class="form-control"></span>
                 <span><p>Desc</p><input v-model="updesc" type="text" class="form-control"></span>
-                <span><p>Link</p><input type="file" class="form-control" v-on:change="getUpImg($event)"></span>
+                <span><p>Link</p><input type="file" class="form-control" @change="getUpImg($event)"></span>
                 <span><p>Price</p><input v-model="upprice" type="text" class="form-control"></span>
                 <span><p>Stock</p><input v-model="upstock" type="text" class="form-control"></span>
                 <span><p>Category</p>
@@ -96,7 +96,7 @@
                 <button class="add-btn" type="button" style="margin: 0 25px;" @click="reviseItem">Edit</button></span>
               </form>
             </li>
-            <li @mouseover="delItPermit">
+            <li @click="delItPermit">
               <a>DELETE ITEM</a>
               <form v-if="delItForm" @submit.prevent>
                 <button @click="toggleShowItem" class="anchor anchor-item">Select Item</button>
@@ -114,7 +114,7 @@
               <strong style="display: flex; justify-content: center; color: orange; font-weight: bold">Manage Category</strong>
             </h5>
             <ul class="itempermit">
-              <li @mouseover="addCatPermit">
+              <li @click="addCatPermit">
                 <a>ADD CATEGORY</a>
                 <form v-if="addCatForm" @submit.prevent>
                   <span><p>Name</p><input v-model="addcatname" type="text" class="form-control"></span>
@@ -122,7 +122,7 @@
                   <button class="add-btn" type="button" style="margin: 5px 0;" @click="registerCat">Add</button></span>
                 </form>
               </li>
-              <li @mouseover="edCatPermit">
+              <li @click="edCatPermit">
                 <a>UPDATE CATEGORY</a>
                 <form v-if="edCatForm" @submit.prevent>
                   <button @click="toggleShow" class="anchor">Select category</button>
@@ -163,10 +163,10 @@
     <!-- enditem-list -->
   </div>
 
-  <script src="components/navBar.js"></script>
-  <script src="components/modaLogin.js"></script>
-  <script src="components/modaRegister.js"></script>
-  <script src="components/modaCheckout.js"></script>
+  <script src="navBar.js"></script>
+  <script src="modaLogin.js"></script>
+  <script src="modaRegister.js"></script>
+  <script src="modaCheckout.js"></script>
   <script src="main.js"></script>
 </body>
 

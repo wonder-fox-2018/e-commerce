@@ -31,7 +31,7 @@ Vue.component('modal-login', {
       logemail : '',
       logpassword : '',
       lognotif: '',
-      baseUrl: "http://localhost:3000"
+      baseUrl: "https://ecommerce-server.hanabc.xyz"
     }
   },
   methods: {

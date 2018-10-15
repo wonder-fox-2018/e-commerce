@@ -38,7 +38,7 @@ var app = new Vue({
     cartCount: '',
     items: [],
     carts: [],
-    baseUrl: "http://localhost:3000"
+    baseUrl: "https://ecommerce-server.hanabc.xyz"
   },
   methods: {
     clickCheckout() {
@@ -270,7 +270,7 @@ var app = new Vue({
       let formdata = new FormData()
       formdata.append('image', this.addlink)
 
-      axios.post('http://localhost:3000/upload', formdata)
+      axios.post(this.baseUrl + '/api/upload', formdata)
       .then((image) => {
         axios({
           method: 'POST',
@@ -281,7 +281,7 @@ var app = new Vue({
           data: {
             name: this.addname,
             desc: this.adddesc,
-            imageurl: addlink.data.link,
+            imageurl: image.data.link,
             price: this.addprice,
             stock: this.addstock,
             category: this.addcategory
@@ -331,9 +331,9 @@ var app = new Vue({
       let id = this.upitem
 
       let formdata = new FormData()
-      formdata.append('image', this.addlink)
+      formdata.append('image', this.uplink)
 
-      axios.post('http://localhost:3000/upload', formdata)
+      axios.post(this.baseUrl + '/api/upload', formdata)
       .then((image) => {
         axios({
           method: 'PUT',
@@ -344,7 +344,7 @@ var app = new Vue({
           data: {
             name: this.upname,
             desc: this.updesc,
-            imageurl: this.uplink,
+            imageurl: image.data.link,
             price: this.upprice,
             stock: this.upstock,
             category: this.upcategory
@@ -415,15 +415,15 @@ var app = new Vue({
       .catch((err) => {
         console.log(err.response.data.message)
       })
+    },
+    getAddImg(link) {
+      this.addlink = link.target.files[0]
+      console.log("ini image", this.addlink);
+    },
+    getUpImg(link) {
+      this.uplink = link.target.files[0]
+      console.log("ini image", this.uplink);
     }
-  },
-  getAddImg(link) {
-    this.addlink = link.target.files[0]
-    console.log("ini image", this.addlink);
-  },
-  getUpImg(link) {
-    this.uplink = link.target.files[0]
-    console.log("ini image", this.uplink);
   },
   created() {
     let datatoken = localStorage.getItem("token")
