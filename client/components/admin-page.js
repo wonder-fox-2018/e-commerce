@@ -54,7 +54,7 @@ Vue.component('admin-page', {
                         </div>
                     </div>
                 </div>
-                <div class="row border-bottom adminmenugroup">
+                <!-- <div class="row border-bottom adminmenugroup">
                     <div class="col-sm-6 col-md-4 text-center adminmenu">
                         <div>
                             <i class="fas fa-plus"></i>
@@ -73,13 +73,15 @@ Vue.component('admin-page', {
                             <h4>Delete A User</h4>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="row mb-4 adminpromote text-center border-top">
                 <div>
                     <h2 class="mb-4">Promote A User Into Admin</h2>
-                    <input type="text" placeholder="Search user by name / email"><br><br>
-                    <button class='btn' id='promoteBtn'>Promote</button>
+                    <h6 v-if='promoteNotice.length > 0' style='color: #de4d2f'>{{ promoteNotice }}</h6>
+                    <h6 v-else style='color: transparent'>placeholder</h6>
+                    <input class='mt-2' type="text" placeholder="The user's registered email" style='text-align: center' v-model='promoteEmail' @keyup.enter='promote'><br><br>
+                    <button class='btn' id='promoteBtn' @click='promote'>Promote</button>
                 </div>
             </div>
         </div>
@@ -235,7 +237,9 @@ Vue.component('admin-page', {
             newProCat: '',
             newProImg: '',
             selectedCat: '',
-            selectedPro: ''
+            selectedPro: '',
+            promoteEmail: '',
+            promoteNotice: '',
         }
     },
     methods: {
@@ -517,6 +521,24 @@ Vue.component('admin-page', {
                 this.newProPrice = ''
             }
             this.newProPrice = this.newProPrice.slice(0, 10)
+        },
+        promote() {
+            axios({
+                url: 'http://localhost:3000/users/promote',
+                method: 'patch',
+                headers: {
+                    token: localStorage.getItem('token')
+                },
+                data: {
+                    email: this.promoteEmail
+                }
+            })
+            .then(data => {
+                this.promoteNotice = data.data.message
+            })
+            .catch(err => {
+                this.promoteNotice = err.response.data.message
+            })
         }
     }
 })

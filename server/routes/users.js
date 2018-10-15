@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { show, add, edit, remove, login, register, getCart, updateCart, checkout, getTransactions} = require('../controllers/users')
+const { show, add, edit, remove, login, register, getCart, updateCart, checkout, getTransactions, promote} = require('../controllers/users')
 const { isLogin, isAdmin } = require('../middlewares/isAuth')
 
 router.get('/', isLogin, isAdmin, show)
@@ -13,5 +13,6 @@ router.post('/login', login)
 router.post('/register', register)
 router.get('/check', isLogin, (req, res) => {res.status(200).json({isLogin: true, id: req.userId, isAdmin: req.isAdmin})})
 router.patch('/checkout', isLogin, checkout)
+router.patch('/promote', isLogin, isAdmin, promote)
 
 module.exports = router;
