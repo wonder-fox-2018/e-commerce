@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <title>DarkiE-Commerce</title>
+    </head>
+    <body>
+        <!--MAIN TEMPLATE-->
+        <div id="app">
+            <nav class="navbar navbar-expand-sm navbar-dark bg-success mb-2" id="top-nav">
+                <div class="container">
+                    <a href="index.html" id="home-nav" class="navbar-brand font-weight-bold">DarkiE-Commerce</a>
+                    <button class="navbar-toggler" data-toggle="collapse" data-target="#div-main-nav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="div-main-nav">
+                        <ul class="navbar-nav font-weight-bold ml-auto" id="main-nav">
+                            <li class="nav-item dropdown mr-2">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown">Category</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item">Electronics</a>
+                                    <a class="dropdown-item">Books</a>
+                                    <a class="dropdown-item">Fashion</a>
+                                    <a class="dropdown-item">Office & Stationery</a>
+                                    <a @click="showListItem" class="dropdown-item">Hobby Toys</a>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <form class="form-inline mr-2">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-search"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control mr-3" placeholder="Search Products">
+                                    </div>
+                                    <button class="btn btn-outline-light">Search</button>
+                                </form>
+                            </li>
+                            <li v-on:click="showCart" class="nav-item mr-2">
+                                <a role="button" class="nav-link">
+                                    <i class="fas fa-shopping-cart mr-1"></i>
+                                    Cart
+                                    <span class="badge badge-dark px-2 py-1">{{ cartBadge }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mr-2">
+                                <a class="nav-link">
+                                    <i class="fas fa-bell mr-1"></i>
+                                    Notifications
+                                </a>
+                            </li>
+                            <li class="nav-item mr-2">
+                                <a class="nav-link">
+                                    <i class="fas fa-user-ninja"></i>
+                                    Profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                    <i class="fas fa-question-circle mr-1"></i>
+                                    Help
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!--CATEGORY AND ITEM LIST-->
+            <div v-if="categoryListShow" class="container">
+                <div class="d-flex justify-content-center align-items-center bg-light rounded col-4 mt-3" id="category-path-link">
+                    <button class="btn btn-link">Home</button>
+                    <i class="fas fa-angle-right"></i>
+                    <button class="btn btn-link">Category</button>
+                    <i class="fas fa-angle-right"></i>
+                    <button class="btn btn-link">Hobby Toys</button>
+                    <i class="fas fa-angle-right"></i>
+                    <button class="btn btn-link disabled">Model Kits</button>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column justify-content-start">
+                                    <p>Category</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>Hobby Toys</div>
+                                        <button class="btn btn-link">
+                                            <i class="fas fa-angle-down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="mb-3">Search in this category</div>
+                                <form @submit.prevent="searchItem()">
+                                    <div class="input-group mb-3">
+                                        <input v-model="keyword" class="form-control" type="text" placeholder="Item Name">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-search"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary align-item-center btn-block">Search</button>
+                                </form>
+                                <hr>
+                                <div class="mb-3">Price</div>
+                                <form class="mb-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Minimum">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Maximum">
+                                    </div>
+                                </form>
+                                <hr>
+                                <div class="mb-3">Location</div>
+                                <form class="mb-4">
+                                    <div class="form-group d-flex justify-content-start">
+                                        <input type="checkbox" class="ml-3 mr-3">
+                                        <div class="align-self-center">Jakarta</div>
+                                    </div>
+                                    <div class="form-group d-flex justify-content-start">
+                                        <input type="checkbox" class="ml-3 mr-3">
+                                        <div class="align-self-center">Bandung</div>
+                                    </div>
+                                    <div class="form-group d-flex justify-content-start">
+                                        <input type="checkbox" class="ml-3 mr-3">
+                                        <div class="align-self-center">Palembang</div>
+                                    </div>
+                                    <div class="form-group d-flex justify-content-start">
+                                        <input type="checkbox" class="ml-3 mr-3">
+                                        <div class="align-self-center">Surabaya</div>
+                                    </div>
+                                    <div class="form-group d-flex justify-content-start">
+                                        <input type="checkbox" class="ml-3 mr-3">
+                                        <div class="align-self-center">Malang</div>
+                                    </div>
+                                </form>
+                                <hr>
+                                <div class="mb-3">Condition</div>
+                                <form>
+                                    <div class="form-group d-flex justify-content-start">
+                                        <input type="checkbox" class="ml-3 mr-3">
+                                        <div class="align-self-center">Near Mint</div>
+                                    </div>
+                                    <div class="form-group d-flex justify-content-start">
+                                        <input type="checkbox" class="ml-3 mr-3">
+                                        <div class="align-self-center">Used</div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="card-columns">
+                            <div v-for="item in items" class="card">
+                                <img class="card-img-top img-fluid" v-bind:src="item.imgURL" alt="">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ item.name }}</h5>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="card-text text-danger">{{ item.price }}</p>
+                                        <p class="card-text text-success">Stock: {{ item.stock }}</p>
+                                    </div>
+                                    <p class="card-text">
+                                        <small class="text-muted">by RareItemShop</small>
+                                        <i class="fas fa-chess-queen"></i>
+                                    </p>
+                                    <span>
+                                        <i class="fas fa-map-marker-alt mr-1 mb-3"></i>
+                                        Jakarta
+                                    </span>
+                                    <button v-on:click="addItemToCart(item._id)" class="btn btn-outline-danger btn-block">
+                                        <i class="fas fa-shopping-cart mr-2"></i>
+                                        Add to cart
+                                    </button>
+                                    <button v-on:click="removeItemFromCart(item._id)" class="btn btn-outline-danger btn-block">
+                                        <i class="fas fa-shopping-cart mr-2"></i>
+                                        Remove from cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--SHOPPING CART-->
+            <div v-if="cartShow" class="container">
+                <div class="row">
+                    <div class="col-lg-8 mt-4 d-flex flex-column">
+                        <div class="d-flex justify-content-start mb-3 border align-items-center" id="cart-all-products">
+                            <div class="lead ml-3">All products in your cart</div>
+                            <button @click="emptyCart" class="btn btn-link ml-auto">Empty Cart</button>
+                        </div>
+                        <div v-for="item in cart" class="card mb-4">
+                            <div class="card-header">
+                                Seller: <strong class="mr-1">RareItemShop</strong>
+                                <i class="fas fa-chess-queen"></i>
+                            </div>
+                            <div class="card-body d-flex justify-content-between">
+                                <div class="media d-flex flex-column align-self-center">
+                                    <img class="mb-4" v-bind:src="item.item.imgURL">
+                                    <h5>{{ item.item.name }}</h5>
+                                    <div class="d-flex justify-content-start align-items-center">
+                                        <div class="text-danger mr-3">
+                                            {{ item.subTotal }}
+                                        </div>
+                                        <input class="form-control col-2" type="number" v-bind:value="item.qty" disabled>
+                                    </div>
+                                </div>
+                                <div class="align-self-start" id="div-cart-btn">
+                                    <a href="" role="button" class="btn btn-dark">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <button class="card-text btn btn-link ml-auto">
+                                <small class="h6">Send notes to seller</small>
+                            </button>
+                            
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-4 d-flex flex-column">
+                        <div class="h5 mb-3">
+                            Order Summary
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <p>Total Price</p>
+                                    <p>Rp 600.000</p>
+                                </div>
+                                <hr>
+                                <button class="btn-block btn btn-danger">Checkout</button>
+                                <hr>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-cart-arrow-down mr-3"></i>
+                                    <div class="">Use promo code or coupon</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous">
+        </script>
+        <script 
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+        </script>
+        <script 
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+        </script>
+
+        <!--VUE INSTANCE-->
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    cartShow: false,
+                    categoryListShow: true,
+                    items: [],
+                    cartBadge: 0,
+                    user: {},
+                    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYzIyYTA0NWM2NGVkMTNiMDAzODIwMiIsIm5hbWUiOiJnaW50b2tpIiwiZW1haWwiOiJnaW50b2tpQG1haWwuY29tIiwiaWF0IjoxNTM5NDU3OTQ3fQ.3d3oN7yYqcpOOaGy2tyZRdahAOYDEUMzBu7v1cdcAgY',
+                    keyword: '',
+                    cart: [],
+                    totalPrice: 0
+                },
+                methods: {
+                    showCart: function() {
+                        this.cartShow = true;
+                        app.getUserCart();
+                        this.categoryListShow = false;
+                    },
+                    showListItem: function() {
+                        this.categoryListShow = true;
+                        this.cartShow = false;
+                    },
+                    getItems: function() {
+                        axios({
+                            method: 'GET',
+                            url: 'http://localhost:3000/items'
+                        })
+                            .then(function(items) {
+                                let itemsData = items.data;
+                                app.items = itemsData;
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    addItemToCart: function(itemId) {
+                        axios({
+                            method: 'PUT',
+                            url: `http://localhost:3000/cart/${itemId}`,
+                            headers: {
+                                'access-token': localStorage.getItem('token')
+                            }
+                        })
+                            .then(function(result) {
+                                console.log(result);
+                                app.getCartBadge();
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    getCartBadge: function() {
+                        axios({
+                            method: 'GET',
+                            url: 'http://localhost:3000/cart',
+                            headers: {
+                                'access-token': localStorage.getItem('token')
+                            }
+                        })
+                            .then(function(cart) {
+                                app.cartBadge = cart.data.itemList.length;
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    getUserCart: function() {
+                        axios({
+                            method: 'GET',
+                            url: 'http://localhost:3000/cart',
+                            headers: {
+                                'access-token': localStorage.getItem('token')
+                            }
+                        })
+                            .then(function(cart) {
+                                app.cart = cart.data.itemList;
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    getItemById: function(itemId) {
+                        axios({
+                            method: 'GET',
+                            url: `http://localhost:3000/items/${itemId}`
+                        })
+                            .then(function(item) {
+                                console.log(item);
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    removeItemFromCart: function(itemId) {
+                        axios({
+                            method: 'PATCH',
+                            url: `http://localhost:3000/cart/${itemId}`,
+                            headers: {
+                                'access-token': localStorage.getItem('token')
+                            }
+                        })
+                            .then(function(result) {
+                                console.log(result);
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    searchItem: function() {
+                        axios({
+                            method: 'GET',
+                            url: `http://localhost:3000/items/search/${this.keyword}`,
+                            headers: {
+                                'access-token': localStorage.getItem('token')
+                            }
+                        })
+                            .then(function(items) {
+                                app.items = items.data;
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    emptyCart: function() {
+                        axios({
+                            method: 'GET',
+                            url: 'http://localhost:3000/cart/empty',
+                            headers: {
+                                'access-token': localStorage.getItem('token')
+                            }
+                        })
+                            .then(function(result) {
+                                app.getUserCart();
+                                app.getCartBadge();
+                                console.log(result);
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    },
+                    getTotalPrice: function() {
+                        axios({
+                            method: 'GET',
+                            url: 'http://localhost:3000/cart',
+                            headers: {
+                                'access-token': localStorage.getItem('token')
+                            }
+                        })
+                            .then(function(cart) {
+                                let totalPrice = 0;
+                                for (let i = 0; i < cart.data.itemList.length; i++) {
+                                    totalPrice += cart.data.itemList[i].subTotal;
+                                }
+
+                                app.totalPrice = totalPrice;
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    }
+                }, 
+                created: function() {
+                    this.getItems();
+                    this.getCartBadge();
+                    this.getUserCart();
+                },
+                watch: {
+                    keyword() {
+                        if (this.keyword.length === 0) {
+                            this.getItems();
+                        } else {
+                            this.searchItem(this.keyword);
+                        }
+                    },
+                    cartBadge() {
+                        this.getCartBadge();
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

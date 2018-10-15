@@ -26,3 +26,21 @@
     color: #0099cc;
     font-family: Oswald;
 }
+
+#registerForm {
+    /* background-color: #800000; */
+    color: #800000;
+}
+
+#loginForm {
+    color: #003366;
+}
+
+#linkToLogin {
+    color: #20b2aa;
+    font-size: 15px;
+}
+
+#errorAlert {
+    
+}
