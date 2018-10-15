@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:700,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+  <title>E-commerce</title>
+</head>
+
+<body>
+  
+  <div id="app">
+    <header class="header-bar">
+      <nav-bar :changecat="addcatname" :changecat2="upcatname" :adm="admStat" :openpermit="permitStat" @openpermit="openPermit" :islogin="isLogin" @home="getHome" @sendsearch="searchItem" @catsend="getItemCat" :cartcount="cartCount" :itemlist="items" @itemlist="items" :openreg="isOpenReg" @openreg="openRegBtn" :openlog="isOpenLog" @openlog="openLogBtn" :opencart="isOpenCart" @opencart="openCartBtn"></nav-bar>
+    </header>
+    
+    <modal-register :openreg="isOpenReg" @openreg="openRegBtn"></modal-register>
+    
+    <modal-login :openlog="isOpenLog" @openlog="openLogBtn"></modal-login>
+    
+    <!-- modal-cart -->
+    <div v-if="isOpenCart == true">
+      <div class="cartBox">
+        <h5 style="margin: 30px 0 40px;">
+          <strong style="display: flex; justify-content: center;">Cart List</strong>
+        </h5>
+        <div>
+          <p v-if="!carts || carts.length === 0" style="margin: 10%; text-align: center;"> No item </p>
+          <div class="row cart-list" v-for="cart in carts" v-else>
+            <div class="col-8" style="color: orange;"> {{cart.name}}</div>
+            <div class="count col-4" style="color: orange;">x{{cart.count}} 
+            <strong class="del-item cart-del" @click="deleteItCart(cart.name)">x</strong></div>
+          </div>
+        </div>
+        <button class="x-close" @click="closeCart">Cancel</button>
+        <button class="reg-btn" style="float: right" @click="clickCheckout">Checkout</button>
+      </div>
+    </div>
+    <!-- end modal-cart -->
+    
+    <modal-checkout @delone="deleteItCart" @mincount="reduceCount" @addcount="addTransaction" :opencheckout="isOpenCheckout" @opencheckout="closeCheckout" :cartlist="carts" @cartlist="emptyCart" :itemarr="items"></modal-checkout>
+    
+    <!-- item-list -->
+    <div v-if="permitStat === true">
+      <div class="admZone row">
+        <div class="adItBox">
+          <h5 style="margin: 20px 0;">
+            <strong style="display: flex; justify-content: center; color: orange; font-weight: bold">Manage Item</strong>
+          </h5>
+          <ul class="itempermit">
+            <li @click="addItPermit">
+              <a>ADD ITEM</a>
+              <form v-if="addItForm" @submit.prevent>
+                <span><p>Name</p><input v-model="addname" type="text" class="form-control"></span>
+                <span><p>Desc</p><input v-model="adddesc" type="text" class="form-control"></span>
+                <span><p>Link</p><input type="file" class="form-control" @change="getAddImg($event)"></span>
+                <span><p>Price</p><input v-model="addprice" type="text" class="form-control"></span>
+                <span><p>Stock</p><input v-model="addstock" type="text" class="form-control"></span>
+                <span><p>Category</p>
+                  <button @click="toggleShow" class="anchor">Select category</button>
+                  <div v-if="showMenu" class="menu menu-cat">
+                    <div class="menu-item" v-for="cat in catlist" @click="catClicked(cat._id)">{{cat.name}}</div>
+                  </div>
+                  <span style="margin-left: 20px">{{addcategory}}</span>
+                <span>
+                <button class="add-btn" type="button" style="margin: 0 25px;" @click="registerItem">Add</button></span>
+              </form>
+            </li>
+            <li @click="edItPermit">
+              <a>UPDATE ITEM</a>
+              <form v-if="edItForm" @submit.prevent>
+                <button @click="toggleShowItem" class="anchor anchor-item">Select Item</button>
+                <div v-if="showMenuItem" class="menu menu-item_name">
+                  <div class="menu-item" v-for="item in items" @click="itemClicked(item)">{{item.name}}</div>
+                </div>
+                <span><p>Name</p><input v-model="upname" type="text" class="form-control"></span>
+                <span><p>Desc</p><input v-model="updesc" type="text" class="form-control"></span>
+                <span><p>Link</p><input type="file" class="form-control" @change="getUpImg($event)"></span>
+                <span><p>Price</p><input v-model="upprice" type="text" class="form-control"></span>
+                <span><p>Stock</p><input v-model="upstock" type="text" class="form-control"></span>
+                <span><p>Category</p>
+                  <button @click="toggleShow" class="anchor">Select category</button>
+                  <div v-if="showMenu" class="menu menu-cat">
+                    <div class="menu-item" v-for="cat in catlist" @click="catClicked(cat._id)">{{cat.name}}</div>
+                  </div>
+                  <span style="margin-left: 20px">{{upcategory}}</span>
+                <span>
+                <button class="add-btn" type="button" style="margin: 0 25px;" @click="reviseItem">Edit</button></span>
+              </form>
+            </li>
+            <li @click="delItPermit">
+              <a>DELETE ITEM</a>
+              <form v-if="delItForm" @submit.prevent>
+                <button @click="toggleShowItem" class="anchor anchor-item">Select Item</button>
+                <div v-if="showMenuItem" class="menu menu-item_name">
+                  <div class="menu-item" v-for="item in items" @click="itemClicked(item)">{{item.name}}</div>
+                </div>
+                <span style="margin: 5px 20px" v-if="upitem">{{upitem}} - {{upname}}</span>
+                <button class="add-btn" type="button" style="margin: 0 10px;" @click="removeItem">Delete</button></span>
+              </form>
+            </li>
+          </ul>
+        </div>
+        <div class="adCatBox">
+            <h5 style="margin: 20px 0;">
+              <strong style="display: flex; justify-content: center; color: orange; font-weight: bold">Manage Category</strong>
+            </h5>
+            <ul class="itempermit">
+              <li @click="addCatPermit">
+                <a>ADD CATEGORY</a>
+                <form v-if="addCatForm" @submit.prevent>
+                  <span><p>Name</p><input v-model="addcatname" type="text" class="form-control"></span>
+                  <span><p>Class Icon</p><input v-model="addcatclass" type="text" class="form-control"></span>
+                  <button class="add-btn" type="button" style="margin: 5px 0;" @click="registerCat">Add</button></span>
+                </form>
+              </li>
+              <li @click="edCatPermit">
+                <a>UPDATE CATEGORY</a>
+                <form v-if="edCatForm" @submit.prevent>
+                  <button @click="toggleShow" class="anchor">Select category</button>
+                  <div v-if="showMenu" class="menu menu-cat2">
+                    <div class="menu-item" v-for="cat in catlist" @click="cat2Clicked(cat)">{{cat.name}}</div>
+                  </div>
+                  <span><p>Name</p><input v-model="upcatname" type="text" class="form-control"></span>
+                  <span><p>Class Icon</p><input v-model="upcatclass" type="text" class="form-control"></span>
+                  <button class="add-btn" type="button" style="margin: 5px 0;" @click="reviseCat">Edit</button></span>
+                </form>
+              </li>
+            </ul>
+          </div>
+      </div>
+    </div>
+    <div v-else>
+      <div class="wrap-loader" v-if="items.length === 0"><div class="circle-loader"></div></div>
+      <div class="container grid" id="app-list" v-else>
+        <div class="grid-item" v-for="item in items">
+          <article class="list--item">
+            <figure>
+              <img :src="item.imageurl" alt="">
+              <header>
+                <div class="floater">
+                <i class="fa fa-cart-plus" v-if="isLogin" @click="addTransaction(item)"></i>
+                </div>
+                <h2> {{item.name}} </h2>
+              </header>
+              <figcaption>
+                {{item.desc}}
+                <p> $ {{item.price}}</p>
+              </figcaption>
+            </figure>
+          </article>
+        </div> 
+      </div>
+    </div>
+    <!-- enditem-list -->
+  </div>
+
+  <script src="navBar.js"></script>
+  <script src="modaLogin.js"></script>
+  <script src="modaRegister.js"></script>
+  <script src="modaCheckout.js"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>

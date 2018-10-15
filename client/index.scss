@@ -1,0 +1,386 @@
+$black: black;
+$themeColor: orange;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background: #eee;
+}
+
+.fa, .fas {
+  position: relative;
+  display: table-cell;
+  width: 60px;
+  height: 36px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 20px;
+}
+
+.main-menu:hover, nav.main-menu.expanded {
+  width: 250px;
+  overflow: visible;
+}
+
+.main-menu {
+  background: #212121;
+  border-right: 1px solid #e5e5e5;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  width: 60px;
+  overflow: hidden;
+  -webkit-transition: width 0.1s linear;
+  transition: width 0.1s linear;
+  z-index: 1000;
+  > ul {
+    margin: 7px 0;
+  }
+  li {
+    position: relative;
+    display: block;
+    width: 250px;
+    color: $themeColor;
+    cursor: pointer;
+  }
+  .nav-icon {
+    position: relative;
+    display: table-cell;
+    width: 60px;
+    height: 36px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 18px;
+  }
+  .nav-text {
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+    width: 190px;
+  }
+  > ul.logout {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+}
+
+.no-touch .scrollable.hover {
+  overflow-y: hidden;
+  &:hover {
+    overflow-y: auto;
+    overflow: visible;
+  }
+}
+
+nav {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  position: fixed;
+  ul, li {
+    outline: 0;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.main-menu li:hover > a, nav.main-menu li.active > a {
+  color: #fff;
+  background-color: $themeColor;
+}
+
+.dropdown-menu > {
+  li > a {
+    &:hover, &:focus {
+      color: #fff;
+      background-color: $themeColor;
+    }
+  }
+  .active > a {
+    color: #fff;
+    background-color: $themeColor;
+    &:hover, &:focus {
+      color: #fff;
+      background-color: $themeColor;
+    }
+  }
+}
+
+.no-touch .dashboard-page nav.dashboard-menu ul li:hover a, .dashboard-page nav.dashboard-menu ul li.active a {
+  color: #fff;
+  background-color: $themeColor;
+}
+
+.fax-t-shirt:before {
+  content: "\1f455";
+}
+
+.fax-dress:before {
+  content: "\1f457";
+}
+
+.fax-necktie:before {
+  content: "\1f454";
+}
+
+.fax-jeans:before {
+  content: "\1f456";
+}
+
+.fax-high-heeled-shoe:before {
+  content: "\1f460";
+}
+
+.fax-mans-shoe:before {
+  content: "\1f45e";
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 5%;
+}
+
+.list--item {
+  figure {
+    background: #fff;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 260px;
+  }
+  img {
+    display: block;
+    width: 100%;
+  }
+  figcaption {
+    padding: 6px 12px 12px;
+    font-size: 12px;
+    color: #444;
+    height: 90px;
+  }
+  header, figcaption {
+    padding-left: 25%;
+  }
+  header {
+    margin-top: 12px;
+  }
+  h2 {
+    font-size: 14px;
+    padding: 0 0 0;
+    margin: 0;
+  }
+}
+
+.floater {
+  width: 20%;
+  height: 50px;
+  background: $themeColor;
+  position: absolute;
+  left: 0;
+  padding-top: 5px;
+  cursor: pointer;
+}
+
+.container {
+  margin: 3% auto 0;
+  max-width: 1024px;
+  column-count: 3;
+  column-gap: 1em; 
+}
+
+.grid-item {
+  display: inline-table
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    margin: 3% auto 0 10%;
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .container {
+    margin: 3% auto 0 10%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    margin: 3% auto 0 10%;
+  }
+}
+
+.wrap-loader {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-loader {
+  margin: 75px;
+  width: 100px;
+  height: 100px;
+  position: relative;
+  animation: rotate 1s ease-in-out infinite;
+  &:before, &:after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border-radius: 50%;
+    animation: center 2s ease-in-out infinite;
+  }
+  &:before {
+    top: 0;
+    left: 0;
+    background-color: orange;
+    color: orange;
+    box-shadow: 60px 60px 0;
+  }
+  &:after {
+    top: 0;
+    left: calc(100% - 40px);
+    background-color: orange;
+    color: orange;
+    box-shadow: -60px 60px 0;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotating {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes center {
+  50% {
+    top: calc(50% - (40px / 2));
+    left: calc(50% - (40px / 2));
+    box-shadow: 0 0 0 black;
+  }
+}
+
+.overlay {
+  position: fixed;
+  width: 120%;
+  height: 120%;
+  top: 0;
+  left: 0;
+  margin-top: -10%;
+  opacity: 0.7;
+  filter: alpha(opacity = 70);
+  background-color: #000;
+}
+
+.regBox {
+  position: fixed;
+  background: #fffccc;
+  color: #000;
+  top: 15%;
+  left: 35%;
+  border-radius: 0 50px 0 50px;
+  min-width: 20rem;
+  transition: box-shadow 0.25s;
+  z-index: 10000000;
+}
+
+.x-close {
+  float: left;
+  margin: 0 30px 0 0;
+}
+
+.reg-btn {
+  float: right;
+  margin: 0 0 0 30px;
+}
+
+.x-close, .reg-btn {
+  background: orange;
+  padding: 0 30px;
+  border: none;
+  font-weight: bold;
+  color: #fffccc;
+}
+
+.x-close {
+  &:hover, &:focus {
+    background: orange;
+    opacity: 0.7;
+    filter: alpha(opacity = 70);
+    color: #000;
+  }
+}
+
+.reg-btn {
+  &:focus, &:hover {
+    background: orange;
+    opacity: 0.7;
+    filter: alpha(opacity = 70);
+    color: #000;
+  }
+}
+
+.form {
+  margin: 1rem 30px;
+}
+
+.md-form input {
+  width: 220px;
+  margin-left: 15px;
+  float: right;
+}
+
+[type="radio"]:checked + label:after {
+  border: 2px solid orange;
+  background-color: orange;
+}
+
+.md-form .form-check-label {
+  margin-left: 20px;
+}
+
+.err-notif {
+  color: orange;
+  text-align: center;
+}
+
+.cart-list {
+  margin: 10%;
+}
+
+.del-item {
+  float: right;
+  cursor: pointer;
+  background: black;
+  color: #fffccc;
+  padding: 10px;
+  margin-top: 6%;
+  line-height: 1;
+}
