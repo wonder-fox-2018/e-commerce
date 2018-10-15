@@ -1,16 +1,8 @@
 var CartModel = require('../models/CartModel.js');
 var mongoose = require('mongoose')
 
-/**
- * CartController.js
- *
- * @description :: Server-side logic for managing Carts.
- */
 module.exports = {
 
-    /**
-     * CartController.list()
-     */
     list: function (req, res) {
         CartModel.find(function (err, Carts) {
             if (err) {
@@ -23,9 +15,6 @@ module.exports = {
         }).populate('cartcontent.Product').exec()
     },
 
-    /**
-     * CartController.show()
-     */
     show: function (req, res) {
         let id = mongoose.Types.ObjectId(req.params.id)
         
@@ -35,9 +24,6 @@ module.exports = {
           })
     },
 
-    /**
-     * CartController.create()
-     */
     create: function (req, res) {
         var Cart = new CartModel({
 
@@ -61,9 +47,6 @@ module.exports = {
         });
     },
 
-    /**
-     * CartController.update()
-     */
     update: function (req, res) {
 
         var id = req.params.id;
@@ -103,9 +86,6 @@ module.exports = {
         });
     },
 
-    /**
-     * CartController.remove()
-     */
     remove: function (req, res) {
         var id = req.params.id;
         CartModel.findByIdAndRemove(id, function (err, Cart) {

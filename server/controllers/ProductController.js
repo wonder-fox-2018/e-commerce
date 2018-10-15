@@ -1,15 +1,7 @@
 var ProductModel = require('../models/ProductModel.js');
 
-/**
- * ProductController.js
- *
- * @description :: Server-side logic for managing Products.
- */
 module.exports = {
 
-    /**
-     * ProductController.list()
-     */
     list: function (req, res) {
         ProductModel.find(function (err, Products) {
             if (err) {
@@ -22,9 +14,6 @@ module.exports = {
         });
     },
 
-    /**
-     * ProductController.show()
-     */
     show: function (req, res) {
         var id = req.params.id;
         ProductModel.findOne({_id: id}, function (err, Product) {
@@ -43,9 +32,6 @@ module.exports = {
         });
     },
 
-    /**
-     * ProductController.create()
-     */
     create: function (req, res) {
         console.log(req.body)
         var Product = new ProductModel({
@@ -68,9 +54,6 @@ module.exports = {
         });
     },
 
-    /**
-     * ProductController.update()
-     */
     update: function (req, res) {
         var id = req.params.id;
         ProductModel.findOne({_id: id}, function (err, Product) {
@@ -105,9 +88,6 @@ module.exports = {
         });
     },
 
-    /**
-     * ProductController.remove()
-     */
     remove: function (req, res) {
         var id = req.params.id;
         ProductModel.findByIdAndRemove(id, function (err, Product) {

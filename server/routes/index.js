@@ -14,5 +14,6 @@ router.use('/users',require('./UserRoutes.js'))
 router.use('/products',require('./ProductRoutes.js'))
 router.use('/carts',require('./CartRoutes.js'))
 router.use('/categories',require('./CategoryRoutes.js'))
+router.use('/checkouts',require('./CheckoutRoutes.js'))
 
 module.exports = router;

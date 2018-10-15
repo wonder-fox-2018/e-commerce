@@ -49,7 +49,7 @@ Vue.component('cart-component', {
                 <li class="totalRow final"><span class="label">Total</span><span class="value">
                         {{cart.total}}
                     </span></li>
-                <li class="totalRow"><a href='' class="btn continue">Checkout</a></li>
+                <li class="totalRow"><a href='' class="btn continue" v-on:click="checkout(cart)">Checkout</a></li>
             </ul>
         </div>
 
@@ -67,6 +67,10 @@ Vue.component('cart-component', {
             this.cart.cartcontent.splice(index, 1)
         },
 
+        checkout:function(cart){
+            console.log('checkout')
+            console.log(cart)
+        }
     },
 
     watch: {

@@ -6,9 +6,10 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 require('dotenv').config()
 
-mongoose.connect('mongodb://localhost:27017/h8',{ useNewUrlParser: true })
+mongoose.connect(`mongodb://h8store:h8store@ds029630.mlab.com:29630/h8store`,{ useNewUrlParser: true })
 
 const app = express();
+
 
 app.use(logger('dev'));
 app.use(express.json());

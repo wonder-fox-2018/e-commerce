@@ -3,16 +3,9 @@ const helpers = require('../helpers')
 const CartController = require('./CartController.js')
 const CartModel = require('../models/CartModel.js')
 const jwt = require('jsonwebtoken')
-/**
- * UserController.js
- *
- * @description :: Server-side logic for managing Users.
- */
+
 module.exports = {
 
-    /**
-     * UserController.list()
-     */
     list: function (req, res) {
         UserModel.find(function (err, Users) {
             if (err) {
@@ -32,9 +25,6 @@ module.exports = {
         }).exec()
     },
 
-    /**
-     * UserController.show()
-     */
     show: function (req, res) {
         var id = helpers.decodeToken(req.params.id).id
 
@@ -58,9 +48,6 @@ module.exports = {
         }).exec()
     },
 
-    /**
-     * UserController.create()
-     */
     create: function (req, res) {
 
         var Cart = new CartModel({
@@ -114,9 +101,6 @@ module.exports = {
 
     },
 
-    /**
-     * UserController.update()
-     */
     update: function (req, res) {
         var id = req.params.id;
         UserModel.findOne({
@@ -153,9 +137,6 @@ module.exports = {
         });
     },
 
-    /**
-     * UserController.remove()
-     */
     remove: function (req, res) {
         var id = req.params.id;
         UserModel.findByIdAndRemove(id, function (err, User) {

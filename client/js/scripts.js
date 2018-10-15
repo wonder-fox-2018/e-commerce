@@ -54,8 +54,8 @@ function onSignIn(googleUser) {
             },
         })
         .done((jwtToken) => {
-
             localStorage.setItem('token', jwtToken.token)
+            window.location.reload()
         })
         .fail((err) => {
             console.log(err)

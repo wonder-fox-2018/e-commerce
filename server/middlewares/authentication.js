@@ -73,7 +73,7 @@ module.exports = {
 
     login(req, res) {
         UserModel.findOne({
-                username: req.body.username
+                email: req.body.email
             })
             .exec()
             .then((user) => {
@@ -91,7 +91,7 @@ module.exports = {
                     })
                 } else {
                     res.status(400).json({
-                        message: "Wrong Username & Password"
+                        message: "Wrong Email & Password"
                     })
                 }
             })

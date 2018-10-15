@@ -1,15 +1,7 @@
 var CategoryModel = require('../models/CategoryModel.js');
 
-/**
- * CategoryController.js
- *
- * @description :: Server-side logic for managing Categorys.
- */
 module.exports = {
 
-    /**
-     * CategoryController.list()
-     */
     list: function (req, res) {
         CategoryModel.find(function (err, Categorys) {
             if (err) {
@@ -22,9 +14,6 @@ module.exports = {
         });
     },
 
-    /**
-     * CategoryController.show()
-     */
     show: function (req, res) {
         var id = req.params.id;
         CategoryModel.findOne({_id: id}, function (err, Category) {
@@ -43,9 +32,6 @@ module.exports = {
         });
     },
 
-    /**
-     * CategoryController.create()
-     */
     create: function (req, res) {
         
         var Category = new CategoryModel({
@@ -65,14 +51,9 @@ module.exports = {
                 error: err
             })
         });
-
-
        
     },
 
-    /**
-     * CategoryController.update()
-     */
     update: function (req, res) {
         var id = req.params.id;
         CategoryModel.findOne({_id: id}, function (err, Category) {
@@ -105,9 +86,6 @@ module.exports = {
         });
     },
 
-    /**
-     * CategoryController.remove()
-     */
     remove: function (req, res) {
         var id = req.params.id;
         CategoryModel.findByIdAndRemove(id, function (err, Category) {
