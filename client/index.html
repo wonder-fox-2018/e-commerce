@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css"> -->
+  <link rel="stylesheet" href="./assets/css/custom.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+  <link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css> <script src=https://code.jquery.com/jquery-3.3.1.js
+    crossorigin=anonymous integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=">
+    </script>
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js> </script> </head> <style>
+  #boxContent {
+    padding: 40px;
+  }
+
+  #icon-navbar {
+    color : white;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  #actinExtModal {
+    color: grey;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+  
+</style>
+
+<body>
+
+<div id="app">
+
+  <header-components @show-my-transaction="showMyTransaction" @search-by-name="searchbyname" @show-all-products-from-nav="showAllProductsFromNav" @status-login="statusLogin" @status-market="statusmarket" :carts="carts" @box-my-market="boxMyMarket" :get-status-market-from-create="getStatusMarketFromCreate" @reset-cart-from-logout="resetCartFromLogout"></header-components>
+  <body-components :showmytransaction="showmytransaction" :search-by-name="searchByName" :showallproductsfromnav="showallproductsfromnav" :islogin="isLogin" @temp-carts="getTempCarts" :my-market="myMarket" :status-market="statusMarket" @status-market-from-create-market="statusMarketFromCreate" :get-reset-cart-from-logout="getResetCartFromLogout"></body-components>
+
+</div>
+
+  <script src="./assets/js/customs.js"></script>
+
+  <script src="./components/BodyComponents/transactionMy.js"></script>
+  <script src="./components/BodyComponents/productMy.js"></script>
+  <script src="./components/BodyComponents/productAll.js"></script>
+  <script src="./components/BodyComponents/mainContentComponent.js"></script>
+  <script src="./components/BodyComponents/leftBarComponent.js"></script>
+  <script src="./components/BodyComponents/index.js"></script>
+
+  <script src="./components/HeaderComponents/shoppingCartComponent.js"></script>
+  <script src="./components/HeaderComponents/registerComponent.js"></script>
+  <script src="./components/HeaderComponents/loginComponent.js"></script>
+  <script src="./components/HeaderComponents/index.js"></script>
+  <script src="./assets/js/main.js"></script>
+  </body>
+
+</html>
