@@ -214,50 +214,14 @@
 
           </div>
           <!-- cards -->
-          <div class="ui eleven wide column">
-            <div class="ui link cards">
-              <div class="ui special cards" id="cards-template">
-                <div class="search" style="padding-top:50px;"></div>
-                <div class="ui special cards">
-                  <div class="card" v-for='item in items'>
-                    <div class="blurring dimmable image">
-                      <div class="ui dimmer">
-                        <div class="content">
-                          <div class="center">
-                            <div class="ui inverted button" >Add to
-                                
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <img :src="item.image_url">
-                    </div>
-                    <div class="content">
-                      <a class="header">{{ item.name }}</a>
-                      <p>( {{ item.category }} )</p>
-                      <div class="meta">
-                        <span class="date">Rp {{ moneyFormat(item.price) }}</span>
-                      </div>
-                    </div>
-                    <div class="extra content">
-                      <p>
-                        Quantity:
-                        {{ item.quantity }}
-                        <!-- {{ item._id}} -->
-                      </p>
-                      <button type="submit" class="btn btn-success" @click='addToCart(item)' v-if="isLogin">Add to cart</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <cards :lists='items' :islogin='isLogin' @addtocart='addToCart'></cards>
+          
         </div>
       </div>  
     </main>
       <!-- footer -->
       <footer>
-        <div class="container-footer text-center static-bottom" style="">
+        <div class="container-footer text-center static-bottom" >
           <div class="row">
             <div class="col-sm-12">
               <p>&copy; copyrigth 2018 | built by <a href="https://github.com/agungatd" target="blank">Agung Tri
@@ -278,8 +242,9 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
- 
+  <script src="./component/cards.js"></script>
   <script>
+    
     
     let app = new Vue({
       el: '#app',
@@ -491,21 +456,6 @@
                 console.log(err);
               })
       },
-        moneyFormat(amount, decimalCount = 0, decimal = ",", thousands = ".") {
-          try {
-            decimalCount = Math.abs(decimalCount);
-            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
-
-            const negativeSign = amount < 0 ? "-" : "";
-
-            let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-            let j = (i.length > 3) ? i.length % 3 : 0;
-
-            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
-          } catch (e) {
-            console.log(e)
-          }
-        },
         showEditItem(id, name, category, price, quantity, itemImageUrl) {
           app.showEditItemForm = true
           app.itemId = id,
