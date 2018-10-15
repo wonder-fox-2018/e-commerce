@@ -9,6 +9,7 @@ Vue.component('nav-bar',{
 
             failedLogin : false,
             failedRegister : false,
+            signupSuccess : false,
 
             register_name : '',
             register_email : '',
@@ -81,14 +82,15 @@ Vue.component('nav-bar',{
                 data
             })
             .then(function (response) {
-                console.log(response.data)
-                console.log('sign up berhasil')
-                
+                self.signupSuccess = true
             })
             .catch(function (err){
                 self.failedRegister = true
                 console.log(err)
             })
+        },
+        signupSuccessFalse : function(){
+            this.signupSuccess = false
         }
     },
     template : `
@@ -141,6 +143,7 @@ Vue.component('nav-bar',{
             </div>
         </div>
     </nav>
+
     <div class="alert alert-warning" v-if="failedLogin" @click="failedLoginFalse">
         <strong>Error!</strong> Invalid username / password.
         <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -148,6 +151,9 @@ Vue.component('nav-bar',{
     <div class="alert alert-warning" v-if="failedRegister" @click="failedRegisterFalse">
         <strong>Error!</strong> Invalid username / password.
         <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    </div>
+    <div class="alert alert-info" role="alert" v-if="signupSuccess" @click="signupSuccessFalse">
+        Register Success!
     </div>
     
     <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -198,7 +204,7 @@ Vue.component('nav-bar',{
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Item</h5>
+                        <h5 class="modal-title">Register</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
