@@ -7,6 +7,8 @@ var transactionSchema = new Schema({
     quantity:[{
         type:Number
     }],
+    user:{type: Schema.Types.ObjectId, ref: 'User'},
+    date: { type: Date, default: new Date() }
 });
 
 var Transaction = mongoose.model('Transaction', transactionSchema);
