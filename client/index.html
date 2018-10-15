@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>H8</title>
+
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/jBox.css" type="text/css">
+    <link rel="stylesheet" href="css/card.css" type="text/css">
+    <link rel="stylesheet" href="css/component.css" type="text/css" />
+    <link rel="stylesheet" href="css/cart.css" type="text/css" />
+    <link rel="stylesheet" href="css/loginRegister.css" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/modernizr.custom.js"></script>
+    <script src="js/jBox.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <meta name="google-signin-client_id" content="736311652491-j77r9uqltc9nucbensuiet5avlpb6046.apps.googleusercontent.com">
+
+</head>
+
+<body>
+    <div id="app">
+        <div id="container">
+            <div class="se-pre-con"></div>
+
+            <header-component :user='user'></header-component>
+
+            <section-component :user='user' @respon-add-category='responAddCategory' @respon-add-product='responAddProduct' :responAdd="responAdd"></section-component>
+
+            <main-component :categories="categories" @clicked-show-categories='showCategories' :responAdd="responAdd"></main-component>
+
+            <nav-component :categories="categories" :responAdd="responAdd"></nav-component>
+
+            <article-component id="article" :cart='cart' :products="products" @addtocart="addToCart" :responAdd="responAdd" ></article-component>
+
+            <aside-component></aside-component>
+
+            <footer-component></footer-component>
+            
+            <signup-component></signup-component>
+
+            <signin-component></signin-component>
+
+            <cart-component :cart='cart' ></cart-component>
+            
+
+        </div>
+    </div>
+    <script src="js/header.js"></script>
+    <script src="js/section.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/aside.js"></script>
+    <script src="js/article.js"></script>
+    <script src="js/signup.js"></script>
+    <script src="js/signin.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/toucheffects.js"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/vue.js"></script>
+</body>
+
+</html>
