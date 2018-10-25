@@ -1,3 +1,3 @@
 # e-commerce
 
-## LINK DEPLOY : https://warungpediaharles.firebaseapp.com/
+## LINK DEPLOY : https://warungpedia-hba.firebaseapp.com/
