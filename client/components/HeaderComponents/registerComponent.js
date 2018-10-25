@@ -44,7 +44,7 @@ const registeruser = {
       name: "",
       email: "",
       password: "",
-      myurl: "https://ecommerceserver.harlesbayuanggara.tech"
+      myurl: "http://localhost:3000"
     };
   },
   methods: {

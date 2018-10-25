@@ -53,7 +53,7 @@ const allProduct = {
     return {
       products: [],
       carts: [],
-      myurl: "https://ecommerceserver.harlesbayuanggara.tech"
+      myurl: "http://localhost:3000"
     };
     // totalProduct: 0,
   },

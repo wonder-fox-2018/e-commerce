@@ -7,15 +7,15 @@ require("dotenv").config();
 
 const port = process.env.PORT || 3000;
 
-// mongoose.connect(
-//   process.env.URL_MONGO_LOCAL,
-//   { useNewUrlParser: true }
-// );
-
 mongoose.connect(
-  process.env.URL_MONGO_MLAB,
+  process.env.URL_MONGO_LOCAL,
   { useNewUrlParser: true }
 );
+
+// mongoose.connect(
+//   process.env.URL_MONGO_MLAB,
+//   { useNewUrlParser: true }
+// );
 
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));

@@ -45,7 +45,7 @@ const myTransaction = {
     return {
       customerName: "",
       myTransaction: [],
-      myurl: "https://ecommerceserver.harlesbayuanggara.tech"
+      myurl: "http://localhost:3000"
     };
   },
   created() {

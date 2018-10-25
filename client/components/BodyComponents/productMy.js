@@ -198,7 +198,6 @@ const myProduct = {
         <!-- START MODAL UPDATE PRODUCT -->
 
         <div class="ui tiny modal modalUpdateProduct">
-          <i class="close icon"></i>
           <div class="header">
             Update Product
           </div>
@@ -235,7 +234,7 @@ const myProduct = {
             </div>
           </div>
           <div class="actions">
-            <div class="ui button">Cancel</div>
+            <div class="ui button" >Cancel</div>
             <div class="ui button" @click="btnUpdateProduct">Update</div>
           </div>
         </div>
@@ -279,7 +278,7 @@ const myProduct = {
       errorCreateProduct: false,
       errorMsgCreateProduct: "",
 
-      myurl: "https://ecommerceserver.harlesbayuanggara.tech"
+      myurl: "http://localhost:3000"
     };
   },
   created() {},
@@ -289,6 +288,12 @@ const myProduct = {
       this.boxMyProduct = true;
       this.boxCreateProduct = false;
       this.boxCreateMarket = false;
+
+      $(".tiny.modal.modalUpdateProduct")
+        .modal({
+          transition: "horizontal flip"
+        })
+        .modal("hide");
 
       axios({
         method: "GET",
@@ -341,7 +346,11 @@ const myProduct = {
       })
         .then(response => {
           this.actionShowMyProduct();
-          // console.log(response.data.message);
+          $(".tiny.modal.modalUpdateProduct")
+            .modal({
+              transition: "horizontal flip"
+            })
+            .modal("hide");
         })
         .catch(err => {});
     },

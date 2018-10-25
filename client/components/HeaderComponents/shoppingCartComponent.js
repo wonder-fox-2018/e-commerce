@@ -51,7 +51,7 @@ const shoppingcart = {
       totalProduct: 0,
       totalPrice: 0,
       resetCart: 0,
-      myurl: "https://ecommerceserver.harlesbayuanggara.tech"
+      myurl: "http://localhost:3000"
     };
   },
   methods: {

@@ -1,28 +1,39 @@
 function login() {
-  $('.tiny.modal.modalLogin')
-   .modal({
-    transition : 'fade right'
-   }).modal('show');
+  $(".tiny.modal.modalLogin")
+    .modal({
+      transition: "fade right"
+    })
+    .modal("show");
 }
 
 function register() {
-  $('.tiny.modal.modalRegister').modal({
-    transition : 'fade left'
-   }).modal('show')
+  $(".tiny.modal.modalRegister")
+    .modal({
+      transition: "fade left"
+    })
+    .modal("show");
 }
 
 function shoppingCart() {
-  $('.large.modal.modalShopingCart').modal({
-    transition : 'horizontal flip'
-   }).modal('show')
+  $(".large.modal.modalShopingCart")
+    .modal({
+      transition: "horizontal flip"
+    })
+    .modal("show");
 }
 
 function updateProduct() {
-  $('.tiny.modal.modalUpdateProduct').modal({
-    transition : 'horizontal flip'
-   }).modal('show')
+  $(".tiny.modal.modalUpdateProduct")
+    .modal({
+      transition: "horizontal flip"
+    })
+    .modal("show");
 }
 
-// $('.ui.dropdown')
-//   .dropdown()
-// ;
+// function closemodalupdateproduct() {
+//   $(".tiny.modal.modalUpdateProduct")
+//     .modal({
+//       transition: "horizontal flip"
+//     })
+//     .modal("hide");
+// }

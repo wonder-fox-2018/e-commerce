@@ -38,7 +38,7 @@ const loginuser = {
       passwordlLogin: "",
       isLogin: false,
       statusMarket: false,
-      myurl: "https://ecommerceserver.harlesbayuanggara.tech"
+      myurl: "http://localhost:3000"
     };
   },
   created() {
