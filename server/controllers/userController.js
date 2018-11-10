@@ -59,7 +59,7 @@ class UserController {
     }
 
     static getUserProfile(req, res) {
-        User.findOne({email: req.user.email})
+        User.findOne({email: req.user.email}).populate('transactionList')
             .then(function(user) {
                 res.status(200).json(user);
             })

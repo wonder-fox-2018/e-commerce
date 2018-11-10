@@ -10,6 +10,7 @@ const userRouter = require('./routes/userRouter.js');
 const itemRouter = require('./routes/itemRouter.js');
 const cartRouter = require('./routes/cartRouter.js');
 const transactionRouter = require('./routes/transactionRouter.js');
+const categoryRouter = require('./routes/categoryRouter.js');
 
 mongoose.connect('mongodb://localhost/e-commerce', {useNewUrlParser: true});
 
@@ -22,11 +23,8 @@ app.use('/users', userRouter);
 app.use('/items', itemRouter);
 app.use('/cart', cartRouter);
 app.use('/transaction', transactionRouter);
+app.use('/categories', categoryRouter);
 
 app.listen(port, function() {
     console.log('Listening on port', port);
 });
-
-// PORT=3000
-// SECRET_PASSWORD=difficult
-// SECRET_TOKEN=veryhard

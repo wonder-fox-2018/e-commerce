@@ -37,6 +37,28 @@ class TransactionController {
                 res.status(500).json(err.message);
             });
     }
+
+    static showAll(req, res) {
+        Transaction.find()
+            .then(function(transactions) {
+                res.status(200).json(transactions);
+            })
+            .catch(function(err) {
+                res.status(500).json(err.message);
+            });
+    }
+
+    static findByUser(req, res) {
+        Transaction.find({
+            user: req.user._id
+        }).populate('user itemList.item')
+            .then(function(transaction) {
+                res.status(200).json(transaction);
+            })
+            .catch(function(err) {
+                res.status(500).json(err.message);
+            });
+    }
 }
 
 module.exports = TransactionController;

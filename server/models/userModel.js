@@ -15,11 +15,7 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'Password is required']
     },
-    role: String,
-    transactionList: [{
-        type: Schema.Types.ObjectId, 
-        ref: 'Transaction'
-    }]
+    role: String
 }, {
     timestamps: true
 });

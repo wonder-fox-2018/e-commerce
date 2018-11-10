@@ -5,7 +5,11 @@ const itemSchema = new Schema({
     name: String,
     price: Number,
     stock: Number,
-    imgURL: String
+    imgURL: String,
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category'
+    }
 }, {
     timestamps: true
 });

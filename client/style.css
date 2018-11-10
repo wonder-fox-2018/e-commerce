@@ -44,3 +44,63 @@
 #errorAlert {
     
 }
+
+.category-list {
+    cursor: pointer;
+}
+
+.category-label-div {
+    /* font-size: 12px; */
+    /* border: 5px solid #daa520; */
+    background-color: #11a29a;
+    font-family: 'Titillium Web', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.category-label {
+    font-size: 1.4vmin;
+}
+
+.card-columns {
+    column-count: 3 !important;
+}
+
+.btn-card {
+    width: 45px;
+}
+
+.div-btn-card {
+    height: 50px;
+    text-align: center;
+}
+
+.list-group-item {
+    padding: 0 !important;
+    border: 0px !important;
+}
+
+.list-group-item:hover {
+    text-align: center;
+    padding: 0 !important;
+}
+
+.span-btn {
+    background: #e74c3c;
+    text-align: center;
+    height: 50px;
+    color: white;
+    width: 0;
+    display: inline-block;
+    transition: 0.2s linear;
+    opacity: 0;
+    cursor: pointer;
+}
+
+li:hover span {
+    width: 40px;
+    opacity: 1.0;
+}
+
+#editItemModal, #editCategoryModal, #addItemModal {
+    font-family: 'Titillium Web', sans-serif;
+}
