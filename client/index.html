@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css" integrity="sha256-ncjDAd2/rm/vaNTqp7Kk96MfSeHACtbiDU9NWKqNuCI="
+    crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js" integrity="sha256-0gIvTkdsp0OOeV8tx3UTdi3ehppGwZbzQMvZJYhbzsE="
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+  crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <title> TokoLapak</i></title>
+</head>
+
+<body>
+  <div id="app">
+    <header class="ui">
+      <!-- register form -->
+        <div class="ui inverted segment" v-if='showRegForm'>
+            <div class="ui inverted form">
+              <div class="three fields">
+                <div class="required field">
+                  <label>Name</label>
+                  <input placeholder="Name" type="text" v-model='name'>
+                </div>
+                <div class="required field">
+                  <label>Email</label>
+                  <input placeholder="Email" type="email" v-model='email'>
+                </div>
+                <div class="required field">
+                  <label>Password</label>
+                  <input placeholder="Password" type="password" v-model='password'>
+                </div>
+              </div>
+              <div class="required inline field">
+                <div class="ui checkbox ">
+                  <input type="checkbox" tabindex="0" class="">
+                  <label>I agree to the terms and conditions</label>
+                </div>
+              </div>
+              <div class="ui submit button" @click='register'>Register</div>
+              <div class="ui submit button" @click='showRegForm=false'>Cancel</div>
+            </div>
+          </div>
+      <!-- Login -->
+      <div class="ui inverted segment" v-if='showLoginForm'>
+        <div class="ui inverted form">
+          <div class="two fields">
+            <div class="required field">
+              <label>Email</label>
+              <input placeholder="Email" type="email" v-model='email'>
+            </div>
+            <div class="required field">
+              <label>Password</label>
+              <input placeholder="Password" type="password" v-model='password'>
+            </div>
+          </div>
+          <div class="required inline field">
+          </div>
+          <div class="ui submit button" @click='login'>Login</div>
+          <div class="ui submit button" @click='showLoginForm=false'>Cancel</div>
+        </div>
+      </div>
+      <!-- CART -->
+      <div class="cart" v-if='showCart'>
+          <div class="header">
+              Order Summary
+            </div>
+            <div id="payment">
+              <h5 class="text-dark">Order Summary</h5><br>
+              <ul>
+                <div class="row justify-content-between" v-for="cart in carts">
+                  <li class="text-dark" style="list-style-type: none;">
+                      {{cart.name}} ({{cart.category}})
+                  </li>
+                  <h6 class="text-dark">{{moneyFormat(cart.price)}}</h6>
+                </div>
+              </ul>
+              <h5 class="text-dark">Payment Information</h5><br>
+              <ul>
+                <div class="justify-content-between">
+                  <h6 class="text-dark">Total Price : {{paymentDetail}}</h6>
+                </div>
+              </ul>
+              <button class="btn btn-success" type="button" @click="checkout(carts,paymentDetail)">Checkout</button>
+              <button class="btn btn-danger" @click='showCart=false'>Close</button>
+            </div>
+      </div>
+      <nav class="navbar navbar-light" style="background-color: rgb(69, 73, 73); color: whitesmoke">
+        <!-- <img src="./img/tokolapak.png" alt="#" class="logo"> -->
+        <h1><span style="color:rgb(20, 160, 20)">Toko</span><i class="fab fa-opencart"></i><span style="color:rgb(194, 27, 27)">Lapak</span></h1>
+        <div class="ui buttons">
+          <button class="ui teal button" id="register" @click='showRegForm=true'>Register</button>
+          <div class="or"></div>
+          <button class="ui blue button" id="login" @click='showLoginForm=true'>login</button>
+        </div>
+        <div class="ui compact menu" id="cart" @click='showCart=true'>
+          <a class="item">
+            <i class="icon cart"></i> Cart
+            <div class="floating ui teal label">{{totalItems}}</div>
+          </a>
+        </div>
+        <div class="logout-button" v-if='isLogin'>
+          <button class="ui button" ><a class="nav-link" @click='logout' style="color: rgb(10, 0, 0)">logout</a></button>
+        </div>
+      </nav>
+    </header>
+    <!-- admin World -->
+    <div class="container" v-if='isAdmin'>
+    <div class="row"  style="margin: auto">
+      <h3>add, edit, delete:</h3>
+      <div class="col-md-3">
+        <button class="btn" @click='adminItem=true'>Items</button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn" @click='adminCart'>Cart</button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn" @click='adminCustomer'>Customers</button>
+      </div>
+    </div>
+    <div class="row" v-if='adminItem'>
+      <h3>Add new Item</h3><br>
+      <label for="name">Name</label>
+      <input type="text"  v-model='itemName'>
+      <label for="category">Category</label>
+      <input type="text"  v-model='itemCategory'>
+      <label for="price">Price</label>
+      <input type="text"  v-model='itemPrice'>
+      <label for="quantity">Quantity</label>
+      <input type="text"  v-model='itemQuantity'>
+      <label for="image_url">Image Url</label>
+      <input type="file"  v-model='itemImageUrl'><br>
+      <button class='btn' @click='createItem'>Add</button> or 
+      <button class='btn' @click='editItem(itemId)'>Edit</button>
+    </div>
+    <div class="row" v-if='adminItem' style="margin: auto">
+      <div class="adminItem">
+        <table class="ui table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for='item in items'>
+              <td>{{ item.name }}</td>
+              <td>{{ item.category }}</td>
+              <td>{{ item.price }}</td>
+              <td>{{ item.quantity }}</td>
+              <td><span style="color:blue" @click='showEditItem(item._id, item.name, item.category, item.price, item.quantity, item.image_url)'>Edit</span> || <span style="color:blue" @click='deleteItem(item._id)'>Delete</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row" v-if='adminCustomer' style="margin: auto">
+      <div class="adminCustomer">
+        <table class="ui table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for='customer in customers'>
+              <td>{{ customer.name }}</td>
+              <td>{{ customer.email }}</td>
+              <td><span style="color:blue" @click='editCustomerForm(customer._id)'>Edit</span> || <span style="color:blue" @click='deleteCustomerForm(customer._id)'>Delete</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- end of Admin -->
+
+<!-- Main Content -->
+    <main>
+      <div class="ui" style="padding:50px 0px;">
+        <div class="ui grid">
+          <div class="offset-sm-0.5"></div>
+          <div class="ui vertical menu" style="background-color: rgb(77, 84, 90);">
+            <a class="item" v-for='category in categories' @click='findItem(category)' >
+              <div class="ui small teal label">666</div>
+              {{category}}
+            </a>
+            <a class="item" @click='showItems' >
+              Show All Categories
+              </a>
+            <div class="item">
+              <div class="ui icon input">
+                <input type="text" placeholder="Search item" v-model='itemFound' @keyup='findItem("search")' >
+                <i class="search icon"></i>
+              </div>
+            </div>
+          </div>
+          <div class="ui one wide column">
+
+          </div>
+          <!-- cards -->
+          <cards :lists='items' :islogin='isLogin' @addtocart='addToCart'></cards>
+          
+        </div>
+      </div>  
+    </main>
+      <!-- footer -->
+      <footer>
+        <div class="container-footer text-center static-bottom" >
+          <div class="row">
+            <div class="col-sm-12">
+              <p>&copy; copyrigth 2018 | built by <a href="https://github.com/agungatd" target="blank">Agung Tri
+                  Atidhira</a></p>
+            </div>
+            <div class="col-sm-12">
+              <a href="https://github.com/agungatd"><i class="fab fa-github"></i></a>&nbsp;
+              <a href="https://facebook.com/agung.triatidhira"><i class="fab fa-facebook"></i></a>&nbsp;
+              <a href="https://www.instagram.com/agung_atidhira/?hl=en"><i class="fab fa-instagram"></i></a>&nbsp;
+              <a href="https://twitter.com/agungatidhira"><i class="fab fa-twitter"></i></a>&nbsp;
+            </div>
+          </div>
+        </div>
+    </footer>
+    <!-- akhir footer -->
+  </div>
+  <!-- scripts -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+  <script src="./component/cards.js"></script>
+  <script>
+    
+    
+    let app = new Vue({
+      el: '#app',
+      data: {
+        name: '',
+        email: '',
+        password: '',
+        isLogin: true,
+        item_id: '',
+        itemFound: '',
+        items: [],
+        categories: ['buku','kamera','sepatu'],
+        itemsInCart: [],
+        totalItems: 0,
+        carts: [],
+        transaction: [],
+        category: '',
+        success: false,
+        error: false,
+        errorMessage: '',
+        successMessage: '',
+        showLoginForm: false,
+        showRegForm: false,
+        showCart: false,
+        isAdmin: false,
+        adminItem: false,
+        adminCustomer: false,
+        adminCart: false,
+        showEditItemForm: false,
+        itemId: '',
+        itemName: '',
+        itemCategory: '',
+        itemPrice: '',
+        itemQuantity: '',
+        itemImageUrl: '',
+        showEditCustomer: false,
+        showEditCart: false
+      },
+      created() {
+        this.showItems()
+        this.showCategories()
+        if(localStorage.admin) {
+          this.isAdmin = true
+        }
+      },
+      watcher: {
+
+      },
+      computed: {
+        paymentDetail() {
+          let totalPrice = 0
+          this.carts.forEach(cart => {
+              totalPrice += cart.price
+          });
+          return totalPrice
+        },
+        transactionDetail() {
+          let total = 0
+          this.transaction.forEach(data => {
+              data.listItem.forEach(item => {
+                  total += item.price
+              })
+          });
+          return total
+        }
+      },
+      methods: {
+        login() {
+          axios.post('http://localhost:3000/customers/login', {
+              email: app.email,
+              password: app.password
+          })
+          .then((response) => {
+            // console.log(response.data)
+            if( response.data.result.role === 'admin') {
+              app.isAdmin = true
+              localStorage.setItem('admin', true)
+            }
+            localStorage.setItem('token',response.data.token)
+            localStorage.setItem('id', response.data.result._id)
+            app.successMessage = 'Login Success'
+            app.password=''
+            app.success = true
+            app.isLogin = true
+            app.showLoginForm = false
+          }).catch((err) => {
+            app.errorMessage = `Error: ${err.Error}`
+            app.error = true
+          });
+        },
+        logout() {
+          this.name = ''
+          this.email = ''
+          this.password = ''
+          localStorage.removeItem('token')
+          localStorage.removeItem('id')
+          localStorage.removeItem('admin')
+          this.isLogin = false
+          // console.log(app.isLogin)
+        },
+        register() {
+          axios.post('http://localhost:3000/customers/register', {
+              name: app.name,
+              email: app.email,
+              password: app.password
+          })
+          .then((response) => {
+            // console.log(response)
+            app.showRegForm = false
+            app.successMessage = 'Registration Success'
+            app.success = true
+            app.password=''
+          }).catch((err) => {
+            app.errorMessage = `Error: ${err.Error}`
+            app.error = true
+          })
+        },
+        showItems() {
+          axios.get('http://localhost:3000/items')
+          .then(function (response) {
+            app.items = response.data.items
+            // console.log(app.items)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        },
+        showCategories(){
+          axios.get('http://localhost:3000/categories')
+          .then(function (response) {
+            // console.log('cat:', response)
+            // app.categories = response.data.items
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        },
+        findItem(category) {
+          // console.log(category, '--', this.itemFound)
+          let arr = []
+          if (this.itemFound === '' && category == 'search') {
+            this.showItems()
+          } else {
+            console.log('masuk sini')
+            axios.get('http://localhost:3000/items')
+            .then(function (response) {
+              if(category !== 'search') {
+                response.data.items.forEach(item=>{
+                  if(item.category.indexOf(category) !== -1) {
+                    arr.push(item)
+                  }
+                })
+              } else {
+                response.data.items.forEach(item=>{
+                  if (item.name.indexOf(app.itemFound) !== -1) {
+                    arr.push(item)
+                  }
+                })
+              }
+              app.items = arr;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          }
+        },
+        addToCart(selectedItem) {
+          this.carts.push(selectedItem)
+          this.totalItems++
+        },
+        checkout(cartItems, paymentDetail) {
+          this.carts = []
+          let id = localStorage.getItem('id')
+          let token = localStorage.getItem('token')
+          let totalTransaction = paymentDetail
+          this.totalItems = 0
+          let data = {
+            carcartItems,
+            id,
+            totalTransaction
+          }
+          axios.post('http://localhost:3000/carts', data, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+          })
+          .then(response => {
+              console.log(response);
+          })
+          .catch(err => {
+              console.log(err);
+          })
+        },
+        getTransaction() {
+          let id = localStorage.getItem('id')
+          let token = localStorage.getItem('token')
+          axios({
+                methods: 'GET',
+                url: `http://localhost:3000/cart/${id}`,
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+              })
+              .then(response => {
+                console.log(response);
+                this.transaction = response.data.Cart
+              })
+              .catch(err => {
+                console.log(err);
+              })
+      },
+        showEditItem(id, name, category, price, quantity, itemImageUrl) {
+          app.showEditItemForm = true
+          app.itemId = id,
+          app.itemName = name,
+          app.itemCategory = category,
+          app.itemPrice = price,
+          app.itemQuantity = quantity
+          app.itemImageUrl = itemImageUrl
+        },
+        createItem() {
+          let token = localStorage.getItem('token')
+          axios.post(`http://localhost:3000/items`, {
+            name: app.itemName,
+            category: app.itemCategory,
+            price: app.itemPrice,
+            quantity: app.itemQuantity,
+            image_url: app.itemImageUrl
+          }, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+          })
+          .then((result) => {
+            console.log(result)
+          }).catch((err) => {
+            console.log(err)
+          });
+          
+        },
+        editItem(id) {
+          let token = localStorage.getItem('token')
+          axios.put(`http://localhost:3000/items/${id}`,{
+            name: app.itemName,
+            category: app.itemCategory,
+            price: app.itemPrice,
+            quantity: app.itemQuantity,
+            image_url: app.itemImageUrl
+          }, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+          })
+          .then((result) => {
+            console.log(result)
+
+          }).catch((err) => {
+            console.log(err)
+          });
+        },
+        deleteItem(id) {
+          let token = localStorage.getItem('token')
+          axios.delete(`http://localhost:3000/items/${id}`, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+          })
+          .then((result) => {
+            console.log(result)
+            app.adminItem = false
+            setTimeout(()=>{
+              app.adminItem = true
+            }, 300)
+          }).catch((err) => {
+            console.log(err)
+          });
+        }
+      }
+    })
+  </script>
+  
+  
+</body>
+
+</html>
