@@ -272,7 +272,9 @@
             created() {
                 this.getCategories()
                 this.getProducts()
-                this.checkLogin()
+                if (localStorage.getItem('token')) {
+                    this.checkLogin()
+                }
             },
             watch: {
                 products() {

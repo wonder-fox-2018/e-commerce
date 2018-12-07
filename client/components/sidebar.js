@@ -329,14 +329,14 @@ Vue.component('side-bar', {
             if (app.cart[i].count === 0) {
                 app.items.splice(i, 1)
                 app.cart.splice(i, 1)
-                app.itemsreal.splice(i, 1)
+                app.itemsReal.splice(i, 1)
             }
             
             app.itemcount --
             this.updateCart()
             
             localStorage.setItem('items', JSON.stringify(app.items))
-            localStorage.setItem('itemsID', JSON.stringify(app.itemsreal))
+            localStorage.setItem('itemsID', JSON.stringify(app.itemsReal))
             localStorage.setItem('cart', JSON.stringify(app.cart))
             localStorage.setItem('totalsum', app.totalsum)
         },
