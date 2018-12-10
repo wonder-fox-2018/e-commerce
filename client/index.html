@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,57 +9,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
     <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
     <title>Shop Homepage</title>
-
-    <!-- Custom styles for this template -->
     <link href="css/shop-homepage.css" rel="stylesheet">
-
   </head>
-
   <body>
-
-    <!-- Navigation -->
     <div id="app">
-    <navbar-component :is-login="isLogin" :getuseronline="getUserOnline" :refresh="allProduct" :get-token='getToken' :user="user"></navbar-component><!-- Page Content -->
-    <div class="container">
-      <div class="row" >
-        <sidebar-component :is-login="isLogin" :role="role" :user="user"></sidebar-component><!-- /.col-lg-3 -->
-        <div class="col-lg-9">
-          <carousel-component></carousel-component>
-          <div class="row">
-            <item-list v-for="list in card" :key="list._id" :list="list" :role="role" :user="user"></item-list>
-          </div> <!-- /.row -->
-        </div><!-- /.col-lg-9 -->
-      </div><!-- /.row -->
-    </div>
-    <!-- /.container -->
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
+      <navbar-component :is-login="isLogin" :getuseronline="getUserOnline" :refresh="allProduct" :get-token='getToken' :user="user"></navbar-component>
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+        <div class="row" >
+          <sidebar-component :is-login="isLogin" :role="role" :user="user"></sidebar-component><!-- /.col-lg-3 -->
+          <div class="col-lg-9">
+            <carousel-component></carousel-component>
+            <div class="row">
+              <item-list v-for="list in card" :key="list._id" :list="list" :role="role" :user="user"></item-list>
+            </div>
+          </div>
+        </div>
       </div>
-      <!-- /.container -->
-    </footer>
-  
-  <!-- modal add product -->
-  <modal-register :register="register"></modal-register>
-  <modal-addproduct :refresh="allProduct"></modal-addproduct>
-  <modal-login :login="register" :get-token="getToken" :getuseronline="getUserOnline"></modal-login>
-  <modal-cart :user="user" :getcheckoutlist="getCheckOutList" :getuseronline="getUserOnline"></modal-cart>
-  <modal-checkout :user="user" :checkout="checkout" :getcheckoutlist="getCheckOutList"></modal-checkout>
-  </div>
-  <!-- Bootstrap core JavaScript -->
-    <script src="./component/modal.js"></script>
+      <footer class="py-3 bg-dark">
+        <div class="container">
+          <p class="m-0 text-center text-white">Copyright &copy; FransMedia 2018</p>
+        </div>
+      </footer>
+      <modal-register :register="register"></modal-register>
+      <modal-addproduct :refresh="allProduct"></modal-addproduct>
+      <modal-login :login="register" :get-token="getToken" :getuseronline="getUserOnline"></modal-login>
+      <modal-cart :user="user" :getcheckoutlist="getCheckOutList" :getuseronline="getUserOnline"></modal-cart>
+      <modal-checkout :user="user" :checkout="checkout" :getcheckoutlist="getCheckOutList"></modal-checkout>
+    </div>
     <script src="./component/item.js"></script>
+    <script src="./component/Navbar.js"></script>
+    <script src="./component/Sidebar.js"></script>
+    <script src="./component/Corousel.js"></script>
+    <script src="./component/ModalRegister.js"></script>
+    <script src="./component/ModalLogin.js"></script>
+    <script src="./component/ModalCart.js"></script>
+    <script src="./component/ModalCheckout.js"></script>
+    <script src="./component/ModalAddProduct.js"></script>
     <script src="./script.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   </body>
-
 </html>
