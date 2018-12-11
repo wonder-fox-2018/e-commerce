@@ -1,5 +1,10 @@
 Vue.component('item-list', {
   props : ['list', 'user', 'role'],
+  data : function(){
+    return{
+      productId : ''
+    }
+  },
   methods : {
     toCart : function(list){
       this.user.price_count = this.user.price_count + list.price
@@ -21,10 +26,14 @@ Vue.component('item-list', {
         this.user.cart.push(list)
       }
     },
+    sendIdProduct(id){
+      this.productId = id
+      console.log('ID : ' + this.productId)
+    }
   },
   template : `
     <div class="col-lg-4 col-md-6 mb-4">
-      <a href="#" style="text-decoration:none" :title="list.title">
+      <a href="#" style="text-decoration:none" @click="sendIdProduct(list._id)" data-toggle="modal" data-target="#modalDetailProduct">
         <div class="card h-100">
         <div class="card-img-top" 
           :style="{ 
@@ -45,6 +54,7 @@ Vue.component('item-list', {
           </div>
         </div>
       </a>
+      <modal-detail-product :product-id="productId"></modal-detail-product>
     </div>
   `
 })
