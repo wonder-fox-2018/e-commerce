@@ -102,7 +102,7 @@ let app = new Vue({
             .then(dataProduct => {
                 this.card = []
                 let products = dataProduct.data.products
-                // console.log(products)
+                console.log(products)
                 products.forEach(list => {
                     this.card.push(list)
                 })

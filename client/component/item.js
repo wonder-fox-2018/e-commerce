@@ -13,7 +13,7 @@ Vue.component('item-list', {
             break
           }
         }
-      } else{
+      }else{
         this.user.cart.push(list)
         status = 1
       }
@@ -22,22 +22,19 @@ Vue.component('item-list', {
       }
     },
   },
-  created: function() {
-    myFunction()
-  },
   template : `
     <div class="col-lg-4 col-md-6 mb-4">
       <a href="#" style="text-decoration:none" :title="list.title">
         <div class="card h-100">
-          <img class="card-img-top" :src="list.img" alt="">
-          <div class="card-img-top" style="background-image:url(https://www.google.co.id/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjNnfOhpZTfAhUEgI8KHUovA_IQjRx6BAgBEAU&url=https%3A%2F%2Fwww.kepogaul.com%2Fseleb%2Fbiodata-chelsea-islan%2F&psig=AOvVaw0THyrja9rBInnsN_Wei_Qd&ust=1544497920875364)">
-            <script>
-              function myFunction() {
-                  document.body.style.backgroundColor = "#f3f3f3";
-                  document.body.style.backgroundImage = "url('https://www.google.co.id/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjNnfOhpZTfAhUEgI8KHUovA_IQjRx6BAgBEAU&url=https%3A%2F%2Fwww.kepogaul.com%2Fseleb%2Fbiodata-chelsea-islan%2F&psig=AOvVaw0THyrja9rBInnsN_Wei_Qd&ust=1544497920875364')";
-              }
-            </script>
-          </div>
+        <div class="card-img-top" 
+          :style="{ 
+            height : '250px', 
+            backgroundImage : 'url('+list.img+')', 
+            backgroundSize : 'contain',
+            backgroundRepeat : 'no-repeat',
+            backgroundPosition : 'center'
+          }">
+        </div>
           <div class="card-body">
               <h4 class="card-title">
                 {{list.title}}

@@ -17,7 +17,7 @@ body {
 }
 .card-price{
   font-size: 18px;
-  color: orangered
+  color: orangered;
 }
 
 @media (min-width: 992px) {
