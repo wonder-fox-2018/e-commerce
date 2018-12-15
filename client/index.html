@@ -21,7 +21,14 @@
           <div class="col-lg-9">
             <carousel-component></carousel-component>
             <div class="row">
-              <item-list v-for="list in card" :key="list._id" :list="list" :role="role" :user="user"></item-list>
+              <item-list 
+                v-for="list in card" 
+                :key="list._id" 
+                :list="list" 
+                :role="role" 
+                :user="user"
+                @receiveid="receiveId">
+              </item-list>
             </div>
           </div>
         </div>
@@ -33,7 +40,7 @@
       </footer>
       <modal-register :register="register"></modal-register>
       <modal-addproduct :refresh="allProduct"></modal-addproduct>
-      <modal-detail-product></modal-detail-product>
+      <modal-detail-product :productdata="productData" :user="user" :role="role"></modal-detail-product>
       <modal-login :login="register" :get-token="getToken" :getuseronline="getUserOnline"></modal-login>
       <modal-cart :user="user" :getcheckoutlist="getCheckOutList" :getuseronline="getUserOnline"></modal-cart>
       <modal-checkout :user="user" :checkout="checkout" :getcheckoutlist="getCheckOutList"></modal-checkout>

@@ -20,7 +20,8 @@ let app = new Vue({
             count : 0, 
             price_count : 0
         },
-        card : []
+        card : [],
+        productData : ''
     },
     created: function(){
         this.getToken()
@@ -29,6 +30,9 @@ let app = new Vue({
         this.getCheckOutList()
     },
     methods :{
+        receiveId(value){
+            this.productData = value
+        },
         getUserOnline : function(){
             let token = localStorage.getItem('token')
             if(token){

@@ -2,7 +2,6 @@ Vue.component('item-list', {
   props : ['list', 'user', 'role'],
   data : function(){
     return{
-      productId : ''
     }
   },
   methods : {
@@ -26,14 +25,13 @@ Vue.component('item-list', {
         this.user.cart.push(list)
       }
     },
-    sendIdProduct(id){
-      this.productId = id
-      console.log('ID : ' + this.productId)
+    sendIdProduct(list){
+      this.$emit('receiveid', list)
     }
   },
   template : `
     <div class="col-lg-4 col-md-6 mb-4">
-      <a href="#" style="text-decoration:none" @click="sendIdProduct(list._id)" data-toggle="modal" data-target="#modalDetailProduct">
+      <a href="" style="text-decoration:none" @click="sendIdProduct(list)" data-toggle="modal" data-target="#modalDetailProduct" :title="list.title">
         <div class="card h-100">
         <div class="card-img-top" 
           :style="{ 
@@ -54,7 +52,6 @@ Vue.component('item-list', {
           </div>
         </div>
       </a>
-      <modal-detail-product :product-id="productId"></modal-detail-product>
     </div>
   `
 })
